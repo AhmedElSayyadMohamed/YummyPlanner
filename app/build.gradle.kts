@@ -8,6 +8,9 @@ android {
         version = release(36)
     }
 
+    buildFeatures {
+        viewBinding = true
+    }
     defaultConfig {
         applicationId = "com.example.yummyplanner"
         minSdk = 24
@@ -38,7 +41,15 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.fragment)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // Navigation component (optional, for advanced nav)
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
+
+    // Lottie animation
+    implementation(libs.lottie)
 }

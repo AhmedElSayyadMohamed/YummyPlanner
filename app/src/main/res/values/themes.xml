@@ -1,9 +1,31 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.YummyPlanner" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <!-- Base application theme -->
+    <style name="Base.Theme.YummyPlanner"
+        parent="Theme.Material3.DayNight.NoActionBar">
+
+        <!-- ========== FONT ========== -->
+        <item name="fontFamily">@font/mulish_font</item>
+
+        <!-- ========== PRIMARY ========== -->
+        <item name="colorPrimary">@color/primary_700</item>
+        <item name="colorOnPrimary">@color/neutral_100</item>
+
+        <!-- ========== SECONDARY ========== -->
+        <item name="colorSecondary">@color/secondary_700</item>
+        <item name="colorOnSecondary">@color/neutral_900</item>
+
+        <!-- ========== BACKGROUND & SURFACE ========== -->
+        <item name="android:colorBackground">@color/neutral_100</item>
+        <item name="colorSurface">@color/neutral_100</item>
+        <item name="colorOnSurface">@color/neutral_900</item>
+
+        <!-- ========== ERROR ========== -->
+        <item name="colorError">@color/danger_700</item>
+
     </style>
 
-    <style name="Theme.YummyPlanner" parent="Base.Theme.YummyPlanner" />
+    <style name="Theme.YummyPlanner"
+        parent="Base.Theme.YummyPlanner" />
+
 </resources>
