@@ -1,12 +1,13 @@
 package com.example.yummyplanner.ui.launcher.splash;
 
+import android.app.Application;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
@@ -21,10 +22,19 @@ import com.airbnb.lottie.LottieProperty;
 import com.airbnb.lottie.model.KeyPath;
 import com.airbnb.lottie.value.LottieValueCallback;
 import com.example.yummyplanner.R;
+import com.example.yummyplanner.data.local.MealLocalDataSource;
+import com.example.yummyplanner.data.local.MealLocalDataSourceImpl;
+import com.example.yummyplanner.data.local.sharedPref.SharedPrefHelper;
+import com.example.yummyplanner.data.repository.MealRepository;
+import com.example.yummyplanner.data.repository.MealRepositoryImpl;
 import com.example.yummyplanner.databinding.FragmentSplashBinding;
+import com.example.yummyplanner.ui.auth.AuthActivity;
+import com.example.yummyplanner.ui.home.LayoutActivity;
+import com.example.yummyplanner.ui.launcher.splash.presenter.SplashContract;
+import com.example.yummyplanner.ui.launcher.splash.presenter.splashPresenter;
 import com.google.android.material.color.MaterialColors;
 
-public class SplashFragment extends Fragment implements SplashView {
+public class SplashFragment extends Fragment implements SplashContract.View {
 
     private FragmentSplashBinding binding;
     private splashPresenter presenter;
@@ -38,7 +48,7 @@ public class SplashFragment extends Fragment implements SplashView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter = new splashPresenter(this);
+        presenter = new splashPresenter(this, getActivity().getApplication());
         presenter.start();
     }
 
@@ -68,8 +78,9 @@ public class SplashFragment extends Fragment implements SplashView {
         );
     }
 
+
     @Override
-    public void navigateToOnboarding() {
+    public void openOnboarding() {
         NavOptions navOptions = new NavOptions.Builder()
                 .setPopUpTo(R.id.splashFragment, true)
                 .build();
@@ -81,6 +92,21 @@ public class SplashFragment extends Fragment implements SplashView {
                         null,
                         navOptions
                 );
+    }
+
+    @Override
+    public void openHome() {
+        Intent intent = new Intent(requireActivity(), LayoutActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    @Override
+    public void openAuth() {
+        Intent intent = new Intent(requireActivity(), AuthActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        startActivity(intent);
     }
 
 

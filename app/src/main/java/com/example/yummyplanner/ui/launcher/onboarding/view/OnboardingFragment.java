@@ -41,7 +41,7 @@ public class OnboardingFragment extends Fragment  implements OnboardingContract.
         View view = inflater.inflate(R.layout.fragment_onboarding, container, false);
 
         // presenter
-        presenter = new OnboardingPresenter(this,requireContext().getApplicationContext());
+        presenter = new OnboardingPresenter(this, requireActivity().getApplication());
 
         //ui binding
         viewPager = view.findViewById(R.id.onboardingViewPager);

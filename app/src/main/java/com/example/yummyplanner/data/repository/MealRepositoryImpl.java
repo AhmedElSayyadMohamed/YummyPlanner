@@ -1,18 +1,22 @@
 package com.example.yummyplanner.data.repository;
 
+import android.app.Application;
+import android.content.Context;
+
 import com.example.yummyplanner.data.local.MealLocalDataSource;
+import com.example.yummyplanner.data.local.MealLocalDataSourceImpl;
 
 public class MealRepositoryImpl implements MealRepository {
 
     private final MealLocalDataSource mealLocalDataSource;
 
-    public MealRepositoryImpl(MealLocalDataSource mealLocalDataSource) {
-        this.mealLocalDataSource = mealLocalDataSource;
+    public MealRepositoryImpl(Application application) {
+        this.mealLocalDataSource = new MealLocalDataSourceImpl(application);
     }
 
 
     @Override
-    public boolean shouldShowOnboarding() {
+    public boolean hasSeenOnboarding() {
         return mealLocalDataSource.hasSeenOnboarding();
     }
 

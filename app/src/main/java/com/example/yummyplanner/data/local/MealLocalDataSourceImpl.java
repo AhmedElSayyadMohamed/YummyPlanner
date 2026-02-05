@@ -1,12 +1,15 @@
 package com.example.yummyplanner.data.local;
 
+import android.content.Context;
+
 import com.example.yummyplanner.data.local.sharedPref.SharedPrefHelper;
+import com.example.yummyplanner.data.local.sharedPref.SharedPrefHelperImpl;
 
 public class MealLocalDataSourceImpl implements MealLocalDataSource {
     private final SharedPrefHelper prefHelper;
 
-    public MealLocalDataSourceImpl(SharedPrefHelper prefHelper) {
-        this.prefHelper = prefHelper;
+    public MealLocalDataSourceImpl(Context context) {
+        this.prefHelper = new SharedPrefHelperImpl(context);
     }
 
 
