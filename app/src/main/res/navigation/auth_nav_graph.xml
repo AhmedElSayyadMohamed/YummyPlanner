@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.yummyplanner.ui.auth.login.LoginFragment">
+        android:name="com.example.yummyplanner.ui.auth.LoginFragment">
         <action
             android:id="@+id/action_login_to_signup"
             app:destination="@id/signupFragment" />
@@ -15,7 +15,7 @@
 
     <fragment
         android:id="@+id/signupFragment"
-        android:name="com.example.yummyplanner.ui.auth.signup.SignupFragment">
+        android:name="com.example.yummyplanner.ui.auth.SignupFragment">
         <action
             android:id="@+id/action_signup_to_login"
             app:destination="@id/loginFragment" />

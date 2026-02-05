@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="YummyHeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
+
+        <item name="android:fontFamily">@font/mulish_font</item>
+        <item name="android:fontWeight">700</item>
+    </style>
+
+    <style name="Widget.YummyPlanner.ElevatedButton" parent="Widget.Material3.Button.ElevatedButton">
+
+        <!-- White fill -->
+        <item name="backgroundTint">@android:color/white</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+
+        <item name="cornerRadius">12dp</item>
+        <item name="android:elevation">2dp</item>
+
+        <!-- Padding -->
+        <item name="android:paddingVertical">12dp</item>
+        <item name="android:paddingHorizontal">20dp</item>
+
+    </style>
+</resources>

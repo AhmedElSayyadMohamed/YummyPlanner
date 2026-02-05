@@ -9,4 +9,14 @@
     <string name="onboarding_item_title">title</string>
     <string name="onboarding_item_description">description</string>
     <string name="skip">Skip</string>
+    <string name="let_s_get_started">Let’s Get Started 😁</string>
+    <string name="email">Email</string>
+    <string name="login_desc">Sign up or login into to have a full digital experience in our restaurant</string>
+    <string name="password">Password</string>
+    <string name="login">LOGIN</string>
+    <string name="or">OR</string>
+    <string name="continue_with_facebook">Continue with Facebook</string>
+    <string name="continue_with_gmail">Continue with Gmail</string>
+    <string name="create_new_account">Create New Account</string>
+    <string name="continue_as_guest">Continue As A Guest</string>
 </resources>
