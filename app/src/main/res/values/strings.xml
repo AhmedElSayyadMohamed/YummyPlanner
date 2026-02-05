@@ -18,5 +18,11 @@
     <string name="continue_with_facebook">Continue with Facebook</string>
     <string name="continue_with_gmail">Continue with Gmail</string>
     <string name="create_new_account">Create New Account</string>
+    <string name="signupTitle">Getting started! ✌️</string>
     <string name="continue_as_guest">Continue As A Guest</string>
+    <string name="signup">SignUp</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="signUp_description">Look like you are new to us! Create an account for a complete experience.</string>
+    <string name="username">Username</string>
+    <string name="signup_screen">SignUp Screen</string>
 </resources>

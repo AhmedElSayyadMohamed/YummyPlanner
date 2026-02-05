@@ -36,7 +36,7 @@
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:text="@string/login_desc"
-            android:textAppearance="?attr/textAppearanceBodyMedium"/>
+            android:textAppearance="?attr/textAppearanceBody1"/>
 
         <!-- Email -->
         <com.google.android.material.textfield.TextInputLayout
@@ -137,7 +137,7 @@
 
         <!-- Create New Account -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/createAccountCard"
+            android:id="@+id/createNewAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
