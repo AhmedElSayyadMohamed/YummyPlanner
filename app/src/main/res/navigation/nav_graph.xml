@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/onboardingFragment"
-        android:name="com.example.yummyplanner.ui.launcher.OnboardingFragment"
+        android:name="com.example.yummyplanner.ui.launcher.onboarding.view.OnboardingFragment"
         android:label="fragment_onboarding"
         tools:layout="@layout/fragment_onboarding" />
 </navigation>

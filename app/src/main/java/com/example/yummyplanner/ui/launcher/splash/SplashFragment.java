@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.airbnb.lottie.model.KeyPath;
 import com.airbnb.lottie.value.LottieValueCallback;
 import com.example.yummyplanner.R;
 import com.example.yummyplanner.databinding.FragmentSplashBinding;
+import com.google.android.material.color.MaterialColors;
 
 public class SplashFragment extends Fragment implements SplashView {
 
@@ -51,11 +53,16 @@ public class SplashFragment extends Fragment implements SplashView {
 
     @Override
     public void tintLottie() {
+
+        int primaryColor = MaterialColors.getColor(
+                binding.splashLottie,
+                androidx.appcompat.R.attr.colorPrimary
+        );
         binding.splashLottie.addValueCallback(
                 new KeyPath("**"),
                 LottieProperty.COLOR_FILTER,
                 new LottieValueCallback<>(new PorterDuffColorFilter(
-                        ContextCompat.getColor(requireContext(), R.color.primary_700),
+                        primaryColor,
                         PorterDuff.Mode.SRC_ATOP
                 ))
         );
@@ -63,10 +70,19 @@ public class SplashFragment extends Fragment implements SplashView {
 
     @Override
     public void navigateToOnboarding() {
+        NavOptions navOptions = new NavOptions.Builder()
+                .setPopUpTo(R.id.splashFragment, true)
+                .build();
+
         NavHostFragment
                 .findNavController(this)
-                .navigate(R.id.action_splashFragment_to_onboardingFragment);
+                .navigate(
+                        R.id.action_splashFragment_to_onboardingFragment,
+                        null,
+                        navOptions
+                );
     }
+
 
     @Override
     public void onDestroyView() {

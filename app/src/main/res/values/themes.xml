@@ -1,7 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme -->
-    <style name="Base.Theme.YummyPlanner"
+    <style
+        name="Base.Theme.YummyPlanner"
         parent="Theme.Material3.DayNight.NoActionBar">
 
         <!-- ========== FONT ========== -->
@@ -23,9 +24,36 @@
         <!-- ========== ERROR ========== -->
         <item name="colorError">@color/danger_700</item>
 
+         //default button
+        <item name="materialButtonStyle">@style/Widget.YummyPlanner.PrimaryButton</item>
+
+        // dots
+        <item name="tabStyle">@style/Widget.YummyPlanner.Dots</item>
+
     </style>
+
+    //default button
+    <style name="Widget.YummyPlanner.PrimaryButton"
+        parent="Widget.Material3.Button">
+
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:paddingHorizontal">24dp</item>
+        <item name="android:paddingVertical">16dp</item>
+    </style>
+
+    //dots styles
+    <style name="Widget.YummyPlanner.Dots"
+        parent="Widget.Material3.TabLayout">
+
+        <item name="tabIndicator">@drawable/dot_indicator</item>
+    </style>
+
 
     <style name="Theme.YummyPlanner"
         parent="Base.Theme.YummyPlanner" />
+
+
 
 </resources>

@@ -5,4 +5,8 @@
     <string name="title_activity_details">DetailsActivity</string>
     <string name="yummy">Yummy</string>
     <string name="planner">Planner</string>
+    <string name="onboarding_navBtn">Get Started</string>
+    <string name="onboarding_item_title">title</string>
+    <string name="onboarding_item_description">description</string>
+    <string name="skip">Skip</string>
 </resources>
