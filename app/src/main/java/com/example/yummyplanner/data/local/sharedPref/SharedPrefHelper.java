@@ -15,7 +15,7 @@ public class SharedPrefHelper {
         prefs.edit().putBoolean(PrefKeys.KEY_ONBOARDING_SEEN,isSeen).apply();
     }
 
-    public boolean isOnboardingSeen(){
+    public boolean hasSeenOnboarding(){
         return prefs.getBoolean(PrefKeys.KEY_ONBOARDING_SEEN,false);
     }
 
