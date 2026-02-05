@@ -1,9 +1,59 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.YummyPlanner" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <!-- Base application theme -->
+    <style
+        name="Base.Theme.YummyPlanner"
+        parent="Theme.Material3.DayNight.NoActionBar">
+
+        <!-- ========== FONT ========== -->
+        <item name="fontFamily">@font/mulish_font</item>
+
+        <!-- ========== PRIMARY ========== -->
+        <item name="colorPrimary">@color/primary_700</item>
+        <item name="colorOnPrimary">@color/neutral_100</item>
+
+        <!-- ========== SECONDARY ========== -->
+        <item name="colorSecondary">@color/secondary_700</item>
+        <item name="colorOnSecondary">@color/neutral_900</item>
+
+        <!-- ========== BACKGROUND & SURFACE ========== -->
+        <item name="android:colorBackground">@color/neutral_100</item>
+        <item name="colorSurface">@color/neutral_100</item>
+        <item name="colorOnSurface">@color/neutral_900</item>
+
+        <!-- ========== ERROR ========== -->
+        <item name="colorError">@color/danger_700</item>
+
+         //default button
+        <item name="materialButtonStyle">@style/Widget.YummyPlanner.PrimaryButton</item>
+
+        // dots
+        <item name="tabStyle">@style/Widget.YummyPlanner.Dots</item>
+
     </style>
 
-    <style name="Theme.YummyPlanner" parent="Base.Theme.YummyPlanner" />
+    //default button
+    <style name="Widget.YummyPlanner.PrimaryButton"
+        parent="Widget.Material3.Button">
+
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:paddingHorizontal">24dp</item>
+        <item name="android:paddingVertical">16dp</item>
+    </style>
+
+    //dots styles
+    <style name="Widget.YummyPlanner.Dots"
+        parent="Widget.Material3.TabLayout">
+
+        <item name="tabIndicator">@drawable/dot_indicator</item>
+    </style>
+
+
+    <style name="Theme.YummyPlanner"
+        parent="Base.Theme.YummyPlanner" />
+
+
+
 </resources>
