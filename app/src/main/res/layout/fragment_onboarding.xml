@@ -28,8 +28,8 @@
         android:text="@string/skip"
         android:textAllCaps="false"
         android:textColor="?attr/colorPrimary"
-
         android:backgroundTint="@android:color/transparent"
+        app:rippleColor="@color/primary_500"
         app:strokeColor="?attr/colorPrimary"
         app:strokeWidth="1dp"
         app:cornerRadius="12dp"

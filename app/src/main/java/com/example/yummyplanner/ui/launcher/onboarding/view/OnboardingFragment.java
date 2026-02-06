@@ -12,6 +12,11 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.yummyplanner.R;
+import com.example.yummyplanner.data.local.appPreferences.AppPreferences;
+import com.example.yummyplanner.data.local.appPreferences.AppPreferencesImpl;
+import com.example.yummyplanner.data.local.userSession.SessionRepository;
+import com.example.yummyplanner.data.local.userSession.SessionRepositoryImpl;
+import com.example.yummyplanner.data.local.userSession.UserSessionManager;
 import com.example.yummyplanner.ui.auth.AuthActivity;
 import com.example.yummyplanner.ui.launcher.onboarding.model.OnboardingItem;
 import com.example.yummyplanner.ui.launcher.onboarding.presenter.OnboardingContract;
@@ -41,7 +46,10 @@ public class OnboardingFragment extends Fragment  implements OnboardingContract.
         View view = inflater.inflate(R.layout.fragment_onboarding, container, false);
 
         // presenter
-        presenter = new OnboardingPresenter(this,requireContext().getApplicationContext());
+        AppPreferences appPreferences = new AppPreferencesImpl(requireActivity());
+        UserSessionManager userSessionManager = new UserSessionManager(appPreferences);
+        SessionRepository sessionRepository = new SessionRepositoryImpl(userSessionManager);
+        presenter = new OnboardingPresenter(this, sessionRepository);
 
         //ui binding
         viewPager = view.findViewById(R.id.onboardingViewPager);

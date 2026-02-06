@@ -13,21 +13,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.YummyPlanner">
 
+        <activity
+            android:name=".ui.layout.LayoutActivity"
+            android:exported="false" />
+
         <!-- Launcher / Splash -->
         <activity
             android:name=".ui.launcher.LauncherActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity> <!-- Auth -->
 
-        <!-- Auth -->
         <activity
             android:name=".ui.auth.AuthActivity"
             android:exported="false" />
-
     </application>
 
 </manifest>
