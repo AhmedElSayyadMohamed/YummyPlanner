@@ -1,10 +1,5 @@
 package com.example.yummyplanner.ui.launcher.onboarding.presenter;
-
-import android.app.Application;
-import android.content.Context;
-
-import com.example.yummyplanner.data.repository.MealRepository;
-import com.example.yummyplanner.data.repository.MealRepositoryImpl;
+import com.example.yummyplanner.data.local.userSession.SessionRepository;
 import com.example.yummyplanner.ui.launcher.onboarding.model.OnboardingItem;
 import com.example.yummyplanner.ui.launcher.onboarding.repository.OnboardingRepository;
 
@@ -16,15 +11,13 @@ public class OnboardingPresenter implements OnboardingContract.Presenter {
     private OnboardingContract.View view;
     private int totalPages;
     private int currentPage;
-    private final MealRepository mealRepository;
+    private SessionRepository sessionRepo;
     private final List<OnboardingItem> onboardingItems;
 
-    public OnboardingPresenter(
-            OnboardingContract.View view,
-            Application application) {
+    public OnboardingPresenter(OnboardingContract.View view,SessionRepository sessionRepo) {
         this.view = view;
         this.onboardingRepository = new OnboardingRepository();
-        this.mealRepository = new MealRepositoryImpl(application);
+        this.sessionRepo = sessionRepo;
         this.onboardingItems = onboardingRepository.getOnboardingItems();
         this.totalPages = this.onboardingItems.size();
         this.currentPage = 0;
@@ -52,14 +45,14 @@ public class OnboardingPresenter implements OnboardingContract.Presenter {
         if (currentPage < totalPages - 1) {
             view.goToNextPage();
         } else {
-            mealRepository.setOnboardingCompleted();
+            sessionRepo.completeOnboarding();
             view.navigateToAuthActivity();
         }
     }
 
     @Override
     public void onSkipClicked() {
-        mealRepository.setOnboardingCompleted();
+        sessionRepo.completeOnboarding();
         view.navigateToAuthActivity();
     }
 

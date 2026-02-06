@@ -1,27 +1,26 @@
 package com.example.yummyplanner.ui.launcher.splash.presenter;
 
-import android.app.Application;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.example.yummyplanner.data.repository.MealRepository;
-import com.example.yummyplanner.data.repository.MealRepositoryImpl;
-import com.example.yummyplanner.ui.launcher.splash.SplashView;
+import com.example.yummyplanner.data.local.userSession.SessionRepository;
 
-public class splashPresenter implements SplashContract.Presener{
+public class SplashPresenter implements SplashContract.Presenter {
 
     private Handler handler;
     private static final int SPLASH_DURATION = 5000;
 
     private SplashContract.View view;
-    private final MealRepository mealRepository;
 
-    public splashPresenter(SplashContract.View view, Application application) {
+    private SessionRepository sessionRepo;
+
+    public SplashPresenter(SplashContract.View view,SessionRepository sessionRepo) {
         this.view = view ;
-        this.mealRepository = new MealRepositoryImpl(application) ;
+        this.sessionRepo = sessionRepo;
         this.handler = new Handler(Looper.getMainLooper());
     }
 
+    @Override
     public void start() {
         if (view == null) return;
 
@@ -38,23 +37,21 @@ public class splashPresenter implements SplashContract.Presener{
 
     @Override
     public void decideNextScreen() {
-
-        if (!mealRepository.hasSeenOnboarding()) {
-            view.openOnboarding();
+        if (!sessionRepo.isOnboardingCompleted()) {
+            view.goToOnboarding();
             return;
         }
 
-        if (mealRepository.isGuestUser()) {
-            view.openHome();
+        if (sessionRepo.isLoggedIn() || sessionRepo.isGuest()) {
+            view.goToHome();
         } else {
-            view.openAuth();
+            view.goToLogin();
         }
     }
 
-
+    @Override
     public void destroy() {
         handler.removeCallbacksAndMessages(null);
         view = null;
     }
-
 }

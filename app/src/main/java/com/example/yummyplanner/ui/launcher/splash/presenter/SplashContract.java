@@ -7,12 +7,14 @@ public interface SplashContract {
         void startAnimations();
         void tintLottie();
 
-        void openOnboarding();
-        void openHome();
-        void openAuth();
+        void goToOnboarding();
+        void goToHome();
+        void goToLogin();
     }
 
-    interface Presener {
+    interface Presenter {
+        void start();
         void decideNextScreen();
+        void destroy();
     }
 }

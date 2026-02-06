@@ -1,23 +1,24 @@
 package com.example.yummyplanner.ui.auth.presenter;
 
-import android.app.Application;
-
-import com.example.yummyplanner.data.repository.MealRepository;
-import com.example.yummyplanner.data.repository.MealRepositoryImpl;
+import com.example.yummyplanner.data.local.userSession.SessionRepository;
 
 public class AuthPresenter implements AuthContract.Presenter{
 
     private AuthContract.View view;
-    private MealRepository mealRepository;
-
-    public AuthPresenter(AuthContract.View view,Application application){
+    private SessionRepository sessionRepo;
+    public AuthPresenter(AuthContract.View view,SessionRepository sessionRepo){
         this.view = view ;
-        this.mealRepository = new MealRepositoryImpl(application);
+        this.sessionRepo = sessionRepo;
+    }
+
+    @Override
+    public void onLoginClicked(String email, String password) {
+
     }
 
     @Override
     public void continueAsAGeust() {
-
-        mealRepository.loginAsGuest();
+        sessionRepo.enterGuest();
+        view.navigateToHome();
     }
 }
