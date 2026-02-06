@@ -8,7 +8,7 @@
     tools:context=".ui.launcher.LauncherActivity">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView"
+        android:id="@+id/layoutFragmentContainerView"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,4 +20,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5"
         app:navGraph="@navigation/launcher_nav_graph" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

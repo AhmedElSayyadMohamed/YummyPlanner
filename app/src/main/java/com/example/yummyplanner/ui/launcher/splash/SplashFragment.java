@@ -28,7 +28,7 @@ import com.example.yummyplanner.data.local.userSession.SessionRepositoryImpl;
 import com.example.yummyplanner.data.local.userSession.UserSessionManager;
 import com.example.yummyplanner.databinding.FragmentSplashBinding;
 import com.example.yummyplanner.ui.auth.AuthActivity;
-import com.example.yummyplanner.ui.home.LayoutActivity;
+import com.example.yummyplanner.ui.layout.LayoutActivity;
 import com.example.yummyplanner.ui.launcher.splash.presenter.SplashContract;
 import com.example.yummyplanner.ui.launcher.splash.presenter.SplashPresenter;
 import com.google.android.material.color.MaterialColors;

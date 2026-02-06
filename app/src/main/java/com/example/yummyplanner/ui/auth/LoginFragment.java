@@ -19,7 +19,7 @@ import com.example.yummyplanner.data.local.userSession.UserSessionManager;
 import com.example.yummyplanner.databinding.FragmentLoginBinding;
 import com.example.yummyplanner.ui.auth.presenter.AuthContract;
 import com.example.yummyplanner.ui.auth.presenter.AuthPresenter;
-import com.example.yummyplanner.ui.home.LayoutActivity;
+import com.example.yummyplanner.ui.layout.LayoutActivity;
 
 
 public class LoginFragment extends Fragment implements AuthContract.View {
