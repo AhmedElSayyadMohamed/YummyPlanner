@@ -22,6 +22,7 @@
         <ImageView
             android:id="@+id/meal_image"
             android:layout_width="match_parent"
+            android:cropToPadding="true"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/plan1" />

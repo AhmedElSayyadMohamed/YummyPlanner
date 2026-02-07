@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.yummyplanner.R;
 import com.example.yummyplanner.data.model.Category;
 
+import java.util.ArrayList;
 import java.util.List;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +24,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         void onCategoryClick(Category category);
     }
 
-    public CategoryAdapter( List<Category> categories, OnCategoryClickListener listener) {
-        this.categories = categories;
+    public CategoryAdapter(OnCategoryClickListener listener) {
+        this.categories = new ArrayList<>();
         this.listener = listener;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+        notifyDataSetChanged();
     }
 
     @Override

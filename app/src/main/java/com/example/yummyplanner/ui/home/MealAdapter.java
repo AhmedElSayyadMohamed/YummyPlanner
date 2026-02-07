@@ -25,9 +25,14 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
         void onMealClick(Meal meal);
     }
 
-    public MealAdapter(List<Meal> meals, OnMealClickListener listener) {
-        this.meals = meals;
+    public MealAdapter(OnMealClickListener listener) {
+        this.meals = new ArrayList<>();
         this.listener = listener;
+    }
+
+    public void setMeals(List<Meal> meals) {
+        this.meals = meals;
+        notifyDataSetChanged();
     }
 
     @NonNull
