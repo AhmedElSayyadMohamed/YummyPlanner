@@ -4,43 +4,44 @@
     <style name="Base.Theme.YummyPlanner"
         parent="Theme.Material3.DayNight.NoActionBar">
 
-        <!-- ========== FONT ========== -->
+        <!-- AppBar -->
+        <item name="appBarLayoutStyle">@style/AppBarStyle</item>
+
+        <!-- Toolbar -->
+        <item name="toolbarStyle">@style/AppToolbarStyle</item>
+
+        <!-- Status Bar -->
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- Font -->
         <item name="fontFamily">@font/mulish_font</item>
 
-        <!-- ========== PRIMARY ========== -->
+        <!-- Primary -->
         <item name="colorPrimary">@color/primary_700</item>
         <item name="colorOnPrimary">@color/neutral_100</item>
 
-        <!-- ========== SECONDARY ========== -->
+        <!-- Secondary -->
         <item name="colorSecondary">@color/secondary_700</item>
         <item name="colorOnSecondary">@color/neutral_900</item>
 
-        <!-- ========== BACKGROUND & SURFACE ========== -->
+        <!-- Background & Surface -->
         <item name="android:colorBackground">@color/neutral_100</item>
         <item name="colorSurface">@color/neutral_100</item>
         <item name="colorOnSurface">@color/neutral_900</item>
 
-        <!-- ========== ERROR ========== -->
+        <!-- Error -->
         <item name="colorError">@color/danger_700</item>
 
-        <!-- ========== DEFAULT COMPONENT STYLES ========== -->
+        <!-- Ripple -->
+        <item name="rippleColor">?attr/colorPrimary</item>
 
-        <!-- Default Button -->
-        <item name="materialButtonStyle">
-            @style/Widget.YummyPlanner.PrimaryButton
-        </item>
+        <!-- Default Components -->
+        <item name="materialButtonStyle">@style/Widget.YummyPlanner.PrimaryButton</item>
+        <item name="textInputStyle">@style/Widget.YummyPlanner.TextField</item>
+        <item name="tabStyle">@style/Widget.YummyPlanner.Dots</item>
 
-        <!-- TextInput -->
-        <item name="textInputStyle">
-            @style/Widget.YummyPlanner.TextField
-        </item>
-
-        <!-- Tabs / Dots -->
-        <item name="tabStyle">
-            @style/Widget.YummyPlanner.Dots
-        </item>
-
-        <!-- ========== TYPOGRAPHY ========== -->
+        <!-- Typography -->
         <item name="textAppearanceHeadlineMedium">
             @style/TextAppearance.YummyPlanner.Headline
         </item>
@@ -55,8 +56,19 @@
     <style name="Theme.YummyPlanner"
         parent="Base.Theme.YummyPlanner" />
 
-    <!-- ================= TEXT APPEARANCE ================= -->
+    <!-- ================= APP BAR ================= -->
+    <style name="AppBarStyle" parent="Widget.Material3.AppBarLayout">
+        <item name="android:background">@color/white</item>
+        <item name="elevation">6dp</item>
+    </style>
 
+    <style name="AppToolbarStyle" parent="Widget.Material3.Toolbar">
+        <item name="backgroundTint">@color/white</item>
+        <item name="elevation">6dp</item>
+        <item name="titleTextColor">@color/black</item>
+    </style>
+
+    <!-- ================= TEXT APPEARANCE ================= -->
     <style name="TextAppearance.YummyPlanner.Headline"
         parent="TextAppearance.Material3.HeadlineMedium">
         <item name="android:textStyle">bold</item>
@@ -70,71 +82,47 @@
 
     <!-- ================= BUTTONS ================= -->
 
-    <!-- Primary Button -->
     <style name="Widget.YummyPlanner.PrimaryButton"
         parent="Widget.Material3.Button">
-
         <item name="backgroundTint">?attr/colorPrimary</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="cornerRadius">12dp</item>
-
-        <!-- Padding -->
         <item name="android:paddingVertical" tools:ignore="NewApi">12dp</item>
         <item name="android:paddingHorizontal" tools:targetApi="26">20dp</item>
-
     </style>
 
-    <!-- Elevated Button -->
     <style name="Widget.YummyPlanner.ElevatedButton"
         parent="Widget.Material3.Button.ElevatedButton">
-
-        <!-- White fill -->
         <item name="backgroundTint">@android:color/white</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
-
         <item name="cornerRadius">12dp</item>
-        <item name="android:elevation">2dp</item>
-
-        <!-- Padding -->
+        <item name="elevation">2dp</item>
         <item name="android:paddingVertical" tools:targetApi="26">12dp</item>
         <item name="android:paddingHorizontal" tools:targetApi="26">20dp</item>
-
     </style>
 
-    <!-- Outlined Button -->
     <style name="Widget.YummyPlanner.OutlinedButton"
         parent="Widget.Material3.Button.OutlinedButton">
-
         <item name="strokeColor">?attr/colorSecondary</item>
         <item name="strokeWidth">1dp</item>
         <item name="cornerRadius">12dp</item>
-
         <item name="iconTint">?attr/colorPrimary</item>
-
     </style>
 
     <!-- ================= TEXT FIELD ================= -->
-
     <style name="Widget.YummyPlanner.TextField"
         parent="Widget.Material3.TextInputLayout.OutlinedBox">
-
         <item name="boxStrokeColor">?attr/colorPrimary</item>
         <item name="hintTextColor">?attr/colorPrimary</item>
-
-        <!-- Radius -->
         <item name="boxCornerRadiusTopStart">12dp</item>
         <item name="boxCornerRadiusTopEnd">12dp</item>
         <item name="boxCornerRadiusBottomStart">12dp</item>
         <item name="boxCornerRadiusBottomEnd">12dp</item>
-
-        <!-- Stroke -->
         <item name="boxStrokeWidth">1dp</item>
         <item name="boxStrokeWidthFocused">2dp</item>
-
     </style>
 
-    <!-- ================= DOTS ================= -->
-
+    <!-- ================= DOTS / TABS ================= -->
     <style name="Widget.YummyPlanner.Dots"
         parent="Widget.Material3.TabLayout">
         <item name="tabIndicator">@drawable/dot_indicator</item>

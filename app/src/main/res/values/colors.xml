@@ -30,5 +30,6 @@
     <!-- Danger -->
     <color name="danger_700">#C20D0D</color>
     <color name="danger_500">#F44336</color>
+    <color name="_32324d">#32324D</color>
 
 </resources>
