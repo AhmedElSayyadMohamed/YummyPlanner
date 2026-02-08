@@ -1,12 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
     namespace = "com.example.yummyplanner"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     buildFeatures {
         viewBinding = true
@@ -14,7 +13,7 @@ android {
     defaultConfig {
         applicationId = "com.example.yummyplanner"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -31,8 +30,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
 
@@ -44,11 +43,17 @@ dependencies {
     implementation(libs.fragment)
     implementation(libs.viewpager2)
     implementation(libs.recyclerview)
+    implementation(libs.credentials)
+    implementation(libs.credentials.play.services.auth)
+    implementation(libs.googleid)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation("de.hdodenhof:circleimageview:3.1.0")
-    implementation("com.google.android.material:material:1.11.0")
+    implementation(libs.circleimageview)
+
+    // Import the BoM for the Firebase platform
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
 
     // Navigation component (optional, for advanced nav)
     implementation(libs.navigation.fragment)
