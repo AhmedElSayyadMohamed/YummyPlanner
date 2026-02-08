@@ -1,4 +1,4 @@
-package com.example.yummyplanner.ui.auth;
+package com.example.yummyplanner.ui.auth.login.presenter;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,9 +9,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+
 import androidx.navigation.Navigation;
 
+import com.example.yummyplanner.BaseFragment;
 import com.example.yummyplanner.R;
 import com.example.yummyplanner.data.auth.repository.AuthRepository;
 import com.example.yummyplanner.data.auth.repository.AuthRepositoryImpl;
@@ -23,16 +24,13 @@ import com.example.yummyplanner.data.local.userSession.SessionRepository;
 import com.example.yummyplanner.data.local.userSession.SessionRepositoryImpl;
 import com.example.yummyplanner.data.local.userSession.UserSessionManager;
 import com.example.yummyplanner.databinding.FragmentLoginBinding;
-import com.example.yummyplanner.ui.auth.presenter.AuthContract;
-import com.example.yummyplanner.ui.auth.presenter.AuthPresenter;
 import com.example.yummyplanner.ui.layout.LayoutActivity;
 import com.example.yummyplanner.utiles.Constants;
-import com.google.android.material.snackbar.Snackbar;
 
-public class LoginFragment extends Fragment implements AuthContract.View {
+public class LoginFragment extends BaseFragment implements LoginContract.View {
 
     private FragmentLoginBinding binding;
-    private AuthPresenter presenter;
+    private LoginPresenter presenter;
     private GoogleAuthHelper googleAuthHelper;
 
     private final SocialAuthCallback socialAuthCallback = new SocialAuthCallback() {
@@ -62,7 +60,7 @@ public class LoginFragment extends Fragment implements AuthContract.View {
         SessionRepository sessionRepo = new SessionRepositoryImpl(sessionManager);
         AuthRepository authRepo = new AuthRepositoryImpl();
 
-        presenter = new AuthPresenter(this, sessionRepo, authRepo);
+        presenter = new LoginPresenter(this, sessionRepo, authRepo);
         googleAuthHelper = new GoogleAuthHelper(requireActivity(), socialAuthCallback);
     }
 
@@ -88,6 +86,8 @@ public class LoginFragment extends Fragment implements AuthContract.View {
         binding.loginBtn.setOnClickListener(v -> {
             String email = binding.etEmail.getText().toString().trim();
             String password = binding.etPassword.getText().toString().trim();
+            Log.d("LOGIN", "Login button clicked");
+
             presenter.onLoginClicked(email, password);
         });
 
@@ -107,7 +107,6 @@ public class LoginFragment extends Fragment implements AuthContract.View {
         );
     }
 
-    /* ================= View callbacks ================= */
 
     @Override
     public void showLoading() {

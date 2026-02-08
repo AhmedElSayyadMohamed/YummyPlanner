@@ -1,4 +1,4 @@
-package com.example.yummyplanner.ui.auth.presenter;
+package com.example.yummyplanner.ui.auth.login.presenter;
 
 import android.util.Log;
 
@@ -8,20 +8,20 @@ import com.example.yummyplanner.data.auth.repository.AuthResultCallback;
 import com.example.yummyplanner.data.local.userSession.SessionRepository;
 import com.example.yummyplanner.utiles.EmailAndPasswordValidation;
 
-public class AuthPresenter implements AuthContract.Presenter{
+public class LoginPresenter implements LoginContract.Presenter {
 
-    private AuthContract.View view;
+    private LoginContract.View view;
     private SessionRepository sessionRepo;
     private AuthRepository authRepo;
 
-    public AuthPresenter(AuthContract.View view,SessionRepository sessionRepo,AuthRepository authRepo){
+    public LoginPresenter(LoginContract.View view, SessionRepository sessionRepo, AuthRepository authRepo){
         this.view = view ;
         this.sessionRepo = sessionRepo;
         this.authRepo = authRepo;
     }
 
     @Override
-    public void attachView(AuthContract.View view) {
+    public void attachView(LoginContract.View view) {
         this.view = view;
     }
 
@@ -44,9 +44,12 @@ public class AuthPresenter implements AuthContract.Presenter{
 
         if (view != null) view.showLoading();
 
+        Log.d("LOGIN", "call  authRepo.loginWithEmailAndPassword ");
         authRepo.loginWithEmailAndPassword(email, password, new AuthResultCallback() {
             @Override
             public void onSuccess(User user) {
+                Log.d("LOGIN", "Success  authRepo.loginWithEmailAndPassword ");
+
                 if (view == null) return;
                 view.hideLoading();
                 view.showSuccessMessage("Login Successful");
@@ -55,6 +58,8 @@ public class AuthPresenter implements AuthContract.Presenter{
 
             @Override
             public void onError(String message) {
+                Log.d("LOGIN", "FAil  authRepo.loginWithEmailAndPassword ");
+
                 if (view == null) return;
                 view.hideLoading();
                 view.showErrorMessage(message != null ? message : "Login failed");
@@ -83,7 +88,7 @@ public class AuthPresenter implements AuthContract.Presenter{
 
     @Override
     public void onGoogleLoginClicked() {
-        Log.d("LOGIN", "We are in AuthPresenter and will fire launchGoogleLogin that in imp in view");
+        Log.d("LOGIN", "We are in LoginPresenter and will fire launchGoogleLogin that in imp in view");
 
         if (view != null) view.launchGoogleLogin();
     }

@@ -21,11 +21,13 @@ public class AuthRepositoryImpl implements AuthRepository {
     @Override
     public void loginWithEmailAndPassword(String email, String password, AuthResultCallback authResultCallback) {
 
+        Log.d("LOGIN", "email "+email+" password "+password);
+
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
 
                     if (task.isSuccessful()) {
-                        Log.d(TAG, "signInWithEmail:success");
+                        Log.d("LOGIN", "signInWithEmail:success");
 
                         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                         if (firebaseUser == null) {
@@ -37,7 +39,8 @@ public class AuthRepositoryImpl implements AuthRepository {
                         authResultCallback.onSuccess(user);
 
                     } else {
-                        Log.w(TAG, "signInWithEmail:failure", task.getException());
+//                        Log.w(TAG, "signInWithEmail:failure", task.getException());
+                        Log.d("LOGIN", "Fail  signInWithEmail:failure ");
 
                         String errorMsg = task.getException() != null
                                 ? task.getException().getMessage()

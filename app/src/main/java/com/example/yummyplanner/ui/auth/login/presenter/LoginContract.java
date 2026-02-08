@@ -1,6 +1,6 @@
-package com.example.yummyplanner.ui.auth.presenter;
+package com.example.yummyplanner.ui.auth.login.presenter;
 
-public interface AuthContract {
+public interface LoginContract {
 
     interface View {
         void showLoading();
@@ -20,7 +20,7 @@ public interface AuthContract {
     interface Presenter {
         void onLoginClicked(String email, String password);
         void continueAsAGeust();
-        void attachView(AuthContract.View view);
+        void attachView(LoginContract.View view);
 
         void onCreateAccountClicked();
         void onFacebookLoginClicked();
