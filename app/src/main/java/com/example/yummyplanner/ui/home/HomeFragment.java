@@ -52,6 +52,8 @@ public class HomeFragment extends Fragment implements HomeContract.View, Categor
         super.onViewCreated(view, savedInstanceState);
 
         presenter = new HomePresenter(this);
+        categoriesAdapter = new CategoryAdapter(this);
+        popularAdapter = new MealAdapter(this);
         setupRecyclerViews();
 
         showLoading();
@@ -65,7 +67,6 @@ public class HomeFragment extends Fragment implements HomeContract.View, Categor
         binding.categoriesRecyclerView.setLayoutManager(
                 new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         );
-        categoriesAdapter = new CategoryAdapter(this);
         binding.categoriesRecyclerView.setAdapter(categoriesAdapter);
 
         // Popular Meals RecyclerView
@@ -74,7 +75,6 @@ public class HomeFragment extends Fragment implements HomeContract.View, Categor
 
         binding.popularMealsRecyclerView.setLayoutManager(gridLayoutManager);
 
-        popularAdapter = new MealAdapter(this);
         binding.popularMealsRecyclerView.setAdapter(popularAdapter);
     }
 
@@ -154,6 +154,8 @@ public class HomeFragment extends Fragment implements HomeContract.View, Categor
             presenter.onDestroy();
         }
         binding = null;
+        categoriesAdapter = null;
+        popularAdapter = null;
         super.onDestroyView();
     }
 }
