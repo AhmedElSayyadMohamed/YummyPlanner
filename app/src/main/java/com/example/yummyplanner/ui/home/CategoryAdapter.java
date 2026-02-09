@@ -3,7 +3,7 @@ package com.example.yummyplanner.ui.home;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yummyplanner.R;
-import com.example.yummyplanner.data.model.Category;
+import com.example.yummyplanner.data.meals.model.Category;
 
 import java.util.ArrayList;
 import java.util.List;

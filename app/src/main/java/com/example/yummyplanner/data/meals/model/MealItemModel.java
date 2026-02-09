@@ -1,8 +1,8 @@
-package com.example.yummyplanner.data.model;
+package com.example.yummyplanner.data.meals.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Meal {
+public class MealItemModel {
 
     @SerializedName("idMeal")
     private String id;
@@ -16,14 +16,8 @@ public class Meal {
     @SerializedName("strArea")
     private String area;
 
-    @SerializedName("strInstructions")
-    private String instructions;
-
     @SerializedName("strMealThumb")
     private String imageUrl;
-
-    @SerializedName("strYoutube")
-    private String youtubeUrl;
 
 
     public void setId(String id) {
@@ -42,16 +36,8 @@ public class Meal {
         this.area = area;
     }
 
-    public void setInstructions(String instructions) {
-        this.instructions = instructions;
-    }
-
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public void setYoutubeUrl(String youtubeUrl) {
-        this.youtubeUrl = youtubeUrl;
     }
 
     public String getId() {
@@ -70,16 +56,8 @@ public class Meal {
         return area;
     }
 
-    public String getInstructions() {
-        return instructions;
-    }
-
     public String getImageUrl() {
         return imageUrl;
-    }
-
-    public String getYoutubeUrl() {
-        return youtubeUrl;
     }
 
     public String getCountryFlagUrl() {

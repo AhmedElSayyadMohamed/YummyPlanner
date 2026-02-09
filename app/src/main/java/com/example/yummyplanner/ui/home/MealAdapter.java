@@ -11,18 +11,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.yummyplanner.R;
-import com.example.yummyplanner.data.model.Meal;
+import com.example.yummyplanner.data.meals.model.MealItemModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder> {
 
-    private List<Meal> meals = new ArrayList<>();
+    private List<MealItemModel> meals = new ArrayList<>();
     private OnMealClickListener listener;
 
     public interface OnMealClickListener {
-        void onMealClick(Meal meal);
+        void onMealClick(MealItemModel meal);
     }
 
     public MealAdapter(OnMealClickListener listener) {
@@ -30,7 +30,7 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
         this.listener = listener;
     }
 
-    public void setMeals(List<Meal> meals) {
+    public void setMeals(List<MealItemModel> meals) {
         this.meals = meals;
         notifyDataSetChanged();
     }
@@ -45,7 +45,7 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull MealViewHolder holder, int position) {
-        Meal meal = meals.get(position);
+        MealItemModel meal = meals.get(position);
 
         holder.mealName.setText(meal.getName());
         holder.mealCategory.setText(meal.getCategory());

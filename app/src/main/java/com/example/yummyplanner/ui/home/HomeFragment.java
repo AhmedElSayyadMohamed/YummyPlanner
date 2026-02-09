@@ -12,12 +12,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.yummyplanner.R;
-import com.example.yummyplanner.data.model.Category;
-import com.example.yummyplanner.data.model.Meal;
+import com.example.yummyplanner.data.meals.model.Category;
+import com.example.yummyplanner.data.meals.model.MealItemModel;
 import com.example.yummyplanner.databinding.FragmentHomeBinding;
 import com.example.yummyplanner.ui.home.presenter.HomeContract;
 import com.example.yummyplanner.ui.home.presenter.HomePresenter;
@@ -93,7 +92,7 @@ public class HomeFragment extends Fragment implements HomeContract.View, Categor
     }
 
     @Override
-    public void showMealOfTheDay(Meal meal) {
+    public void showMealOfTheDay(MealItemModel meal) {
         hideLoading();
 
         binding.tvTitle.setText(meal.getName());
@@ -116,7 +115,7 @@ public class HomeFragment extends Fragment implements HomeContract.View, Categor
     }
 
     @Override
-    public void showPopularMeals(List<Meal> meals) {
+    public void showPopularMeals(List<MealItemModel> meals) {
         if (popularAdapter != null) {
             popularAdapter.setMeals(meals);
         }
@@ -143,7 +142,7 @@ public class HomeFragment extends Fragment implements HomeContract.View, Categor
     }
 
     @Override
-    public void onMealClick(Meal meal) {
+    public void onMealClick(MealItemModel meal) {
         // Handle meal click
         Toast.makeText(getContext(), "Clicked: " + meal.getName(), Toast.LENGTH_SHORT).show();
     }
