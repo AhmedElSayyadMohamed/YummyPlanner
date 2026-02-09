@@ -1,6 +1,8 @@
 package com.example.yummyplanner.data.remote;
 
 
+import android.util.Log;
+
 import com.example.yummyplanner.data.meals.model.Area;
 import com.example.yummyplanner.data.meals.model.Category;
 import com.example.yummyplanner.data.meals.model.Ingredient;
@@ -14,6 +16,7 @@ import com.example.yummyplanner.data.network.Network;
 import com.example.yummyplanner.data.remote.MealService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,7 +25,7 @@ import retrofit2.Response;
 public class MealRemoteDataSourceImpl implements com.example.yummyplanner.data.remote.MealRemoteDataSource {
 
     private final MealService mealService;
-    private final MealRemoteDataSourceImpl instance;
+    private static MealRemoteDataSourceImpl instance;
 
     private MealRemoteDataSourceImpl() {
         this.mealService = Network.getInstance().create(MealService.class);
@@ -147,25 +150,31 @@ public class MealRemoteDataSourceImpl implements com.example.yummyplanner.data.r
 
     @Override
     public void getPopularMeals(MealsDataCallback<List<MealItemModel>> callback) {
-        mealService.getMealsByCategory("Seafood")
-                .enqueue(new Callback<MealResponse>() {
+        mealService.getPopularMeals("a")
+                .enqueue(new Callback<MealsResponse>() {
                     @Override
                     public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
                         if (response.isSuccessful() && response.body() != null) {
+
                             List<MealItemModel> allMeals = response.body().getMeals();
 
+                            Log.d("DEBUG_MEAL", "Name: " + allMeals.get(0).getName() +
+                                    ", Category: " + allMeals.get(0).getCategory() +
+                                    ", Area: " + allMeals.get(0).getArea() +
+                                    ", Flag URL: " + allMeals.get(0).getCountryFlagUrl());
+
                             List<MealItemModel> popularMeals = allMeals.stream()
-                                    .limit(5)
+                                    .limit(10)
                                     .collect(Collectors.toList());
 
                             callback.onSuccess(popularMeals);
                         } else {
-                            callback.onError("Error fetching meals");
+                            callback.onFailure("Error fetching meals");
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<MealResponse> call, Throwable t) {
+                    public void onFailure(Call<MealsResponse> call, Throwable t) {
                         callback.onFailure(t.getMessage() != null ? t.getMessage() : "Network Error Please Check Your Network");
                     }
                 });

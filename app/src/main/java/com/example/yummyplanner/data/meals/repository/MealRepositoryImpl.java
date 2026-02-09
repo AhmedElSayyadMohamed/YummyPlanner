@@ -16,7 +16,7 @@ public class MealRepositoryImpl implements MealRepository {
     private final  MealRemoteDataSource remoteDataSource;
 
     private MealRepositoryImpl() {
-        remoteDataSource = MealRemoteDataSource.getInstance();
+        remoteDataSource = MealRemoteDataSourceImpl.getInstance();
     }
 
     public static synchronized MealRepositoryImpl getInstance(){

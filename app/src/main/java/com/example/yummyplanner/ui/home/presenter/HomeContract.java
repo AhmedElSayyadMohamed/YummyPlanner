@@ -19,12 +19,11 @@ public interface HomeContract {
         void showCategories(List<Category> categories);
         void showPopularMeals(List<MealItemModel> meals);
         void showCuisines(List<Area> areas);
-        void showIngredients(List<Ingredient> ingredients);
 
         void navigateToMealDetails(MealItemModel meal);
         void navigateToMealsList(String filter, String type);
         void setUserName(String name);
-        void setUserPhoto(String);
+
     }
 
     interface Presenter {
@@ -35,7 +34,6 @@ public interface HomeContract {
         void onMealOfTheDayClicked(MealItemModel meal);
         void onCategoryClicked(String category);
         void onCuisineClicked(String area);
-        void onIngredientClicked(String ingredient);
         void onPopularMealClicked(MealItemModel meal);
     }
 }

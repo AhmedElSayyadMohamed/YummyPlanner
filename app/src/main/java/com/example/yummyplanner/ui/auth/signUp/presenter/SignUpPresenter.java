@@ -2,6 +2,7 @@ package com.example.yummyplanner.ui.auth.signUp.presenter;
 
 import com.example.yummyplanner.data.auth.model.User;
 import com.example.yummyplanner.data.auth.repository.AuthRepository;
+import com.example.yummyplanner.data.auth.repository.AuthRepositoryImpl;
 import com.example.yummyplanner.data.auth.repository.AuthResultCallback;
 import com.example.yummyplanner.utiles.EmailAndPasswordValidation;
 
@@ -10,9 +11,9 @@ public class SignUpPresenter implements SignUpContract.Presenter{
     private SignUpContract.View view ;
     private final AuthRepository authRepo;
 
-    public SignUpPresenter(SignUpContract.View view, AuthRepository authRepo) {
+    public SignUpPresenter(SignUpContract.View view) {
         this.view = view;
-        this.authRepo = authRepo;
+        this.authRepo = AuthRepositoryImpl.getInstance();
     }
 
     @Override

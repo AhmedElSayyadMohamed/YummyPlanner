@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.yummyplanner.data.auth.model.User;
 import com.example.yummyplanner.data.auth.repository.AuthRepository;
+import com.example.yummyplanner.data.auth.repository.AuthRepositoryImpl;
 import com.example.yummyplanner.data.auth.repository.AuthResultCallback;
 import com.example.yummyplanner.data.local.userSession.SessionRepository;
 import com.example.yummyplanner.utiles.EmailAndPasswordValidation;
@@ -14,10 +15,10 @@ public class LoginPresenter implements LoginContract.Presenter {
     private SessionRepository sessionRepo;
     private AuthRepository authRepo;
 
-    public LoginPresenter(LoginContract.View view, SessionRepository sessionRepo, AuthRepository authRepo){
+    public LoginPresenter(LoginContract.View view, SessionRepository sessionRepo){
         this.view = view ;
         this.sessionRepo = sessionRepo;
-        this.authRepo = authRepo;
+        this.authRepo = AuthRepositoryImpl.getInstance();
     }
 
     @Override

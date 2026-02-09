@@ -17,8 +17,8 @@ public interface MealService {
     @GET("categories.php")
     Call<CategoryResponse> getCategories();
 
-    @GET("filter.php")
-    Call<MealsResponse> getPopularMeals(@Query("c") String category);
+    @GET("search.php")
+    Call<MealsResponse> getPopularMeals(@Query("f") String category);
 
 
     @GET("list.php?a=list")

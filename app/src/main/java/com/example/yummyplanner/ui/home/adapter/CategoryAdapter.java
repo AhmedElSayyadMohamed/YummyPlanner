@@ -1,4 +1,4 @@
-package com.example.yummyplanner.ui.home;
+package com.example.yummyplanner.ui.home.adapter;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,7 +47,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         holder.categoryName.setText(category.getName());
 
         Glide.with(holder.itemView)
-                .load(category.getImageUrl())
+                .load(category.getThumbnail())
                 .placeholder(R.drawable.plan1)
                 .into(holder.categoryImage);
 

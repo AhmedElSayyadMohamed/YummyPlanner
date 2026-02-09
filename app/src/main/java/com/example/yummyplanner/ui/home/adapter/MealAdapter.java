@@ -1,4 +1,4 @@
-package com.example.yummyplanner.ui.home;
+package com.example.yummyplanner.ui.home.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,24 +48,38 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
         MealItemModel meal = meals.get(position);
 
         holder.mealName.setText(meal.getName());
-        holder.mealCategory.setText(meal.getCategory());
-        holder.mealCountry.setText(meal.getArea());
+
+        holder.mealCategory.setText(meal.getCategory() != null ? meal.getCategory() : "-");
+
+        holder.mealCountry.setText(meal.getArea() != null ? meal.getArea() : "-");
 
         Glide.with(holder.itemView.getContext())
                 .load(meal.getImageUrl())
+                .centerCrop()
                 .placeholder(R.drawable.plan1)
                 .error(R.drawable.plan1)
                 .into(holder.mealImage);
 
-        Glide.with(holder.itemView.getContext())
-                .load(meal.getCountryFlagUrl())
-                .circleCrop()
-                .placeholder(R.drawable.flag)
-                .error(R.drawable.flag)
-                .into(holder.countryFlag);
+//        Glide.with(holder.itemView.getContext())
+//                .load(meal.getCountryFlagUrl())
+//                .centerCrop()
+//                .placeholder(R.drawable.flag)
+//                .error(R.drawable.ic_error)
+//                .into(holder.countryFlag);
 
+        String flagUrl = meal.getCountryFlagUrl();
+        if(flagUrl != null && !flagUrl.isEmpty()){
+            Glide.with(holder.itemView.getContext())
+                    .load(flagUrl)
+                    .centerCrop()
+                    .placeholder(R.drawable.flag)
+                    .error(R.drawable.flag)
+                    .into(holder.countryFlag);
+        }else{
+            holder.countryFlag.setImageResource(R.drawable.flag);
+        }
         holder.itemView.setOnClickListener(v -> {
-            int pos = holder.getAdapterPosition();
+            int pos = holder.getAbsoluteAdapterPosition();
             if (pos != RecyclerView.NO_POSITION && listener != null) {
                 listener.onMealClick(meals.get(pos));
             }
@@ -87,12 +101,12 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
 
         public MealViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Updated IDs to match item_meal.xml
             mealImage = itemView.findViewById(R.id.meal_image);
             countryFlag = itemView.findViewById(R.id.meal_country_flag);
-            mealName = itemView.findViewById(R.id.tv_meal_name);
+            mealName = itemView.findViewById(R.id.tv_popular_meal_name);
             mealCategory = itemView.findViewById(R.id.tv_meal_category_type);
-            mealCountry = itemView.findViewById(R.id.tv_meal_country);
+            mealCountry = itemView.findViewById(R.id.tv_popular_meal_country);
+
         }
     }
 }

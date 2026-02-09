@@ -28,7 +28,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:text="Hi Ahmed 👋"
+                android:text="Hi "
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/tvUseName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:layout_gravity="start|center_vertical"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  👋"
+                android:layout_gravity="start|center_vertical"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
@@ -113,6 +130,7 @@
 
             <!-- Meal of the Day -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mealOfDayCard"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 app:cardCornerRadius="24dp"
@@ -121,8 +139,10 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:padding="16dp">
 
+                    <!-- Label -->
                     <TextView
                         android:id="@+id/tvLabel"
                         android:layout_width="wrap_content"
@@ -130,56 +150,62 @@
                         android:text="@string/meal_of_the_day"
                         android:textColor="@color/white"
                         android:textSize="14sp"
-                        android:layout_margin="16dp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintTop_toTopOf="parent" />
 
+                    <!-- Title -->
                     <TextView
-                        android:id="@+id/tvTitle"
+                        android:id="@+id/tvMealOfTheDayTitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:maxLines="2"
                         android:text="@string/avocado_chicken_salad"
+                        android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="@color/white"
-                        android:layout_marginTop="6dp"
-                        app:layout_constraintStart_toStartOf="@id/tvLabel"
-                        app:layout_constraintTop_toBottomOf="@id/tvLabel"
-                        app:layout_constraintEnd_toStartOf="@id/avatarContainer"/>
+                        app:layout_constraintEnd_toStartOf="@+id/materialCardView"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvLabel" />
 
+
+                    <!-- Description -->
                     <TextView
-                        android:id="@+id/tvDescription"
+                        android:id="@+id/tvMealOfTheDayDescription"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
                         android:text="@string/fresh_avocado_with_grilled_chicken_healthy_and_delicious"
                         android:textColor="@color/white"
-                        android:maxLines="2"
-                        android:ellipsize="end"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintStart_toStartOf="@id/tvTitle"
-                        app:layout_constraintTop_toBottomOf="@id/tvTitle"
-                        app:layout_constraintEnd_toStartOf="@id/avatarContainer"/>
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/materialCardView"
+                        app:layout_constraintStart_toStartOf="@id/tvMealOfTheDayTitle"
+                        app:layout_constraintTop_toBottomOf="@id/tvMealOfTheDayTitle" />
 
-                    <FrameLayout
-                        android:id="@+id/avatarContainer"
-                        android:layout_width="88dp"
-                        android:layout_height="88dp"
-                        android:layout_marginEnd="16dp"
+
+                    <!-- Meal Image -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/materialCardView"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        app:cardCornerRadius="24dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent">
-
+                        app:layout_constraintTop_toTopOf="parent">
                         <ImageView
-                            android:id="@+id/meal_of_day_image"
-                            android:layout_width="72dp"
-                            android:layout_height="72dp"
-                            android:layout_gravity="center"
+                            android:id="@+id/mealOfDayImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/plan1"/>
-                    </FrameLayout>
+                            android:src="@drawable/plan1" />
+                    </com.google.android.material.card.MaterialCardView>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
+
 
             <!-- Categories -->
             <TextView
@@ -191,12 +217,29 @@
                 android:paddingVertical="16dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/categoriesRecyclerView"
+                android:id="@+id/rvCategories"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
                 tools:listitem="@layout/item_category"/>
+
+            <!-- Area -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/countries"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:paddingVertical="16dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvArea"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/item_country"/>
 
             <!-- Popular -->
             <TextView
@@ -208,7 +251,7 @@
                 android:layout_marginTop="20dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/popularMealsRecyclerView"
+                android:id="@+id/rvPopularMeals"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
@@ -216,6 +259,7 @@
                 tools:listitem="@layout/item_meal"/>
 
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
     <FrameLayout
@@ -229,9 +273,10 @@
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/loadingLottie"
-            android:layout_width="135dp"
-            android:layout_height="106dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_margin="50dp"
             android:visibility="gone"
             app:lottie_fileName="loading.json"
             app:lottie_loop="true" />
