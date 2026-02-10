@@ -21,8 +21,9 @@ import java.util.stream.Collectors;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import com.example.yummyplanner.data.remote.MealRemoteDataSource;
 
-public class MealRemoteDataSourceImpl implements com.example.yummyplanner.data.remote.MealRemoteDataSource {
+public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
 
     private final MealService mealService;
     private static MealRemoteDataSourceImpl instance;
@@ -179,5 +180,28 @@ public class MealRemoteDataSourceImpl implements com.example.yummyplanner.data.r
                     }
                 });
 
+    }
+
+    @Override
+    public void getMealById(String id, MealsDataCallback<MealItemModel> callback) {
+        mealService.getMealById(id).enqueue(new Callback<MealsResponse>() {
+            @Override
+            public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
+                if(response.isSuccessful()&& response.body()!=null){
+                    if(response.body().getMeals()!=null && !response.body().getMeals().isEmpty()){
+                        callback.onSuccess(response.body().getMeals().get(0));
+                    }else{
+                        callback.onFailure("Meal Not Found");
+                    }
+                }else{
+                    callback.onFailure("Server Error");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MealsResponse> call, Throwable t) {
+                callback.onFailure(t.getMessage()!=null?t.getMessage():"Network Error Please Check Your Network");
+            }
+        });
     }
 }

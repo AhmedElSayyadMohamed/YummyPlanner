@@ -1,6 +1,7 @@
 package com.example.yummyplanner.ui.layout;
 
 import android.os.Bundle;
+import android.view.View;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.yummyplanner.R;
 import com.example.yummyplanner.databinding.ActivityLayoutBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 public class LayoutActivity extends AppCompatActivity {
@@ -35,6 +37,27 @@ public class LayoutActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(
                 binding.bottomNavigation,
                 navController
+        );
+
+
+        BottomNavigationView bottomNav = binding.bottomNavigation;
+
+        navController.addOnDestinationChangedListener(
+                (controller, destination, arguments) -> {
+
+                    if (destination.getId() == R.id.mealDetailsFragment) {
+                        bottomNav.animate()
+                                .translationY(bottomNav.getHeight())
+                                .setDuration(200);
+                        bottomNav.setVisibility(View.GONE);
+
+                    } else {
+                        bottomNav.setVisibility(View.VISIBLE);
+                        bottomNav.animate()
+                                .translationY(0)
+                                .setDuration(200);
+                    }
+                }
         );
     }
 }

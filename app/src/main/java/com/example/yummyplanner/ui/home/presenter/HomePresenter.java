@@ -43,27 +43,27 @@ public class HomePresenter implements HomeContract.Presenter {
         loadCategories();
         loadPopularMeals();
         loadCuisines();
-        loadIngredients();
+//        loadIngredients();
 
     }
 
-    private void loadIngredients() {
-        mealRepository.getIngredients(new MealsDataCallback<List<Ingredient>>() {
-
-            @Override
-            public void onSuccess(List<Ingredient> data) {
-
-                if (view != null) {
-                    view.showIngredients(data);
-                }
-            }
-
-            @Override
-            public void onFailure(String message) {
-                view.showError("Failed to load Ingredients");
-            }
-        });
-    }
+//    private void loadIngredients() {
+//        mealRepository.getIngredients(new MealsDataCallback<List<Ingredient>>() {
+//
+//            @Override
+//            public void onSuccess(List<Ingredient> data) {
+//
+//                if (view != null) {
+//                    view.showIngredients(data);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(String message) {
+//                view.showError("Failed to load Ingredients");
+//            }
+//        });
+//    }
 
     private void loadCuisines() {
         mealRepository.getAreas(new MealsDataCallback<List<Area>>() {

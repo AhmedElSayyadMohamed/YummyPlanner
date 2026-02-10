@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -122,7 +123,7 @@ public class HomeFragment extends Fragment implements HomeContract.View,
 
     @Override
     public void showError(String message) {
-        Constants.showErrorSnackbar(this,message);
+        Constants.showErrorSnackbar(binding.getRoot(),message);
     }
 
     @Override
@@ -164,18 +165,22 @@ public class HomeFragment extends Fragment implements HomeContract.View,
 
     @Override
     public void navigateToMealDetails(MealItemModel meal) {
+        if(!isAdded() || getView() == null|| meal == null) return;
 
+        HomeFragmentDirections.ActionHomeFragmentToMealDetailsFragment action =
+                HomeFragmentDirections.actionHomeFragmentToMealDetailsFragment(meal.getId());
+
+        NavHostFragment.findNavController(this).navigate(action);
+    }
+
+    @Override
+    public void onMealClick(MealItemModel meal) {
+        navigateToMealDetails(meal);
     }
 
     @Override
     public void navigateToMealsList(String filter, String type) {
 
-    }
-
-    @Override
-    public void setUserName(String name) {
-        if (!isAdded() || getView() == null) return;
-          binding.tvUseName.setText(name);
     }
 
     @Override
@@ -189,7 +194,10 @@ public class HomeFragment extends Fragment implements HomeContract.View,
     }
 
     @Override
-    public void onMealClick(MealItemModel meal) {
-
+    public void setUserName(String name) {
+        if (!isAdded() || getView() == null) return;
+          binding.tvUseName.setText(name);
     }
+
+
 }

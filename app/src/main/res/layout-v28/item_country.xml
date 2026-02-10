@@ -31,6 +31,7 @@ app:strokeWidth="1dp">
             android:id="@+id/img_country"
             android:layout_width="50dp"
             android:layout_height="50dp"
+
             android:importantForAccessibility="no"
             android:src="@drawable/flag" />
     </com.google.android.material.card.MaterialCardView>

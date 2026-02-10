@@ -19,4 +19,7 @@ public interface MealRepository {
     void getIngredients(MealsDataCallback<List<Ingredient>> callback);
 
     void getPopularMeals(MealsDataCallback<List<MealItemModel>> callback);
+
+    void getMeadDetails(String id, MealsDataCallback<MealItemModel> callback);
+
 }

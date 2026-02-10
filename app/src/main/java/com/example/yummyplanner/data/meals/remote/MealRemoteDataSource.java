@@ -18,4 +18,7 @@ public interface MealRemoteDataSource {
     void getIngredients(MealsDataCallback<List<Ingredient>> callback);
 
     void getPopularMeals(MealsDataCallback<List<MealItemModel>> callback);
+
+    void getMealById(String id, MealsDataCallback<MealItemModel> callback);
+
 }

@@ -51,5 +51,10 @@ public class MealRepositoryImpl implements MealRepository {
     public void getPopularMeals(MealsDataCallback<List<MealItemModel>> callback) {
         remoteDataSource.getPopularMeals(callback);
     }
+
+    @Override
+    public void getMeadDetails(String id, MealsDataCallback<MealItemModel> callback) {
+        remoteDataSource.getMealById(id,callback);
+    }
 }
 

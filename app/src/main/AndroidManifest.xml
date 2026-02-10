@@ -14,12 +14,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.YummyPlanner">
-
+        <activity
+            android:name=".ui.details.DetailsActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.layout.LayoutActivity"
-            android:exported="false" />
-
-        <!-- Launcher / Splash -->
+            android:exported="false" /> <!-- Launcher / Splash -->
         <activity
             android:name=".ui.launcher.LauncherActivity"
             android:exported="true">
@@ -29,7 +29,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- Auth -->
-
         <activity
             android:name=".ui.auth.AuthActivity"
             android:exported="false" />
