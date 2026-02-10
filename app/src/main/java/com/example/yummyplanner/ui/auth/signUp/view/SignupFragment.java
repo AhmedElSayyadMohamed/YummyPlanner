@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.yummyplanner.BaseFragment;
+import com.example.yummyplanner.ui.BaseFragment;
 import com.example.yummyplanner.R;
 import com.example.yummyplanner.data.auth.repository.AuthRepositoryImpl;
 import com.example.yummyplanner.databinding.FragmentSignupBinding;
@@ -28,7 +28,7 @@ public class SignupFragment extends BaseFragment implements SignUpContract.View 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new SignUpPresenter(this,new AuthRepositoryImpl());
+        presenter = new SignUpPresenter(this);
     }
 
     @Override

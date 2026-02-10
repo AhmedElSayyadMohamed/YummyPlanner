@@ -1,4 +1,4 @@
-package com.example.yummyplanner;
+package com.example.yummyplanner.ui;
 
 import android.content.Context;
 

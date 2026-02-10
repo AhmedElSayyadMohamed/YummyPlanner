@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 
 import androidx.navigation.Navigation;
 
-import com.example.yummyplanner.BaseFragment;
+import com.example.yummyplanner.ui.BaseFragment;
 import com.example.yummyplanner.R;
 import com.example.yummyplanner.data.auth.repository.AuthRepository;
 import com.example.yummyplanner.data.auth.repository.AuthRepositoryImpl;
@@ -26,6 +26,7 @@ import com.example.yummyplanner.data.local.userSession.UserSessionManager;
 import com.example.yummyplanner.databinding.FragmentLoginBinding;
 import com.example.yummyplanner.ui.layout.LayoutActivity;
 import com.example.yummyplanner.utiles.Constants;
+import com.google.android.material.snackbar.Snackbar;
 
 public class LoginFragment extends BaseFragment implements LoginContract.View {
 
@@ -54,13 +55,11 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        AppPreferences prefs =
-                new AppPreferencesImpl(requireContext().getApplicationContext());
+        AppPreferences prefs = new AppPreferencesImpl(requireContext().getApplicationContext());
         UserSessionManager sessionManager = new UserSessionManager(prefs);
         SessionRepository sessionRepo = new SessionRepositoryImpl(sessionManager);
-        AuthRepository authRepo = new AuthRepositoryImpl();
 
-        presenter = new LoginPresenter(this, sessionRepo, authRepo);
+        presenter = new LoginPresenter(this, sessionRepo);
         googleAuthHelper = new GoogleAuthHelper(requireActivity(), socialAuthCallback);
     }
 
@@ -105,6 +104,12 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
                     Constants.showSuccessSnackbar(binding.getRoot(), "Facebook Login coming soon!");
                 }
         );
+
+        binding.btnGuest.setOnClickListener(v->{
+
+            presenter.continueAsAGeust();
+
+        });
     }
 
 
@@ -163,6 +168,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
 
     @Override
     public void showSuccessMessage(String message) {
+
         Constants.showSuccessSnackbar(binding.getRoot(), message);
     }
 

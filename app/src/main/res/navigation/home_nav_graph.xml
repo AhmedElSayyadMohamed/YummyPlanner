@@ -1,28 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/home_nav_graph"
     app:startDestination="@id/homeFragment">
 
+
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.yummyplanner.ui.home.HomeFragment"
-        android:label="Home"/>
+        android:label="Home">
+
+        <action
+            android:id="@+id/action_homeFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.yummyplanner.ui.favourites.FavoritesFragment"
-        android:label="Favorites"/>
+        android:label="Favorites" />
 
     <fragment
         android:id="@+id/plannerFragment"
         android:name="com.example.yummyplanner.ui.planner.PlannerFragment"
-        android:label="Planner"/>
+        android:label="Planner" />
 
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.yummyplanner.ui.setting.SettingFragment"
-        android:label="Settings"/>
+        android:label="Settings" />
+
+    <fragment
+        android:id="@+id/mealDetailsFragment"
+        android:name="com.example.yummyplanner.ui.details.DetailsFragment"
+        android:label="Meal Details">
+
+        <argument
+            android:name="mealId"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

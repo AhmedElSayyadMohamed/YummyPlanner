@@ -7,7 +7,7 @@ appcompat = "1.7.1"
 material = "1.13.0"
 activity = "1.12.3"
 constraintlayout = "2.2.1"
-nav_version = "2.7.7"
+nav_version = "2.9.6"
 fragment = "1.8.9"
 lottie_version = "6.4.0"
 viewpager2 = "1.1.0"
@@ -56,3 +56,4 @@ circleimageview = { group = "de.hdodenhof", name = "circleimageview", version.re
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "nav_version" }

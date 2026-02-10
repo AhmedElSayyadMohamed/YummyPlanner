@@ -13,11 +13,19 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class AuthRepositoryImpl implements AuthRepository {
     private final FirebaseAuth firebaseAuth;
+    private static AuthRepositoryImpl instance;
 
-    public AuthRepositoryImpl() {
+    private AuthRepositoryImpl() {
         this.firebaseAuth = FirebaseAuth.getInstance();
     }
 
+
+    public static synchronized AuthRepositoryImpl getInstance(){
+        if(instance == null){
+            instance = new AuthRepositoryImpl();
+        }
+        return  instance;
+    }
     @Override
     public void loginWithEmailAndPassword(String email, String password, AuthResultCallback authResultCallback) {
 

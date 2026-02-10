@@ -28,6 +28,7 @@
     <string name="planner">Planner</string>
     <string name="onboarding_item_title">Onboarding Title</string>
     <string name="onboarding_item_description">Onboarding Description</string>
+    <string name="countries">Countries</string>
 
 
 </resources>

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.navigation.safeargs)
 }
 
 android {
@@ -55,7 +56,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
 
-    // Navigation component (optional, for advanced nav)
+    // Navigation component
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
 
@@ -73,5 +74,4 @@ dependencies {
     // Room
     implementation(libs.room.runtime)
     annotationProcessor(libs.room.compiler)
-
 }

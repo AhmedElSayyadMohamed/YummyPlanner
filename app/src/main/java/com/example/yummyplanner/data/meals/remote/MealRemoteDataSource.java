@@ -1,0 +1,24 @@
+package com.example.yummyplanner.data.remote;
+import com.example.yummyplanner.data.meals.model.Area;
+import com.example.yummyplanner.data.meals.model.Category;
+import com.example.yummyplanner.data.meals.model.Ingredient;
+import com.example.yummyplanner.data.meals.model.MealItemModel;
+import com.example.yummyplanner.data.meals.repository.MealsDataCallback;
+
+import java.util.List;
+
+public interface MealRemoteDataSource {
+
+    void getRandomMeal(MealsDataCallback<MealItemModel> callback);
+
+    void getCategories(MealsDataCallback<List<Category>> callback);
+
+    void getAreas(MealsDataCallback<List<Area>> callback);
+
+    void getIngredients(MealsDataCallback<List<Ingredient>> callback);
+
+    void getPopularMeals(MealsDataCallback<List<MealItemModel>> callback);
+
+    void getMealById(String id, MealsDataCallback<MealItemModel> callback);
+
+}
