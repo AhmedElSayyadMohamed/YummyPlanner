@@ -1,6 +1,6 @@
-package com.example.yummyplanner.data.local.userSession;
+package com.example.yummyplanner.data.meals.local.userSession;
 
-import com.example.yummyplanner.data.local.appPreferences.AppPreferences;
+import com.example.yummyplanner.data.meals.local.appPreferences.AppPreferences;
 
 public class UserSessionManager {
 

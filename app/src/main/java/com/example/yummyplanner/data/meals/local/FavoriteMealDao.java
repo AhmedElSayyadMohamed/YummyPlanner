@@ -7,7 +7,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.example.yummyplanner.data.local.entity.FavouriteMealEntity;
+import com.example.yummyplanner.data.meals.local.entity.FavouriteMealEntity;
 
 import java.util.List;
 

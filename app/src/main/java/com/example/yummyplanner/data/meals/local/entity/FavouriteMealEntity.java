@@ -1,4 +1,4 @@
-package com.example.yummyplanner.data.local.entity;
+package com.example.yummyplanner.data.meals.local.entity;
 
 
 import androidx.annotation.NonNull;

@@ -3,7 +3,7 @@ package com.example.yummyplanner.ui.launcher.splash.presenter;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.example.yummyplanner.data.local.userSession.SessionRepository;
+import com.example.yummyplanner.data.meals.local.userSession.SessionRepository;
 
 public class SplashPresenter implements SplashContract.Presenter {
 

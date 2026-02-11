@@ -1,5 +1,5 @@
 package com.example.yummyplanner.ui.launcher.onboarding.presenter;
-import com.example.yummyplanner.data.local.userSession.SessionRepository;
+import com.example.yummyplanner.data.meals.local.userSession.SessionRepository;
 import com.example.yummyplanner.ui.launcher.onboarding.model.OnboardingItem;
 import com.example.yummyplanner.ui.launcher.onboarding.repository.OnboardingRepository;
 

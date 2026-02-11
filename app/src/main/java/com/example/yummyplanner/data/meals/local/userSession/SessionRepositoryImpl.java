@@ -1,4 +1,4 @@
-package com.example.yummyplanner.data.local.userSession;
+package com.example.yummyplanner.data.meals.local.userSession;
 
 public class SessionRepositoryImpl implements SessionRepository {
 

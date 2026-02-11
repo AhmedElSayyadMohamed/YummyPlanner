@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import com.example.yummyplanner.data.local.entity.FavouriteMealEntity;
+import com.example.yummyplanner.data.meals.local.entity.FavouriteMealEntity;
 
 @Database(entities = {FavouriteMealEntity.class}, version = 1, exportSchema = false)
 public abstract class MealDatabase extends RoomDatabase {

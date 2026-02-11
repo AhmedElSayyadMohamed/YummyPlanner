@@ -7,7 +7,6 @@ import com.example.yummyplanner.data.meals.model.Category;
 import com.example.yummyplanner.data.meals.model.MealItemModel;
 import com.example.yummyplanner.data.meals.repository.MealsDataCallback;
 import com.example.yummyplanner.data.repository.MealRepository;
-import com.example.yummyplanner.data.repository.MealRepositoryImpl;
 
 import java.util.List;
 
@@ -18,10 +17,10 @@ public class HomePresenter implements HomeContract.Presenter {
     private final MealRepository mealRepository;
 
 
-    public HomePresenter(HomeContract.View view) {
+    public HomePresenter(HomeContract.View view, MealRepository mealRepository, AuthRepository authRepository) {
         this.view = view;
-        this.mealRepository = MealRepositoryImpl.getInstance();
-        this.authRepository = AuthRepositoryImpl.getInstance();
+        this.mealRepository = mealRepository;
+        this.authRepository = authRepository;
     }
 
     @Override
@@ -42,27 +41,7 @@ public class HomePresenter implements HomeContract.Presenter {
         loadCategories();
         loadPopularMeals();
         loadCuisines();
-//        loadIngredients();
-
     }
-
-//    private void loadIngredients() {
-//        mealRepository.getIngredients(new MealsDataCallback<List<Ingredient>>() {
-//
-//            @Override
-//            public void onSuccess(List<Ingredient> data) {
-//
-//                if (view != null) {
-//                    view.showIngredients(data);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(String message) {
-//                view.showError("Failed to load Ingredients");
-//            }
-//        });
-//    }
 
     private void loadCuisines() {
         mealRepository.getAreas(new MealsDataCallback<List<Area>>() {
@@ -76,7 +55,7 @@ public class HomePresenter implements HomeContract.Presenter {
 
             @Override
             public void onFailure(String message) {
-                view.showError("Failed to load Areas");
+                if (view != null) view.showError("Failed to load Areas");
             }
         });
     }
@@ -92,7 +71,7 @@ public class HomePresenter implements HomeContract.Presenter {
 
             @Override
             public void onFailure(String message) {
-                view.showError("Failed to load Popular Meals");
+                if (view != null) view.showError("Failed to load Popular Meals");
             }
         });
     }
@@ -108,7 +87,7 @@ public class HomePresenter implements HomeContract.Presenter {
 
             @Override
             public void onFailure(String message) {
-                view.showError("Failed to load Categories");
+                if (view != null) view.showError("Failed to load Categories");
 
             }
         });
@@ -169,13 +148,6 @@ public class HomePresenter implements HomeContract.Presenter {
             view.navigateToMealsList(area, "area");
         }
     }
-
-//    @Override
-//    public void onIngredientClicked(String ingredient) {
-//        if (view != null && ingredient != null) {
-//            view.navigateToMealsList(ingredient, "ingredient");
-//        }
-//    }
 
     @Override
     public void onPopularMealClicked(MealItemModel meal) {

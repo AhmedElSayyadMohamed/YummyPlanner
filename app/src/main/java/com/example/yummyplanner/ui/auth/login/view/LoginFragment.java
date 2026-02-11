@@ -14,19 +14,16 @@ import androidx.navigation.Navigation;
 
 import com.example.yummyplanner.ui.BaseFragment;
 import com.example.yummyplanner.R;
-import com.example.yummyplanner.data.auth.repository.AuthRepository;
-import com.example.yummyplanner.data.auth.repository.AuthRepositoryImpl;
 import com.example.yummyplanner.data.auth.social.GoogleAuthHelper;
 import com.example.yummyplanner.data.auth.social.SocialAuthCallback;
-import com.example.yummyplanner.data.local.appPreferences.AppPreferences;
-import com.example.yummyplanner.data.local.appPreferences.AppPreferencesImpl;
-import com.example.yummyplanner.data.local.userSession.SessionRepository;
-import com.example.yummyplanner.data.local.userSession.SessionRepositoryImpl;
-import com.example.yummyplanner.data.local.userSession.UserSessionManager;
+import com.example.yummyplanner.data.meals.local.appPreferences.AppPreferences;
+import com.example.yummyplanner.data.meals.local.appPreferences.AppPreferencesImpl;
+import com.example.yummyplanner.data.meals.local.userSession.SessionRepository;
+import com.example.yummyplanner.data.meals.local.userSession.SessionRepositoryImpl;
+import com.example.yummyplanner.data.meals.local.userSession.UserSessionManager;
 import com.example.yummyplanner.databinding.FragmentLoginBinding;
 import com.example.yummyplanner.ui.layout.LayoutActivity;
 import com.example.yummyplanner.utiles.Constants;
-import com.google.android.material.snackbar.Snackbar;
 
 public class LoginFragment extends BaseFragment implements LoginContract.View {
 
