@@ -5,15 +5,15 @@ import android.util.Log;
 
 import com.example.yummyplanner.data.meals.model.Area;
 import com.example.yummyplanner.data.meals.model.Category;
-import com.example.yummyplanner.data.meals.model.Ingredient;
+import com.example.yummyplanner.data.meals.model.IngredientApiItem;
 import com.example.yummyplanner.data.meals.model.MealItemModel;
+import com.example.yummyplanner.data.meals.model.MealdetailsItemModel;
 import com.example.yummyplanner.data.meals.model.response.AreaReposnse;
 import com.example.yummyplanner.data.meals.model.response.CategoryResponse;
 import com.example.yummyplanner.data.meals.model.response.IngredientResponse;
 import com.example.yummyplanner.data.meals.model.response.MealsResponse;
 import com.example.yummyplanner.data.meals.repository.MealsDataCallback;
 import com.example.yummyplanner.data.network.Network;
-import com.example.yummyplanner.data.remote.MealService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import com.example.yummyplanner.data.remote.MealRemoteDataSource;
 
 public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
 
@@ -42,10 +41,10 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
     public void getRandomMeal(MealsDataCallback<MealItemModel> callback) {
         mealService.getMealOfTheDay().enqueue(
 
-                new Callback<MealsResponse>() {
+                new Callback<MealsResponse<MealItemModel>>() {
 
                     @Override
-                    public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
+                    public void onResponse(Call<MealsResponse<MealItemModel>> call, Response<MealsResponse<MealItemModel>> response) {
 
                         if (response.isSuccessful() && response.body() != null) {
                             List<MealItemModel> meals = response.body().getMeals();
@@ -60,7 +59,7 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
                     }
 
                     @Override
-                    public void onFailure(Call<MealsResponse> call, Throwable t) {
+                    public void onFailure(Call<MealsResponse<MealItemModel>> call, Throwable t) {
 
                         callback.onFailure(t.getMessage() != null ? t.getMessage() : " ERROR Check Your Network Please");
                     }
@@ -125,13 +124,13 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
     }
 
     @Override
-    public void getIngredients(MealsDataCallback<List<Ingredient>> callback) {
+    public void getIngredients(MealsDataCallback<List<IngredientApiItem>> callback) {
         mealService.getIngredients().enqueue(new Callback<IngredientResponse>() {
             @Override
             public void onResponse(Call<IngredientResponse> call, Response<IngredientResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     if (response.body().getIngredients() != null && !response.body().getIngredients().isEmpty()) {
-                        List<Ingredient> ingredients = response.body().getIngredients();
+                        List<IngredientApiItem> ingredients = response.body().getIngredients();
                         callback.onSuccess(ingredients);
                     } else {
                         callback.onFailure("There is no ingredients data");
@@ -152,30 +151,34 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
     @Override
     public void getPopularMeals(MealsDataCallback<List<MealItemModel>> callback) {
         mealService.getPopularMeals("a")
-                .enqueue(new Callback<MealsResponse>() {
+                .enqueue(new Callback<MealsResponse<MealItemModel>>() {
                     @Override
-                    public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
+                    public void onResponse(Call<MealsResponse<MealItemModel>> call, Response<MealsResponse<MealItemModel>> response) {
                         if (response.isSuccessful() && response.body() != null) {
 
                             List<MealItemModel> allMeals = response.body().getMeals();
 
-                            Log.d("DEBUG_MEAL", "Name: " + allMeals.get(0).getName() +
-                                    ", Category: " + allMeals.get(0).getCategory() +
-                                    ", Area: " + allMeals.get(0).getArea() +
-                                    ", Flag URL: " + allMeals.get(0).getCountryFlagUrl());
+                            if (allMeals != null && !allMeals.isEmpty()) {
+                                Log.d("DEBUG_MEAL", "Name: " + allMeals.get(0).getName() +
+                                        ", Category: " + allMeals.get(0).getCategory() +
+                                        ", Area: " + allMeals.get(0).getArea() +
+                                        ", Flag URL: " + allMeals.get(0).getCountryFlagUrl());
 
-                            List<MealItemModel> popularMeals = allMeals.stream()
-                                    .limit(10)
-                                    .collect(Collectors.toList());
+                                List<MealItemModel> popularMeals = allMeals.stream()
+                                        .limit(10)
+                                        .collect(Collectors.toList());
 
-                            callback.onSuccess(popularMeals);
+                                callback.onSuccess(popularMeals);
+                            } else {
+                                callback.onFailure("No meals found");
+                            }
                         } else {
                             callback.onFailure("Error fetching meals");
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<MealsResponse> call, Throwable t) {
+                    public void onFailure(Call<MealsResponse<MealItemModel>> call, Throwable t) {
                         callback.onFailure(t.getMessage() != null ? t.getMessage() : "Network Error Please Check Your Network");
                     }
                 });
@@ -183,10 +186,10 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
     }
 
     @Override
-    public void getMealById(String id, MealsDataCallback<MealItemModel> callback) {
-        mealService.getMealById(id).enqueue(new Callback<MealsResponse>() {
+    public void getMealById(String id, MealsDataCallback<MealdetailsItemModel> callback) {
+        mealService.getMealById(id).enqueue(new Callback<MealsResponse<MealdetailsItemModel>>() {
             @Override
-            public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
+            public void onResponse(Call<MealsResponse<MealdetailsItemModel>> call, Response<MealsResponse<MealdetailsItemModel>> response) {
                 if(response.isSuccessful()&& response.body()!=null){
                     if(response.body().getMeals()!=null && !response.body().getMeals().isEmpty()){
                         callback.onSuccess(response.body().getMeals().get(0));
@@ -199,7 +202,7 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
             }
 
             @Override
-            public void onFailure(Call<MealsResponse> call, Throwable t) {
+            public void onFailure(Call<MealsResponse<MealdetailsItemModel>> call, Throwable t) {
                 callback.onFailure(t.getMessage()!=null?t.getMessage():"Network Error Please Check Your Network");
             }
         });

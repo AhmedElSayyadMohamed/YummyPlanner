@@ -2,7 +2,6 @@ package com.example.yummyplanner.ui.home.presenter;
 
 import com.example.yummyplanner.data.meals.model.Area;
 import com.example.yummyplanner.data.meals.model.Category;
-import com.example.yummyplanner.data.meals.model.Ingredient;
 import com.example.yummyplanner.data.meals.model.MealItemModel;
 
 import java.util.List;

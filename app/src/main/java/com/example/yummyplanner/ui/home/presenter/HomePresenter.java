@@ -4,7 +4,6 @@ import com.example.yummyplanner.data.auth.repository.AuthRepository;
 import com.example.yummyplanner.data.auth.repository.AuthRepositoryImpl;
 import com.example.yummyplanner.data.meals.model.Area;
 import com.example.yummyplanner.data.meals.model.Category;
-import com.example.yummyplanner.data.meals.model.Ingredient;
 import com.example.yummyplanner.data.meals.model.MealItemModel;
 import com.example.yummyplanner.data.meals.repository.MealsDataCallback;
 import com.example.yummyplanner.data.repository.MealRepository;

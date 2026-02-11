@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide;
 import com.example.yummyplanner.R;
 import com.example.yummyplanner.data.meals.model.Area;
 import com.example.yummyplanner.data.meals.model.Category;
-import com.example.yummyplanner.data.meals.model.Ingredient;
 import com.example.yummyplanner.data.meals.model.MealItemModel;
 import com.example.yummyplanner.databinding.FragmentHomeBinding;
 import com.example.yummyplanner.ui.home.adapter.CategoryAdapter;
@@ -29,6 +28,7 @@ import com.example.yummyplanner.utiles.Constants;
 
 
 import java.util.List;
+
 
 public class HomeFragment extends Fragment implements HomeContract.View,
         MealAdapter.OnMealClickListener,
@@ -132,7 +132,14 @@ public class HomeFragment extends Fragment implements HomeContract.View,
 
         mealOfTheDay = meal;
         binding.tvMealOfTheDayTitle.setText(meal.getName());
-        binding.tvMealOfTheDayDescription.setText(meal.getCategory() + " • " + meal.getArea());
+        binding.tvMealOfTheDayCategory.setText(meal.getCategory());
+        binding.mealOfTheDaymealCountryCountry.setText(meal.getArea());
+
+        Glide.with(this)
+                .load(meal.getCountryFlagUrl())
+                .placeholder(R.drawable.flag)
+                .into(binding.mealOfTheDaymealCountryFlag);
+
         Glide.with(this)
                 .load(meal.getImageUrl())
                 .placeholder(R.drawable.plan1)

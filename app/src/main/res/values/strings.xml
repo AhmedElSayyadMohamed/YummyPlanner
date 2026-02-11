@@ -29,6 +29,14 @@
     <string name="onboarding_item_title">Onboarding Title</string>
     <string name="onboarding_item_description">Onboarding Description</string>
     <string name="countries">Countries</string>
+    <string name="meal_details">Meal Details</string>
+    <string name="product_of_the_day">Product of the day</string>
+    <string name="avocado_chicken_saladd">Avocado Chicken Salad</string>
+    <string name="_10_40">$10.40</string>
+    <string name="dessert">Dessert</string>
+    <string name="categories">Categories</string>
+    <string name="all">all</string>
+    <string name="most_popular">Most Popular</string>
 
 
 </resources>

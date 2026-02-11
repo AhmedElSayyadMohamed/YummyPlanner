@@ -1,19 +1,45 @@
 package com.example.yummyplanner.ui.details.presenter;
 
-import com.example.yummyplanner.data.meals.model.MealItemModel;
+import com.example.yummyplanner.data.meals.model.MealdetailsItemModel;
+import com.example.yummyplanner.data.meals.model.response.Ingredient;
+
+import java.util.List;
 
 public interface MealDetailsContract {
 
     interface View {
+
+        // UI States
         void showLoading();
         void hideLoading();
-        void noInternet();
         void showError(String message);
-        void showMealDetails(MealItemModel meal);
+
+        // Meal Data
+        void showMealDetails(MealdetailsItemModel meal);
+        void showIngredients(List<Ingredient> ingredients);
+        void showInstructions(String instructions);
+
+        // Favorite
+        void updateFavoriteState(boolean isFavorite);
+        void showFavoriteAdded();
+        void showFavoriteRemoved();
+
+        // Meal Planner
+        void showMealAddedToPlanner(String date);
     }
 
-    interface Presnter {
+    interface Presenter {
 
+        void attachView(View view);
+        void detachView();
 
+        // Meal Details
+        void getMealDetails(String mealId);
+
+        // Favorite
+        void onFavoriteClicked(MealdetailsItemModel meal);
+
+        // Meal Planner
+        void onAddToPlannerClicked(MealdetailsItemModel meal, String date);
     }
 }

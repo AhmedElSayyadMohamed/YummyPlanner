@@ -5,12 +5,12 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class MealsResponse {
+public class MealsResponse <T>{
 
     @SerializedName("meals")
-    private List<MealItemModel> meals;
+    private List<T> meals;
 
-    public List<MealItemModel> getMeals() {
+    public List<T> getMeals() {
         return meals;
     }
 }
