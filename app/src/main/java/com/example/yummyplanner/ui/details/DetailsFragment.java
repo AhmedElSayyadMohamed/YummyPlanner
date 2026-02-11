@@ -33,6 +33,7 @@ public class DetailsFragment extends Fragment implements MealDetailsContract.Vie
     private MealDetailsContract.Presenter presenter;
     private IngredientsAdapter ingredientsAdapter;
     private  String videoId;
+    private MealdetailsItemModel meal;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container,
@@ -56,12 +57,13 @@ public class DetailsFragment extends Fragment implements MealDetailsContract.Vie
         presenter = new MealDetailsPresenter(this);
 
         presenter.getMealDetails(mealId);
+
         binding.btnAddToFav.setOnClickListener(v -> {
-//            presenter.onFavoriteClicked();
+            presenter.onFavoriteClicked(this.meal);
         });
 
         binding.btnAddToPlanner.setOnClickListener(v -> {
-//            presenter.addMealToPlanner();
+             presenter.onAddToPlannerClicked(this.meal, "2023-09-01");
         });
 
         YouTubePlayerView youTubePlayerView = binding.youtubePlayerView;
@@ -114,6 +116,9 @@ public class DetailsFragment extends Fragment implements MealDetailsContract.Vie
 
     @Override
     public void showMealDetails(MealdetailsItemModel meal) {
+        if(meal!=null){
+            this.meal = meal;
+        }
         videoId = meal.getVideoId();
         binding.tvMealName.setText(meal.getName());
         binding.tvMealDetailsCategoryType.setText(meal.getCategory());
@@ -130,9 +135,7 @@ public class DetailsFragment extends Fragment implements MealDetailsContract.Vie
         Glide.with(this)
                 .load(meal.getCountryFlagUrl())
                 .into(binding.mealCountryDetailsFlag);
-
     }
-
 
 
     @Override
@@ -172,8 +175,6 @@ public class DetailsFragment extends Fragment implements MealDetailsContract.Vie
         Constants.showSuccessSnackbar(binding.getRoot(), "Removed from favorites 💔");
     }
 
-    // ---------------- PLANNER ----------------
-
     @Override
     public void showMealAddedToPlanner(String date) {
         Constants.showSuccessSnackbar(
@@ -183,13 +184,13 @@ public class DetailsFragment extends Fragment implements MealDetailsContract.Vie
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+    public void onIngredientClick(Ingredient ingredient) {
+
     }
 
     @Override
-    public void onIngredientClick(Ingredient ingredient) {
-
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
