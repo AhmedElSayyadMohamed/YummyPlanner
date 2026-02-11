@@ -98,6 +98,7 @@ public class MealDetailsPresenter implements MealDetailsContract.Presenter {
         );
     }
 
+
     @Override
     public void onAddToPlannerClicked(MealdetailsItemModel meal, String date) {
 

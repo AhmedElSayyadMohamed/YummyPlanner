@@ -1,5 +1,6 @@
 package com.example.yummyplanner.ui.details;
 
+import android.app.DatePickerDialog;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,9 +28,14 @@ import com.example.yummyplanner.ui.details.presenter.MealDetailsContract;
 import com.example.yummyplanner.ui.details.presenter.MealDetailsPresenter;
 import com.example.yummyplanner.utiles.Constants;
 
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointForward;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
+
+import java.util.Calendar;
 import java.util.List;
 
 public class DetailsFragment extends Fragment implements MealDetailsContract.View , IngredientsAdapter.OnIngredientClickListener {
@@ -71,7 +77,9 @@ public class DetailsFragment extends Fragment implements MealDetailsContract.Vie
         });
 
         binding.btnAddToPlanner.setOnClickListener(v -> {
-             presenter.onAddToPlannerClicked(this.meal, "2023-09-01");
+            if (meal != null) {
+                showDatePickerAndAddMeal();
+            }
         });
 
         Toolbar toolbar = binding.toolbar;
@@ -165,7 +173,6 @@ public class DetailsFragment extends Fragment implements MealDetailsContract.Vie
         binding.tvInstructions.setText(instructions);
     }
 
-
     @Override
     public void updateFavoriteState(boolean isFavorite) {
         if (isFavorite) {
@@ -192,6 +199,64 @@ public class DetailsFragment extends Fragment implements MealDetailsContract.Vie
                 .setDuration(400)
                 .setInterpolator(new OvershootInterpolator());
     }
+
+    private void showDatePickerAndAddMeal() {
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        today.set(Calendar.MINUTE, 0);
+        today.set(Calendar.SECOND, 0);
+        today.set(Calendar.MILLISECOND, 0);
+
+        Calendar startDate = (Calendar) today.clone();
+        startDate.add(Calendar.DAY_OF_MONTH, 1);
+
+        Calendar endDate = (Calendar) startDate.clone();
+        endDate.add(Calendar.DAY_OF_MONTH, 7);
+
+        CalendarConstraints.DateValidator validator =
+                DateValidatorPointForward.from(startDate.getTimeInMillis());
+
+        CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder()
+                .setValidator(new CalendarConstraints.DateValidator() {
+                    @Override
+                    public boolean isValid(long date) {
+                        return date >= startDate.getTimeInMillis() && date <= endDate.getTimeInMillis();
+                    }
+
+                    @Override
+                    public int describeContents() { return 0; }
+
+                    @Override
+                    public void writeToParcel(android.os.Parcel dest, int flags) {}
+                });
+
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select a date")
+                .setCalendarConstraints(constraintsBuilder.build())
+                .setTheme(com.google.android.material.R.style.ThemeOverlay_Material3_MaterialCalendar)
+                .build();
+
+        datePicker.addOnPositiveButtonClickListener(selection -> {
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(selection);
+
+            String selectedDate = String.format("%04d-%02d-%02d",
+                    cal.get(Calendar.YEAR),
+                    cal.get(Calendar.MONTH) + 1,
+                    cal.get(Calendar.DAY_OF_MONTH));
+
+            addMealToPlanner(selectedDate);
+        });
+
+        datePicker.show(getParentFragmentManager(), "DATE_PICKER");
+    }
+
+    private void addMealToPlanner(String date) {
+        if (presenter != null) {
+            presenter.onAddToPlannerClicked(meal, date);
+        }
+    }
+
 
     @Override
     public void showFavoriteAdded() {
