@@ -1,12 +1,13 @@
 package com.example.yummyplanner.data.repository;
 import com.example.yummyplanner.data.meals.model.Area;
 import com.example.yummyplanner.data.meals.model.Category;
-import com.example.yummyplanner.data.meals.model.Ingredient;
+import com.example.yummyplanner.data.meals.model.IngredientApiItem;
 import com.example.yummyplanner.data.meals.model.MealItemModel;
+import com.example.yummyplanner.data.meals.model.MealdetailsItemModel;
 import com.example.yummyplanner.data.meals.repository.MealsDataCallback;
 import com.example.yummyplanner.data.remote.MealRemoteDataSource;
 import com.example.yummyplanner.data.remote.MealRemoteDataSourceImpl;
-import  com.example.yummyplanner.data.repository.MealRepository;
+
 import java.util.List;
 
 
@@ -43,7 +44,7 @@ public class MealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public void getIngredients(MealsDataCallback<List<Ingredient>> callback) {
+    public void getIngredients(MealsDataCallback<List<IngredientApiItem>> callback) {
         remoteDataSource.getIngredients(callback);
     }
 
@@ -53,7 +54,7 @@ public class MealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public void getMeadDetails(String id, MealsDataCallback<MealItemModel> callback) {
+    public void getMeadDetails(String id, MealsDataCallback<MealdetailsItemModel> callback) {
         remoteDataSource.getMealById(id,callback);
     }
 }

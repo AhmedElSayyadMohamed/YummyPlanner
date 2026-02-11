@@ -56,6 +56,8 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
 
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:13.0.0")
+
     // Navigation component
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)

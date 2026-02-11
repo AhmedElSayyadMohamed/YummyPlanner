@@ -1,15 +1,15 @@
 package com.example.yummyplanner.data.meals.model.response;
 
-import com.example.yummyplanner.data.meals.model.Ingredient;
+import com.example.yummyplanner.data.meals.model.IngredientApiItem;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 public class IngredientResponse {
     @SerializedName("meals")
-    private List<Ingredient> ingredients;
+    private List<IngredientApiItem> ingredients;
 
-    public List<Ingredient> getIngredients(){
+    public List<IngredientApiItem> getIngredients(){
 
         return ingredients;
     }

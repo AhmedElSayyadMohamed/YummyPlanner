@@ -164,26 +164,63 @@
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/materialCardView"
+                        app:layout_constraintEnd_toStartOf="@id/materialCardView"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tvLabel" />
-
-
-                    <!-- Description -->
+                    <!-- Category -->
                     <TextView
-                        android:id="@+id/tvMealOfTheDayDescription"
+                        android:id="@+id/tvMealOfTheDayCategory"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_weight="1"
                         android:ellipsize="end"
+                        android:gravity="start"
                         android:maxLines="2"
-                        android:text="@string/fresh_avocado_with_grilled_chicken_healthy_and_delicious"
+                        android:text="@string/dessert"
                         android:textColor="@color/white"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
                         app:layout_constraintEnd_toStartOf="@+id/materialCardView"
-                        app:layout_constraintStart_toStartOf="@id/tvMealOfTheDayTitle"
-                        app:layout_constraintTop_toBottomOf="@id/tvMealOfTheDayTitle" />
+                        app:layout_constraintStart_toStartOf="@+id/tvMealOfTheDayTitle"
+                        app:layout_constraintTop_toBottomOf="@+id/tvMealOfTheDayTitle" />
 
+                    <LinearLayout
+                        android:id="@+id/linearLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent">
+
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            app:cardBackgroundColor="@android:color/white"
+                            app:cardCornerRadius="32dp"
+                            app:cardElevation="1dp"
+                            app:strokeColor="@color/primary_100"
+                            app:strokeWidth="1dp">
+
+                            <ImageView
+                                android:id="@+id/mealOfTheDaymealCountryFlag"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/flag" />
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <TextView
+                            android:id="@+id/mealOfTheDaymealCountryCountry"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="Egypt"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
 
                     <!-- Meal Image -->
                     <com.google.android.material.card.MaterialCardView
@@ -207,22 +244,19 @@
             </com.google.android.material.card.MaterialCardView>
 
 
-
             <!-- Categories -->
           <LinearLayout
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="horizontal"
-
-              >
+              android:paddingVertical="16dp">
 
               <TextView
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:text="Categories"
+                  android:text="@string/categories"
                   android:textSize="18sp"
-                  android:textStyle="bold"
-                  android:paddingVertical="16dp"/>
+                  android:textStyle="bold"/>
               <View
                   android:layout_width="0dp"
                   android:layout_height="0dp"
@@ -230,10 +264,8 @@
               <TextView
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:text="All"
-                  android:textSize="18sp"
-                  android:textStyle="bold"
-                  android:paddingVertical="16dp"/>
+                  android:text="@string/all"
+                  android:textSize="16sp"/>
           </LinearLayout>
 
 
@@ -246,14 +278,28 @@
                 tools:listitem="@layout/item_category"/>
 
             <!-- Area -->
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/countries"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:paddingVertical="16dp"/>
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingVertical="16dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/countries"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="all"
+                    android:textSize="16sp"/>
+            </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvArea"
                 android:layout_width="match_parent"
@@ -263,14 +309,28 @@
                 tools:listitem="@layout/item_country"/>
 
             <!-- Popular -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Most Popular"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginTop="20dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingVertical="16dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/most_popular"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="all"
+                    android:textSize="16sp"/>
+            </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvPopularMeals"
                 android:layout_width="match_parent"
