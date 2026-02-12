@@ -1,16 +1,18 @@
 package com.example.yummyplanner.data.meals.repository;
 
+import com.example.yummyplanner.data.meals.local.entity.FavouriteMealEntity;
 import com.example.yummyplanner.data.meals.model.Area;
 import com.example.yummyplanner.data.meals.model.Category;
-import com.example.yummyplanner.data.meals.model.Ingredient;
 import com.example.yummyplanner.data.meals.model.IngredientApiItem;
 import com.example.yummyplanner.data.meals.model.MealItemModel;
 import com.example.yummyplanner.data.meals.model.MealdetailsItemModel;
 import com.example.yummyplanner.data.meals.remote.MealRemoteDataSource;
 import com.example.yummyplanner.data.meals.remote.MealRemoteDataSourceImpl;
-import java.util.List;
-import java.util.stream.Collectors;
 
+import java.util.List;
+
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 
 public class MealRepositoryImpl implements MealRepository {
@@ -57,5 +59,35 @@ public class MealRepositoryImpl implements MealRepository {
     @Override
     public Single<MealdetailsItemModel> getMealDetails(String id) {
         return remoteDataSource.getMealById(id);
+    }
+
+    @Override
+    public Flowable<List<FavouriteMealEntity>> getAllFavorites() {
+        return null;
+    }
+
+    @Override
+    public Completable insertFavorite(FavouriteMealEntity meal) {
+        return null;
+    }
+
+    @Override
+    public Completable deleteFavorite(FavouriteMealEntity meal) {
+        return null;
+    }
+
+    @Override
+    public Completable deleteFavoriteById(String mealId) {
+        return null;
+    }
+
+    @Override
+    public Single<Boolean> isFavorite(String mealId) {
+        return null;
+    }
+
+    @Override
+    public Single<FavouriteMealEntity> getFavoriteById(String mealId) {
+        return null;
     }
 }
