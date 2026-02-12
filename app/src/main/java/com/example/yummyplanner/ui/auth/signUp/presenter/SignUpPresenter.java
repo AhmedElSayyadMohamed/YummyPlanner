@@ -1,10 +1,14 @@
 package com.example.yummyplanner.ui.auth.signUp.presenter;
 
+import android.util.Log;
+
 import com.example.yummyplanner.data.auth.model.User;
 import com.example.yummyplanner.data.auth.repository.AuthRepository;
 import com.example.yummyplanner.data.auth.repository.AuthRepositoryImpl;
 import com.example.yummyplanner.data.auth.repository.AuthResultCallback;
+import com.example.yummyplanner.data.meals.cloud.CloudRemoteDataSource;
 import com.example.yummyplanner.utiles.EmailAndPasswordValidation;
+import com.example.yummyplanner.utiles.LogsConstants;
 
 public class SignUpPresenter implements SignUpContract.Presenter{
 
@@ -60,11 +64,16 @@ public class SignUpPresenter implements SignUpContract.Presenter{
         }
 
         if (view != null) view.showLoading();
+        User user = new User(fullName, email);
+        user.setPassword(password);
+        Log.d("userRegister", "registerUser in presenter ");
 
-        authRepo.registerWithEmailAndPassword(email,password,new AuthResultCallback() {
+        authRepo.registerWithEmailAndPassword(user,new AuthResultCallback() {
             @Override
             public void onSuccess(User user) {
                 if (view == null) return;
+                Log.d(LogsConstants.userRegister, "success registerUser in presenter ");
+
                 view.hideLoading();
                 view.showSuccessMessage("User registered successfully");
                 view.navigateToLoginScreen();
@@ -73,11 +82,14 @@ public class SignUpPresenter implements SignUpContract.Presenter{
             @Override
             public void onError(String message) {
                 if (view == null) return;
+                Log.d(LogsConstants.userRegister, "faild registerUser in presenter ");
+
                 view.hideLoading();
                 view.showErrorMessage(message != null ? message : "Registration failed");
             }
         });
     }
+
 
     @Override
     public void onLoginClicked() {

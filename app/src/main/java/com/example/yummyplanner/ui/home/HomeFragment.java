@@ -15,9 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.yummyplanner.R;
+import com.example.yummyplanner.data.auth.repository.AuthRepositoryImpl;
 import com.example.yummyplanner.data.meals.model.Area;
 import com.example.yummyplanner.data.meals.model.Category;
 import com.example.yummyplanner.data.meals.model.MealItemModel;
+import com.example.yummyplanner.data.repository.MealRepositoryImpl;
 import com.example.yummyplanner.databinding.FragmentHomeBinding;
 import com.example.yummyplanner.ui.home.adapter.CategoryAdapter;
 import com.example.yummyplanner.ui.home.adapter.CuisinesAdapter;
@@ -48,7 +50,11 @@ public class HomeFragment extends Fragment implements HomeContract.View,
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new HomePresenter(this);
+        presenter = new HomePresenter(
+                this,
+                MealRepositoryImpl.getInstance(requireContext()),
+                AuthRepositoryImpl.getInstance()
+        );
     }
 
     @Nullable

@@ -3,6 +3,8 @@ package com.example.yummyplanner.ui.auth.signUp.view;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import com.example.yummyplanner.databinding.FragmentSignupBinding;
 import com.example.yummyplanner.ui.auth.signUp.presenter.SignUpContract;
 import com.example.yummyplanner.ui.auth.signUp.presenter.SignUpPresenter;
 import com.example.yummyplanner.utiles.Constants;
+import com.example.yummyplanner.utiles.LogsConstants;
 import com.google.android.material.appbar.MaterialToolbar;
 
 
@@ -64,6 +67,8 @@ public class SignupFragment extends BaseFragment implements SignUpContract.View 
             String confirmPassword = getText(binding.etConfirmPassword);
 
             presenter.registerUser(fullName, email, password, confirmPassword);
+
+            Log.d("userRegister", "I am click register btn ");
         });
         super.onViewCreated(view, savedInstanceState);
     }

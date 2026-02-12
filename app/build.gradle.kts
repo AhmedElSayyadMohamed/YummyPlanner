@@ -55,7 +55,8 @@ dependencies {
     // Import the BoM for the Firebase platform
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
-
+    // Firestore
+    implementation("com.google.firebase:firebase-firestore")
     // youtube video
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:13.0.0")
 

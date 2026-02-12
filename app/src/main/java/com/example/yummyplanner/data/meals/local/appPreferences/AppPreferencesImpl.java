@@ -1,4 +1,4 @@
-package com.example.yummyplanner.data.local.appPreferences;
+package com.example.yummyplanner.data.meals.local.appPreferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;

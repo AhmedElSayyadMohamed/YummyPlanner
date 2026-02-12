@@ -6,7 +6,7 @@ import com.example.yummyplanner.data.auth.model.User;
 import com.example.yummyplanner.data.auth.repository.AuthRepository;
 import com.example.yummyplanner.data.auth.repository.AuthRepositoryImpl;
 import com.example.yummyplanner.data.auth.repository.AuthResultCallback;
-import com.example.yummyplanner.data.local.userSession.SessionRepository;
+import com.example.yummyplanner.data.meals.local.userSession.SessionRepository;
 import com.example.yummyplanner.utiles.EmailAndPasswordValidation;
 
 public class LoginPresenter implements LoginContract.Presenter {

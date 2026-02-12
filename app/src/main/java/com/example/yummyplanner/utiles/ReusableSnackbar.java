@@ -5,12 +5,14 @@ import android.graphics.Color;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -30,11 +32,19 @@ public class ReusableSnackbar {
         layout.setBackgroundColor(Color.TRANSPARENT);
         layout.setPadding(0, 0, 0, 0);
 
-        FrameLayout.LayoutParams params =
-                (FrameLayout.LayoutParams) layout.getLayoutParams();
-        params.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
-        params.setMargins(32, 0, 32, 32);
-        layout.setLayoutParams(params);
+        ViewGroup.LayoutParams layoutParams = layout.getLayoutParams();
+
+        if (layoutParams instanceof FrameLayout.LayoutParams) {
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) layoutParams;
+            params.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+            params.setMargins(32, 0, 32, 32);
+            layout.setLayoutParams(params);
+        } else if (layoutParams instanceof CoordinatorLayout.LayoutParams) {
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) layoutParams;
+            params.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+            params.setMargins(32, 0, 32, 32);
+            layout.setLayoutParams(params);
+        }
 
         View customView;
 
