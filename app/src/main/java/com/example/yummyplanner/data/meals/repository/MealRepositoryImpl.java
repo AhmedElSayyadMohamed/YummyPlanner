@@ -1,110 +1,58 @@
 package com.example.yummyplanner.data.repository;
-import android.content.Context;
 
-import com.example.yummyplanner.data.auth.model.User;
-import com.example.yummyplanner.data.meals.cloud.CloudRemoteDataSource;
-import com.example.yummyplanner.data.meals.cloud.FireStoreManager;
-import com.example.yummyplanner.data.meals.local.MealLocalDataSource;
-import com.example.yummyplanner.data.meals.local.MealLocalDataSourceImpl;
-import com.example.yummyplanner.data.meals.local.entity.FavouriteMealEntity;
-import com.example.yummyplanner.data.meals.local.entity.PlannedMealEntity;
 import com.example.yummyplanner.data.meals.model.Area;
 import com.example.yummyplanner.data.meals.model.Category;
-import com.example.yummyplanner.data.meals.model.IngredientApiItem;
+import com.example.yummyplanner.data.meals.model.Ingredient;
 import com.example.yummyplanner.data.meals.model.MealItemModel;
-import com.example.yummyplanner.data.meals.model.MealdetailsItemModel;
-import com.example.yummyplanner.data.meals.repository.MealsDataCallback;
 import com.example.yummyplanner.data.remote.MealRemoteDataSource;
 import com.example.yummyplanner.data.remote.MealRemoteDataSourceImpl;
-
+import com.example.yummyplanner.data.repository.MealRepository;
 import java.util.List;
-
-import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 
-
-public class MealRepositoryImpl implements com.example.yummyplanner.data.repository.MealRepository {
+public class MealRepositoryImpl implements MealRepository {
 
     private static MealRepositoryImpl instance;
-    private final  MealRemoteDataSource remoteDataSource;
-    private final  MealLocalDataSource localDataSource;
+    private final MealRemoteDataSource remoteDataSource;
 
-
-    private MealRepositoryImpl(Context context) {
+    private MealRepositoryImpl() {
         remoteDataSource = MealRemoteDataSourceImpl.getInstance();
-        localDataSource = MealLocalDataSourceImpl.getInstance(context);
     }
 
-    public static synchronized MealRepositoryImpl getInstance(Context context){
-        if(instance == null){
-            instance = new MealRepositoryImpl(context);
+    public static synchronized MealRepositoryImpl getInstance() {
+        if (instance == null) {
+            instance = new MealRepositoryImpl();
         }
-        return  instance;
-    }
-
-
-
-    // home fetch
-    @Override
-    public void getRandomMeal(MealsDataCallback<MealItemModel> callback) {
-        remoteDataSource.getRandomMeal(callback);
+        return instance;
     }
 
     @Override
-    public void getCategories(MealsDataCallback<List<Category>> callback) {
-        remoteDataSource.getCategories(callback);
+    public Single<MealItemModel> getRandomMeal() {
+        return remoteDataSource.getRandomMeal();
     }
 
     @Override
-    public void getAreas(MealsDataCallback<List<Area>> callback) {
-        remoteDataSource.getAreas(callback);
+    public Single<List<Category>> getCategories() {
+        return remoteDataSource.getCategories();
     }
 
     @Override
-    public void getIngredients(MealsDataCallback<List<IngredientApiItem>> callback) {
-        remoteDataSource.getIngredients(callback);
+    public Single<List<Area>> getAreas() {
+        return remoteDataSource.getAreas();
     }
 
     @Override
-    public void getPopularMeals(MealsDataCallback<List<MealItemModel>> callback) {
-        remoteDataSource.getPopularMeals(callback);
+    public Single<List<Ingredient>> getIngredients() {
+        return remoteDataSource.getIngredients();
     }
 
     @Override
-    public void getMeadDetails(String id, MealsDataCallback<MealdetailsItemModel> callback) {
-        remoteDataSource.getMealById(id,callback);
-    }
-
-
-
-
-
-    //favourite
-    public Flowable<List<FavouriteMealEntity>> getAllFavorites() {
-        return localDataSource.getAllFavorites();
-    }
-
-    public Completable insertFavorite(FavouriteMealEntity meal) {
-        return localDataSource.insertFavorite(meal);
+    public Single<List<MealItemModel>> getPopularMeals() {
+        return remoteDataSource.getPopularMeals();
     }
 
     @Override
-    public Completable deleteFavorite(FavouriteMealEntity meal) {
-        return localDataSource.deleteFavorite(meal);
-    }
-
-    public Completable deleteFavoriteById(String id) {
-        return localDataSource.deleteFavoriteById(id);
-    }
-
-    public Single<Boolean> isFavorite(String id) {
-        return localDataSource.isFavorite(id);
-    }
-
-    @Override
-    public Single<FavouriteMealEntity> getFavoriteById(String mealId) {
-        return localDataSource.getFavoriteById(mealId);
+    public Single<MealItemModel> getMealDetails(String id) {
+        return remoteDataSource.getMealById(id);
     }
 }
-
