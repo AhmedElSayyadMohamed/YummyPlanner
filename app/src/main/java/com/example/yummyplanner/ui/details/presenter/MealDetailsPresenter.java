@@ -1,6 +1,7 @@
 package com.example.yummyplanner.ui.details.presenter;
 
 import com.example.yummyplanner.data.meals.local.entity.FavouriteMealEntity;
+import com.example.yummyplanner.data.meals.local.entity.PlannedMealEntity;
 import com.example.yummyplanner.data.meals.model.MealdetailsItemModel;
 import com.example.yummyplanner.data.meals.repository.MealRepository;
 
@@ -62,17 +63,18 @@ public class MealDetailsPresenter implements MealDetailsContract.Presenter {
                         .subscribeOn(Schedulers.io())
                         .flatMapCompletable(isFav -> {
                             if (isFav) {
-                                view.showFavoriteRemoved();
                                 return mealRepository.deleteFavoriteById(meal.getId());
                             } else {
                                 FavouriteMealEntity entity = FavouriteMealEntity.fromRemoteMeal(meal);
-                                view.showFavoriteAdded();
                                 return mealRepository.insertFavorite(entity);
                             }
                         })
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 () -> {
+                                    // Feedback is usually handled via side effects or checking state again
+                                    // In original code, it was showing snackbar BEFORE the repository call finished.
+                                    // Let's keep it simple or follow the previous pattern if needed.
                                     checkIfFavorite(meal.getId());
                                 },
                                 throwable -> {
@@ -104,7 +106,24 @@ public class MealDetailsPresenter implements MealDetailsContract.Presenter {
 
     @Override
     public void onAddToPlannerClicked(MealdetailsItemModel meal, String date) {
-
+        PlannedMealEntity plannedMeal = PlannedMealEntity.fromMealDetails(meal, date);
+        compositeDisposable.add(
+                mealRepository.insertPlannedMeal(plannedMeal)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> {
+                                    if (view != null) {
+                                        view.showMealAddedToPlanner(date);
+                                    }
+                                },
+                                throwable -> {
+                                    if (view != null) {
+                                        view.showError("Failed to add to planner: " + throwable.getMessage());
+                                    }
+                                }
+                        )
+        );
     }
 
     @Override

@@ -1,10 +1,10 @@
-package com.example.yummyplanner.ui.favourites;
+package com.example.yummyplanner.ui.favourites.presenter;
 
 import com.example.yummyplanner.data.meals.model.MealdetailsItemModel;
 
 import java.util.List;
 
-public interface FavoriteContract {
+public interface FavoritesContract {
 
     interface View {
         void showLoading();

@@ -50,7 +50,7 @@ public class HomeFragment extends Fragment implements HomeContract.View,
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new HomePresenter(this);
+        presenter = new HomePresenter(this, requireContext());
     }
 
     @Nullable
@@ -147,7 +147,7 @@ public class HomeFragment extends Fragment implements HomeContract.View,
                 .into(binding.mealOfTheDaymealCountryFlag);
 
         Glide.with(this)
-                .load(meal.getImageUrl())
+                .load( meal.getImageUrl())
                 .placeholder(R.drawable.plan1)
                 .into(binding.mealOfDayImage);
     }

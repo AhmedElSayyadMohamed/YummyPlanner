@@ -1,15 +1,13 @@
 package com.example.yummyplanner.ui.details;
 
-import android.app.DatePickerDialog;
 import android.graphics.PorterDuff;
-import android.net.Uri;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
-import android.webkit.WebView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -65,7 +63,7 @@ public class DetailsFragment extends Fragment implements MealDetailsContract.Vie
         String mealId = args.getMealId();
         Log.d("DetailsFragment", "mealId: " + mealId);
 
-        presenter = new MealDetailsPresenter(this, MealRepositoryImpl.getInstance());
+        presenter = new MealDetailsPresenter(this, MealRepositoryImpl.getInstance(requireContext()));
 
         presenter.getMealDetails(mealId);
 
@@ -165,6 +163,7 @@ public class DetailsFragment extends Fragment implements MealDetailsContract.Vie
         ingredientsAdapter = new IngredientsAdapter(this);
         binding.rvIngredients.setAdapter(ingredientsAdapter);
         binding.rvIngredients.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        ingredients.forEach(i -> Log.d("ingredient",i.toString()));
         ingredientsAdapter.setIngredients(ingredients);
     }
 

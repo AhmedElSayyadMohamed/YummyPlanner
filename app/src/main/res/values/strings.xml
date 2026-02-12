@@ -48,6 +48,8 @@
     <string name="category">Category</string>
     <string name="search_by_filter">Search by filter:</string>
     <string name="search_for_meals">Search for meals...</string>
+    <string name="my_favorites">My Favorites</string>
+    <string name="no_favorites_added_yet">No favorites added yet</string>
 
 
 </resources>

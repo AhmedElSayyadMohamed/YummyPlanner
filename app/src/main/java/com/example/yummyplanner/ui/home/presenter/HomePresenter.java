@@ -1,5 +1,7 @@
 package com.example.yummyplanner.ui.home.presenter;
 
+import android.content.Context;
+
 import com.example.yummyplanner.data.auth.repository.AuthRepository;
 import com.example.yummyplanner.data.auth.repository.AuthRepositoryImpl;
 import com.example.yummyplanner.data.meals.model.MealItemModel;
@@ -19,9 +21,9 @@ public class HomePresenter implements HomeContract.Presenter {
 
     private final CompositeDisposable disposables = new CompositeDisposable();
 
-    public HomePresenter(HomeContract.View view) {
+    public HomePresenter(HomeContract.View view, Context context) {
         this.view = view;
-        this.mealRepository = MealRepositoryImpl.getInstance();
+        this.mealRepository = MealRepositoryImpl.getInstance(context);
         this.authRepository = AuthRepositoryImpl.getInstance();
     }
 
