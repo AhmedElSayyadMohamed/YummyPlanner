@@ -35,11 +35,19 @@
     <string name="_10_40">$10.40</string>
     <string name="dessert">Dessert</string>
     <string name="categories">Categories</string>
-    <string name="all">all</string>
+    <string name="all">seeAll</string>
     <string name="most_popular">Most Popular</string>
     <string name="removed_from_favorites">Removed from favorites 💔</string>
     <string name="added_to_favorites">Added to favorites ❤️</string>
     <string name="meal_added_to_planner_on">"Meal added to planner on "</string>
+    <string name="hi">Hi </string>
+    <string name="logout">Logout</string>
+    <string name="discover_your_next_meal">Discover your next meal</string>
+    <string name="country">Country</string>
+    <string name="ingredient">Ingredient</string>
+    <string name="category">Category</string>
+    <string name="search_by_filter">Search by filter:</string>
+    <string name="search_for_meals">Search for meals...</string>
 
 
 </resources>

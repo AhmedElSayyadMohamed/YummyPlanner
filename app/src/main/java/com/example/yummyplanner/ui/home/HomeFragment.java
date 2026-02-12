@@ -78,7 +78,11 @@ public class HomeFragment extends Fragment implements HomeContract.View,
 
         initAdapter();
         setupClickListeners();
-
+        binding.searchBarBtn.setOnClickListener(v -> {
+            NavHostFragment
+                    .findNavController(this)
+                    .navigate(R.id.action_homeFragment_to_searchFragment);
+        });
         presenter.attachView(this);
         presenter.loadHomeData();
     }

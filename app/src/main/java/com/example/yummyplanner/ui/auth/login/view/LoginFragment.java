@@ -53,7 +53,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
         super.onCreate(savedInstanceState);
 
         AppPreferences prefs = new AppPreferencesImpl(requireContext().getApplicationContext());
-        UserSessionManager sessionManager = new UserSessionManager(prefs);
+        UserSessionManager sessionManager = UserSessionManager.getInstance(getContext().getApplicationContext());
         SessionRepository sessionRepo = new SessionRepositoryImpl(sessionManager);
 
         presenter = new LoginPresenter(this, sessionRepo);

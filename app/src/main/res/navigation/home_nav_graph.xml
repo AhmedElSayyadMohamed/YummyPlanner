@@ -31,6 +31,11 @@
         android:label="Settings" />
 
     <fragment
+        android:id="@+id/action_homeFragment_to_searchFragment"
+        android:name="com.example.yummyplanner.ui.search.SearchFragment"
+        android:label="Search" />
+
+    <fragment
         android:id="@+id/mealDetailsFragment"
         android:name="com.example.yummyplanner.ui.details.DetailsFragment"
         android:label="Meal Details">
