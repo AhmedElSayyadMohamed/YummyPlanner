@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "980854131503",
+    "project_id": "products-store-857ca",
+    "storage_bucket": "products-store-857ca.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980854131503:android:b2d57d970b58a6f30cefda",
+        "android_client_info": {
+          "package_name": "com.example.yummyplanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "980854131503-tc5oc50l95pjrht8vum1lddr5f57pekn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.yummyplanner",
+            "certificate_hash": "528d9ef40a4ef1d5dea42c8b11779954dbfc52c7"
+          }
+        },
+        {
+          "client_id": "980854131503-betocnfqneptus3ohjsfi6c6c2r0u3mc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDr5fSosVpGFc-0wjufK8_U3Y52GCZ8GvA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "980854131503-betocnfqneptus3ohjsfi6c6c2r0u3mc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "980854131503-9jcmmr6vs53fkcb3fp33jinka56tau5t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.productsStore"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

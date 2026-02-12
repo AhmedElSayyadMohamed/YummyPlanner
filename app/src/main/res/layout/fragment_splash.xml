@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground"
+    tools:context=".ui.launcher.splash.SplashFragment">
+
+    <ImageView
+        android:id="@+id/splash_top_left_image"
+        android:layout_width="180dp"
+        android:layout_height="300dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/splash_top_left_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/splashLottie"
+        android:layout_width="135dp"
+        android:layout_height="106dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="splash_logo.json"
+        app:lottie_loop="true" />
+
+    <ImageView
+        android:id="@+id/splash_bottom_right_image"
+        android:layout_width="180dp"
+        android:layout_height="300dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/splash_bottom_right_image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <TextView
+        android:id="@+id/textYummy"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/mulish_bold"
+        android:text="@string/yummy"
+        android:textColor="?attr/colorPrimary"
+        android:textScaleX="1"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textPlanner"
+        app:layout_constraintEnd_toEndOf="@+id/textPlanner"
+        app:layout_constraintStart_toStartOf="@+id/textPlanner" />
+
+    <TextView
+        android:id="@+id/textPlanner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="24dp"
+        android:fontFamily="@font/mulish_bold"
+        android:text="@string/planner"
+        android:textColor="?attr/colorSecondary"
+        android:textScaleX="1"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

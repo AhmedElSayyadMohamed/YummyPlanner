@@ -1,5 +1,36 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Base -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Primary -->
+    <color name="primary_700">#615793</color>
+    <color name="primary_600">#514E9D</color>
+    <color name="primary_500">#6A68B8</color>
+    <color name="primary_200">#C9C8E7</color>
+    <color name="primary_100">#EBEAF2</color>
+
+    <!-- Secondary -->
+    <color name="secondary_700">#FF7B2C</color>
+    <color name="secondary_600">#FFC84D</color>
+    <color name="secondary_500">#FFD67A</color>
+
+    <!-- Neutral -->
+    <color name="neutral_900">#1E2134</color>
+    <color name="neutral_700">#4A4A6A</color>
+    <color name="neutral_500">#8586A9</color>
+    <color name="neutral_300">#C8C8DC</color>
+    <color name="neutral_100">#E5E5E5</color>
+
+    <!-- Success -->
+    <color name="success_700">#2EAA4F</color>
+    <color name="success_500">#4ED775</color>
+
+    <!-- Danger -->
+    <color name="danger_700">#C20D0D</color>
+    <color name="danger_500">#F44336</color>
+    <color name="_32324d">#32324D</color>
+    <color name="f44336">#F44336</color>
+
 </resources>
