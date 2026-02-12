@@ -272,7 +272,7 @@ public class DetailsFragment extends Fragment implements MealDetailsContract.Vie
     public void showMealAddedToPlanner(String date) {
         Constants.showSuccessSnackbar(
                 binding.getRoot(),
-                "Meal added to planner on " + date
+                getString(R.string.meal_added_to_planner_on) + date
         );
     }
 

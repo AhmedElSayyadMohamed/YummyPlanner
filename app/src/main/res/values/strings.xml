@@ -39,6 +39,7 @@
     <string name="most_popular">Most Popular</string>
     <string name="removed_from_favorites">Removed from favorites 💔</string>
     <string name="added_to_favorites">Added to favorites ❤️</string>
+    <string name="meal_added_to_planner_on">"Meal added to planner on "</string>
 
 
 </resources>

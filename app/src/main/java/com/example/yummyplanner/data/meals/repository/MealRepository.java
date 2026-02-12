@@ -1,6 +1,7 @@
 package com.example.yummyplanner.data.repository;
 
 import com.example.yummyplanner.data.meals.local.entity.FavouriteMealEntity;
+import com.example.yummyplanner.data.meals.local.entity.PlannedMealEntity;
 import com.example.yummyplanner.data.meals.model.Area;
 import com.example.yummyplanner.data.meals.model.Category;
 import com.example.yummyplanner.data.meals.model.IngredientApiItem;

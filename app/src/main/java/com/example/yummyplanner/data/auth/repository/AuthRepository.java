@@ -6,7 +6,7 @@ public interface AuthRepository {
 
     void loginWithEmailAndPassword(String email,String password, AuthResultCallback listener);
 
-    void registerWithEmailAndPassword(String email, String password, AuthResultCallback listener);
+    void registerWithEmailAndPassword(User user, AuthResultCallback listener);
 
     void loginWithGoogle(String idToken, AuthResultCallback callback);
 

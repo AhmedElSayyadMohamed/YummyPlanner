@@ -1,9 +1,13 @@
 package com.example.yummyplanner.data.repository;
 import android.content.Context;
 
+import com.example.yummyplanner.data.auth.model.User;
+import com.example.yummyplanner.data.meals.cloud.CloudRemoteDataSource;
+import com.example.yummyplanner.data.meals.cloud.FireStoreManager;
 import com.example.yummyplanner.data.meals.local.MealLocalDataSource;
 import com.example.yummyplanner.data.meals.local.MealLocalDataSourceImpl;
 import com.example.yummyplanner.data.meals.local.entity.FavouriteMealEntity;
+import com.example.yummyplanner.data.meals.local.entity.PlannedMealEntity;
 import com.example.yummyplanner.data.meals.model.Area;
 import com.example.yummyplanner.data.meals.model.Category;
 import com.example.yummyplanner.data.meals.model.IngredientApiItem;
@@ -26,6 +30,7 @@ public class MealRepositoryImpl implements com.example.yummyplanner.data.reposit
     private final  MealRemoteDataSource remoteDataSource;
     private final  MealLocalDataSource localDataSource;
 
+
     private MealRepositoryImpl(Context context) {
         remoteDataSource = MealRemoteDataSourceImpl.getInstance();
         localDataSource = MealLocalDataSourceImpl.getInstance(context);
@@ -39,6 +44,8 @@ public class MealRepositoryImpl implements com.example.yummyplanner.data.reposit
     }
 
 
+
+    // home fetch
     @Override
     public void getRandomMeal(MealsDataCallback<MealItemModel> callback) {
         remoteDataSource.getRandomMeal(callback);
@@ -69,8 +76,11 @@ public class MealRepositoryImpl implements com.example.yummyplanner.data.reposit
         remoteDataSource.getMealById(id,callback);
     }
 
-    //fav
 
+
+
+
+    //favourite
     public Flowable<List<FavouriteMealEntity>> getAllFavorites() {
         return localDataSource.getAllFavorites();
     }
