@@ -2,16 +2,20 @@ package com.example.yummyplanner.data.auth.repository;
 
 import com.example.yummyplanner.data.auth.model.User;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
+
 public interface AuthRepository {
 
-    void loginWithEmailAndPassword(String email,String password, AuthResultCallback listener);
+    Single<User> loginWithEmailAndPassword(String email, String password);
 
-    void registerWithEmailAndPassword(User user, AuthResultCallback listener);
+    Single<User> registerWithEmailAndPassword(User user);
 
-    void loginWithGoogle(String idToken, AuthResultCallback callback);
+    Single<User> loginWithGoogle(String idToken);
 
     boolean isUserLoggedIn();
 
     User getCurrentUser();
-    void logout();
+
+    Completable logout();
 }

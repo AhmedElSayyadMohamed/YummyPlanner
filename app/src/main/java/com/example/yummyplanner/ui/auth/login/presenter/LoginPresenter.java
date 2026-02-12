@@ -1,19 +1,22 @@
 package com.example.yummyplanner.ui.auth.login.presenter;
 
-import android.util.Log;
 
-import com.example.yummyplanner.data.auth.model.User;
 import com.example.yummyplanner.data.auth.repository.AuthRepository;
 import com.example.yummyplanner.data.auth.repository.AuthRepositoryImpl;
-import com.example.yummyplanner.data.auth.repository.AuthResultCallback;
 import com.example.yummyplanner.data.meals.local.userSession.SessionRepository;
 import com.example.yummyplanner.utiles.EmailAndPasswordValidation;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class LoginPresenter implements LoginContract.Presenter {
 
     private LoginContract.View view;
-    private SessionRepository sessionRepo;
-    private AuthRepository authRepo;
+    private final SessionRepository sessionRepo;
+    private final AuthRepository authRepo;
+
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
     public LoginPresenter(LoginContract.View view, SessionRepository sessionRepo){
         this.view = view ;
@@ -28,16 +31,14 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     @Override
     public void onLoginClicked(String email, String password) {
-
-         if(EmailAndPasswordValidation.isEmpty(email)){
-             if (view != null) view.showEmailError("Email is required");
-             return;
-         }
+        if(EmailAndPasswordValidation.isEmpty(email)){
+            if (view != null) view.showEmailError("Email is required");
+            return;
+        }
         if (EmailAndPasswordValidation.isInValidEmail(email)) {
             if (view != null) view.showEmailError("Invalid email address format");
             return;
         }
-
         if (EmailAndPasswordValidation.isEmpty(password)) {
             if (view != null) view.showPasswordError("Password is required");
             return;
@@ -45,29 +46,58 @@ public class LoginPresenter implements LoginContract.Presenter {
 
         if (view != null) view.showLoading();
 
-        Log.d("LOGIN", "call  authRepo.loginWithEmailAndPassword ");
-        authRepo.loginWithEmailAndPassword(email, password, new AuthResultCallback() {
-            @Override
-            public void onSuccess(User user) {
-                Log.d("LOGIN", "Success  authRepo.loginWithEmailAndPassword ");
+        disposables.add(
+                authRepo.loginWithEmailAndPassword(email, password)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                user -> {
+                                    if (view != null) {
+                                        view.hideLoading();
+                                        view.showSuccessMessage("Login Successful");
+                                        sessionRepo.login();
+                                        sessionRepo.saveUser(user);
+                                        view.navigateToHome();
+                                    }
+                                },
+                                throwable -> {
+                                    if (view != null) {
+                                        view.hideLoading();
+                                        view.showErrorMessage(throwable.getMessage() != null ?
+                                                throwable.getMessage() : "Login failed");
+                                    }
+                                }
+                        )
+        );
+    }
 
-                if (view == null) return;
-                view.hideLoading();
-                view.showSuccessMessage("Login Successful");
-                sessionRepo.login();
-                sessionRepo.saveUser(user);
-                view.navigateToHome();
-            }
+    @Override
+    public void firebaseAuthWithGoogle(String idToken) {
+        if (view != null) view.showLoading();
 
-            @Override
-            public void onError(String message) {
-                Log.d("LOGIN", "FAil  authRepo.loginWithEmailAndPassword ");
-
-                if (view == null) return;
-                view.hideLoading();
-                view.showErrorMessage(message != null ? message : "Login failed");
-            }
-        });
+        disposables.add(
+                authRepo.loginWithGoogle(idToken)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                user -> {
+                                    if (view != null) {
+                                        view.hideLoading();
+                                        view.showSuccessMessage("Google Sign-In Successful");
+                                        sessionRepo.login();
+                                        sessionRepo.saveUser(user);
+                                        view.navigateToHome();
+                                    }
+                                },
+                                throwable -> {
+                                    if (view != null) {
+                                        view.hideLoading();
+                                        view.showErrorMessage(throwable.getMessage() != null ?
+                                                throwable.getMessage() : "Google Auth Failed");
+                                    }
+                                }
+                        )
+        );
     }
 
     @Override
@@ -86,42 +116,16 @@ public class LoginPresenter implements LoginContract.Presenter {
     @Override
     public void onFacebookLoginClicked() {
         if (view != null) view.showErrorMessage("Facebook Login coming soon!");
-
     }
 
     @Override
     public void onGoogleLoginClicked() {
-        Log.d("LOGIN", "We are in LoginPresenter and will fire launchGoogleLogin that in imp in view");
-
         if (view != null) view.launchGoogleLogin();
     }
 
     @Override
-    public void firebaseAuthWithGoogle(String idToken) {
-        if (view != null) view.showLoading();
-
-        authRepo.loginWithGoogle(idToken, new AuthResultCallback() {
-            @Override
-            public void onSuccess(User user) {
-                if (view == null) return;
-                view.hideLoading();
-                view.showSuccessMessage("Google Sign-In Successful");
-                sessionRepo.login();
-                sessionRepo.saveUser(user);
-                view.navigateToHome();
-            }
-
-            @Override
-            public void onError(String message) {
-                if (view == null) return;
-                view.hideLoading();
-                view.showErrorMessage(message != null ? message : "Google Auth Failed");
-            }
-        });
-    }
-
-    @Override
     public void detachView() {
+        disposables.clear();
         view = null;
     }
 }

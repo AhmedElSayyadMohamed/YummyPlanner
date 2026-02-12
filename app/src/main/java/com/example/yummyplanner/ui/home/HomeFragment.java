@@ -50,8 +50,7 @@ public class HomeFragment extends Fragment implements HomeContract.View,
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new HomePresenter(
-                this);
+        presenter = new HomePresenter(this);
     }
 
     @Nullable

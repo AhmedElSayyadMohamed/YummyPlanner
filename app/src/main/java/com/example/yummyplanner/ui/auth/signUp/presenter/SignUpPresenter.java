@@ -5,15 +5,18 @@ import android.util.Log;
 import com.example.yummyplanner.data.auth.model.User;
 import com.example.yummyplanner.data.auth.repository.AuthRepository;
 import com.example.yummyplanner.data.auth.repository.AuthRepositoryImpl;
-import com.example.yummyplanner.data.auth.repository.AuthResultCallback;
-import com.example.yummyplanner.data.meals.cloud.CloudRemoteDataSource;
 import com.example.yummyplanner.utiles.EmailAndPasswordValidation;
 import com.example.yummyplanner.utiles.LogsConstants;
 
-public class SignUpPresenter implements SignUpContract.Presenter{
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
-    private SignUpContract.View view ;
+public class SignUpPresenter implements SignUpContract.Presenter {
+
+    private SignUpContract.View view;
     private final AuthRepository authRepo;
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public SignUpPresenter(SignUpContract.View view) {
         this.view = view;
@@ -68,38 +71,33 @@ public class SignUpPresenter implements SignUpContract.Presenter{
         user.setPassword(password);
         Log.d("userRegister", "registerUser in presenter ");
 
-        authRepo.registerWithEmailAndPassword(user,new AuthResultCallback() {
-            @Override
-            public void onSuccess(User user) {
-                if (view == null) return;
-                Log.d(LogsConstants.userRegister, "success registerUser in presenter ");
+        compositeDisposable.add(authRepo.registerWithEmailAndPassword(user)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(registeredUser -> {
+                    if (view == null) return;
+                    Log.d(LogsConstants.userRegister, "success registerUser in presenter ");
 
-                view.hideLoading();
-                view.showSuccessMessage("User registered successfully");
-                view.navigateToLoginScreen();
-            }
+                    view.hideLoading();
+                    view.showSuccessMessage("User registered successfully");
+                    view.navigateToLoginScreen();
+                }, throwable -> {
+                    if (view == null) return;
+                    Log.d(LogsConstants.userRegister, "failed registerUser in presenter ");
 
-            @Override
-            public void onError(String message) {
-                if (view == null) return;
-                Log.d(LogsConstants.userRegister, "faild registerUser in presenter ");
-
-                view.hideLoading();
-                view.showErrorMessage(message != null ? message : "Registration failed");
-            }
-        });
+                    view.hideLoading();
+                    view.showErrorMessage(throwable.getMessage() != null ? throwable.getMessage() : "Registration failed");
+                }));
     }
-
 
     @Override
     public void onLoginClicked() {
         if (view != null) view.navigateToLoginScreen();
-
     }
 
     @Override
     public void detachView() {
         view = null;
-
+        compositeDisposable.clear();
     }
 }
