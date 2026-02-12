@@ -69,21 +69,18 @@ public class SignUpPresenter implements SignUpContract.Presenter {
         if (view != null) view.showLoading();
         User user = new User(fullName, email);
         user.setPassword(password);
-        Log.d("userRegister", "registerUser in presenter ");
 
         compositeDisposable.add(authRepo.registerWithEmailAndPassword(user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(registeredUser -> {
                     if (view == null) return;
-                    Log.d(LogsConstants.userRegister, "success registerUser in presenter ");
 
                     view.hideLoading();
                     view.showSuccessMessage("User registered successfully");
                     view.navigateToLoginScreen();
                 }, throwable -> {
                     if (view == null) return;
-                    Log.d(LogsConstants.userRegister, "failed registerUser in presenter ");
 
                     view.hideLoading();
                     view.showErrorMessage(throwable.getMessage() != null ? throwable.getMessage() : "Registration failed");

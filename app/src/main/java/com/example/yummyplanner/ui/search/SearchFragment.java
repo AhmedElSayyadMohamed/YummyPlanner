@@ -51,8 +51,26 @@ public class SearchFragment extends Fragment implements SearchContract.View, Mea
         setupSearchEditText();
         setupFilters();
 
-        binding.chipCategory.setChecked(true);
-        loadDefaultData();
+        handleIncomingArgs();
+    }
+
+    private void handleIncomingArgs() {
+        SearchFragmentArgs args = SearchFragmentArgs.fromBundle(getArguments());
+        String categoryName = args.getCategoryName();
+        String areaName = args.getAreaName();
+
+        if (categoryName != null && !categoryName.isEmpty()) {
+            binding.chipCategory.setChecked(true);
+            binding.etSearch.setText(categoryName);
+            presenter.filterByCategory(categoryName);
+        } else if (areaName != null && !areaName.isEmpty()) {
+            binding.chipArea.setChecked(true);
+            binding.etSearch.setText(areaName);
+            presenter.filterByArea(areaName);
+        } else {
+            binding.chipCategory.setChecked(true);
+            loadDefaultData();
+        }
     }
 
     private void loadDefaultData() {

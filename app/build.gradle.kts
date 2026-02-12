@@ -4,6 +4,11 @@ plugins {
     alias(libs.plugins.navigation.safeargs)
 }
 
+// Automatically delete duplicate ic_launcher.png files that conflict with .webp versions
+project.fileTree("src/main/res") {
+    include("**/ic_launcher.png")
+}.forEach { it.delete() }
+
 android {
     namespace = "com.example.yummyplanner"
     compileSdk = 36

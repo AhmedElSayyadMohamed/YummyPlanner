@@ -52,7 +52,6 @@ public class AuthRepositoryImpl implements AuthRepository {
                     .addOnSuccessListener(authResult -> {
                         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                         if (firebaseUser != null) {
-                            // هنا بنستخدم flatMap عشان نربط عملية الـ Auth بعملية الـ Firestore
                             cloudRemoteDataSource.createUserDocument(user.getName(), user.getEmail())
                                     .subscribe(
                                             () -> emitter.onSuccess(getUserFromFirebaseUser(firebaseUser)),

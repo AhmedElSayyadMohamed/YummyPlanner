@@ -46,6 +46,16 @@
         android:id="@+id/searchFragment"
         android:name="com.example.yummyplanner.ui.search.SearchFragment"
         android:label="Search">
+        <argument
+            android:name="categoryName"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="areaName"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
         <action
             android:id="@+id/action_searchFragment_to_detailsFragment"
             app:destination="@id/mealDetailsFragment" />

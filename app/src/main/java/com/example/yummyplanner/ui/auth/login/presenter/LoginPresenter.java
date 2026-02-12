@@ -53,10 +53,10 @@ public class LoginPresenter implements LoginContract.Presenter {
                         .subscribe(
                                 user -> {
                                     if (view != null) {
-                                        view.hideLoading();
-                                        view.showSuccessMessage("Login Successful");
                                         sessionRepo.login();
                                         sessionRepo.saveUser(user);
+                                        view.hideLoading();
+                                        view.showSuccessMessage("Login Successful");
                                         view.navigateToHome();
                                     }
                                 },
@@ -82,10 +82,10 @@ public class LoginPresenter implements LoginContract.Presenter {
                         .subscribe(
                                 user -> {
                                     if (view != null) {
-                                        view.hideLoading();
-                                        view.showSuccessMessage("Google Sign-In Successful");
                                         sessionRepo.login();
                                         sessionRepo.saveUser(user);
+                                        view.hideLoading();
+                                        view.showSuccessMessage("Google Sign-In Successful");
                                         view.navigateToHome();
                                     }
                                 },

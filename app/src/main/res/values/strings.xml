@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">YummyPlanner</string>
+    <string name="app_name">Yummy</string>
     <string name="default_web_client_id" translatable="false">980854131503-betocnfqneptus3ohjsfi6c6c2r0u3mc.apps.googleusercontent.com</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="choose_the_best_dish_for_you">Choose the best dish for you</string>
@@ -50,6 +50,7 @@
     <string name="search_for_meals">Search for meals...</string>
     <string name="my_favorites">My Favorites</string>
     <string name="no_favorites_added_yet">No favorites added yet</string>
+    <string name="seeall">seeAll</string>
 
 
 </resources>
