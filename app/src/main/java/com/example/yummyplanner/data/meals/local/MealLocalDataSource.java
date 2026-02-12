@@ -25,5 +25,7 @@ public interface MealLocalDataSource {
     Completable deletePlannedMeal(PlannedMealEntity meal);
 
     Completable insertAllFavorites(List<FavouriteMealEntity> meals);
+    Completable insertAllPlannedMeals(List<PlannedMealEntity> meals);
     Completable deleteAllFavorites();
+    Completable deleteAllPlannedMeals();
 }

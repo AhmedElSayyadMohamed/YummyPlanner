@@ -6,7 +6,9 @@ import com.example.yummyplanner.data.meals.model.IngredientApiItem;
 import com.example.yummyplanner.data.meals.model.MealItemModel;
 import com.example.yummyplanner.data.meals.model.MealdetailsItemModel;
 import com.example.yummyplanner.data.network.Network;
+import com.example.yummyplanner.data.meals.model.response.MealsResponse;
 import java.util.List;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.core.Single;
@@ -54,9 +56,9 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
     @Override
     public Single<List<MealItemModel>> getPopularMeals() {
         return mealService.getPopularMeals("a")
-                .map(response -> response.getMeals().stream()
+                .map(response -> response.getMeals() != null ? response.getMeals().stream()
                         .limit(10)
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList()) : Collections.emptyList());
     }
 
     @Override
@@ -65,5 +67,27 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
                 .map(response -> response.getMeals().get(0));
     }
 
+    @Override
+    public Single<List<MealItemModel>> searchMealsByName(String name) {
+        return mealService.searchMealsByName(name)
+                .map(response -> response.getMeals() != null ? response.getMeals() : Collections.emptyList());
+    }
 
+    @Override
+    public Single<List<MealItemModel>> filterByCategory(String category) {
+        return mealService.filterByCategory(category)
+                .map(response -> response.getMeals() != null ? response.getMeals() : Collections.emptyList());
+    }
+
+    @Override
+    public Single<List<MealItemModel>> filterByArea(String area) {
+        return mealService.filterByArea(area)
+                .map(response -> response.getMeals() != null ? response.getMeals() : Collections.emptyList());
+    }
+
+    @Override
+    public Single<List<MealItemModel>> filterByIngredient(String ingredient) {
+        return mealService.filterByIngredient(ingredient)
+                .map(response -> response.getMeals() != null ? response.getMeals() : Collections.emptyList());
+    }
 }

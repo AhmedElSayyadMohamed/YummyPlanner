@@ -22,16 +22,15 @@ public interface MealRepository {
     Single<List<MealItemModel>> getPopularMeals();
     Single<MealdetailsItemModel> getMealDetails(String id);
 
-
+    Single<List<MealItemModel>> searchMealsByName(String name);
+    Single<List<MealItemModel>> filterByCategory(String category);
+    Single<List<MealItemModel>> filterByArea(String area);
+    Single<List<MealItemModel>> filterByIngredient(String ingredient);
 
     // fav
-
     Completable insertFavorite(FavouriteMealEntity meal);
-
     Flowable<List<FavouriteMealEntity>> getAllFavorites();
-
     Completable deleteFavoriteById(String mealId);
-
     Single<Boolean> isFavorite(String mealId);
 
     // Planner
@@ -40,4 +39,6 @@ public interface MealRepository {
     Flowable<List<PlannedMealEntity>> getAllPlannedMeals();
     Completable deletePlannedMeal(PlannedMealEntity meal);
 
+    Completable clearAllData();
+    Completable syncDataFromCloud();
 }

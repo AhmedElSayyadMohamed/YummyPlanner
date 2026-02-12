@@ -77,6 +77,26 @@ public class MealRepositoryImpl implements MealRepository {
                 );
     }
 
+    @Override
+    public Single<List<MealItemModel>> searchMealsByName(String name) {
+        return remoteDataSource.searchMealsByName(name);
+    }
+
+    @Override
+    public Single<List<MealItemModel>> filterByCategory(String category) {
+        return remoteDataSource.filterByCategory(category);
+    }
+
+    @Override
+    public Single<List<MealItemModel>> filterByArea(String area) {
+        return remoteDataSource.filterByArea(area);
+    }
+
+    @Override
+    public Single<List<MealItemModel>> filterByIngredient(String ingredient) {
+        return remoteDataSource.filterByIngredient(ingredient);
+    }
+
     //favourite
 
     @Override
@@ -108,7 +128,9 @@ public class MealRepositoryImpl implements MealRepository {
 
     @Override
     public Completable insertPlannedMeal(PlannedMealEntity meal) {
-        return localDataSource.insertPlannedMeal(meal);
+        return localDataSource.insertPlannedMeal(meal)
+                .andThen(cloudRemoteDataSource.addMealToPlanner(meal))
+                .subscribeOn(Schedulers.io());
     }
 
     @Override
@@ -123,6 +145,27 @@ public class MealRepositoryImpl implements MealRepository {
 
     @Override
     public Completable deletePlannedMeal(PlannedMealEntity meal) {
-        return localDataSource.deletePlannedMeal(meal);
+        return localDataSource.deletePlannedMeal(meal)
+                .andThen(cloudRemoteDataSource.deletePlannerMeal(meal.getIdMeal()))
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Completable clearAllData() {
+        return localDataSource.deleteAllFavorites()
+                .andThen(localDataSource.deleteAllPlannedMeals())
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Completable syncDataFromCloud() {
+        Completable syncFavs = cloudRemoteDataSource.getAllFavorites().firstOrError()
+                .flatMapCompletable(localDataSource::insertAllFavorites);
+        
+        Completable syncPlanner = cloudRemoteDataSource.getPlannerMeals()
+                .flatMapCompletable(localDataSource::insertAllPlannedMeals);
+
+        return Completable.mergeArray(syncFavs, syncPlanner)
+                .subscribeOn(Schedulers.io());
     }
 }

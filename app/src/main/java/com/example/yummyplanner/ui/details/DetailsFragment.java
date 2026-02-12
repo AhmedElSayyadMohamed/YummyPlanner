@@ -1,5 +1,6 @@
 package com.example.yummyplanner.ui.details;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
 
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.animation.OvershootInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -18,10 +20,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.yummyplanner.R;
+import com.example.yummyplanner.data.meals.local.userSession.UserSessionManager;
 import com.example.yummyplanner.data.meals.repository.MealRepositoryImpl;
 import com.example.yummyplanner.databinding.FragmentDetailsBinding;
 import com.example.yummyplanner.data.meals.model.MealdetailsItemModel;
 import com.example.yummyplanner.data.meals.model.response.Ingredient;
+import com.example.yummyplanner.ui.auth.AuthActivity;
 import com.example.yummyplanner.ui.details.presenter.MealDetailsContract;
 import com.example.yummyplanner.ui.details.presenter.MealDetailsPresenter;
 import com.example.yummyplanner.utiles.Constants;
@@ -68,14 +72,17 @@ public class DetailsFragment extends Fragment implements MealDetailsContract.Vie
         presenter.getMealDetails(mealId);
 
         binding.btnAddToFav.setOnClickListener(v -> {
-            if (this.meal != null) {
+            if (UserSessionManager.getInstance(requireContext()).isGuest()) {
+                showGuestLoginDialog();
+            } else if (this.meal != null) {
                 presenter.onFavoriteClicked(this.meal );
             }
-
         });
 
         binding.btnAddToPlanner.setOnClickListener(v -> {
-            if (meal != null) {
+            if (UserSessionManager.getInstance(requireContext()).isGuest()) {
+                showGuestLoginDialog();
+            } else if (meal != null) {
                 showDatePickerAndAddMeal();
             }
         });
@@ -101,6 +108,23 @@ public class DetailsFragment extends Fragment implements MealDetailsContract.Vie
                 }
             }
         });
+    }
+
+    private void showGuestLoginDialog() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Login Required")
+                .setMessage("You need to login to use this feature. Would you like to login now?")
+                .setPositiveButton("Login", (dialog, which) -> {
+                    navigateToAuth();
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void navigateToAuth() {
+        Intent intent = new Intent(requireContext(), AuthActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
 

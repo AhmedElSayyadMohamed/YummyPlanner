@@ -22,6 +22,12 @@ public interface PlannerDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable insertPlannedMeal(PlannedMealEntity meal);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Completable insertAllPlannedMeals(List<PlannedMealEntity> meals);
+
     @Delete
     Completable deletePlannedMeal(PlannedMealEntity meal);
+
+    @Query("DELETE FROM planned_meals")
+    Completable clearAllPlannedMeals();
 }

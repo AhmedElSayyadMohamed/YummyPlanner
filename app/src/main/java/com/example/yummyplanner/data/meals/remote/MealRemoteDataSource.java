@@ -22,4 +22,12 @@ public interface MealRemoteDataSource {
     Single<List<MealItemModel>> getPopularMeals();
 
     Single<MealdetailsItemModel> getMealById(String id);
+
+    Single<List<MealItemModel>> searchMealsByName(String name);
+
+    Single<List<MealItemModel>> filterByCategory(String category);
+
+    Single<List<MealItemModel>> filterByArea(String area);
+
+    Single<List<MealItemModel>> filterByIngredient(String ingredient);
 }

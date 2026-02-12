@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -59,16 +60,34 @@ public class SettingFragment extends Fragment {
         loadStats();
 
         binding.btnLogout.setOnClickListener(v -> {
-            AuthRepositoryImpl.getInstance().logout()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(() -> {
-                        UserSessionManager.getInstance(requireContext()).logout();
-                        navigateToAuth();
-                    }, throwable -> {
-                        // Handle error if needed
-                    });
+            showLogoutConfirmationDialog();
         });
+    }
+
+    private void showLogoutConfirmationDialog() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Logout")
+                .setMessage("Are you sure you want to logout?")
+                .setPositiveButton("Logout", (dialog, which) -> {
+                    performLogout();
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void performLogout() {
+        disposables.add(
+                AuthRepositoryImpl.getInstance().logout()
+                        .andThen(MealRepositoryImpl.getInstance(requireContext()).clearAllData())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(() -> {
+                            UserSessionManager.getInstance(requireContext()).logout();
+                            navigateToAuth();
+                        }, throwable -> {
+                            // Handle error if needed
+                        })
+        );
     }
 
     private void loadStats() {

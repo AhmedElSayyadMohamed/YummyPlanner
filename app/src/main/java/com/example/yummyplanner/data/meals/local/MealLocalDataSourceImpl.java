@@ -87,7 +87,17 @@ public class MealLocalDataSourceImpl implements MealLocalDataSource {
     }
 
     @Override
+    public Completable insertAllPlannedMeals(List<PlannedMealEntity> meals) {
+        return plannerDao.insertAllPlannedMeals(meals);
+    }
+
+    @Override
     public Completable deleteAllFavorites() {
         return favoriteMealDao.clearAllFavorites();
+    }
+
+    @Override
+    public Completable deleteAllPlannedMeals() {
+        return plannerDao.clearAllPlannedMeals();
     }
 }
