@@ -5,6 +5,7 @@ public class User {
     private String email;
     private String password;
     private long createdAt;
+    private String avatarUrl;
 
     public User() { }
 
@@ -13,6 +14,15 @@ public class User {
         this.email = email;
         this.createdAt = System.currentTimeMillis();
     }
+
+    public User(String name, String email, String avatarUrl) {
+        this.name = name;
+        this.email = email;
+        this.avatarUrl = avatarUrl;
+    }
+
+
+    public String getAvatarUrl() { return avatarUrl; }
 
     public void setPassword(){
         this.password = password;

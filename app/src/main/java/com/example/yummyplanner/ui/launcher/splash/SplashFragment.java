@@ -48,7 +48,7 @@ public class SplashFragment extends Fragment implements SplashContract.View {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         AppPreferences prefs = new AppPreferencesImpl(getContext().getApplicationContext());
-        UserSessionManager sessionManager = new UserSessionManager(prefs);
+        UserSessionManager sessionManager =UserSessionManager.getInstance(getContext().getApplicationContext());
         SessionRepository sessionRepo = new SessionRepositoryImpl(sessionManager);
 
         presenter = new SplashPresenter(this, sessionRepo);

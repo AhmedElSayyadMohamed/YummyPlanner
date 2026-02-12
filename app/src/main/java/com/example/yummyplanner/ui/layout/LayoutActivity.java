@@ -45,7 +45,7 @@ public class LayoutActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener(
                 (controller, destination, arguments) -> {
 
-                    if (destination.getId() == R.id.mealDetailsFragment) {
+                    if (destination.getId() == R.id.mealDetailsFragment||destination.getId() == R.id.action_homeFragment_to_searchFragment) {
                         bottomNav.animate()
                                 .translationY(bottomNav.getHeight())
                                 .setDuration(200);

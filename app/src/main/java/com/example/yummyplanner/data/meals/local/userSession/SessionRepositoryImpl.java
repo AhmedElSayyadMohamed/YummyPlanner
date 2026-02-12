@@ -1,5 +1,7 @@
 package com.example.yummyplanner.data.meals.local.userSession;
 
+import com.example.yummyplanner.data.auth.model.User;
+
 public class SessionRepositoryImpl implements SessionRepository {
 
     private UserSessionManager sessionManager;
@@ -41,5 +43,10 @@ public class SessionRepositoryImpl implements SessionRepository {
     @Override
     public void logout() {
         sessionManager.logout();
+    }
+
+    @Override
+    public void saveUser(User user) {
+        sessionManager.saveUser(user);
     }
 }

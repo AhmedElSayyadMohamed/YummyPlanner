@@ -47,7 +47,7 @@ public class OnboardingFragment extends Fragment  implements OnboardingContract.
 
         // presenter
         AppPreferences appPreferences = new AppPreferencesImpl(requireActivity());
-        UserSessionManager userSessionManager = new UserSessionManager(appPreferences);
+        UserSessionManager userSessionManager = UserSessionManager.getInstance(getContext().getApplicationContext());
         SessionRepository sessionRepository = new SessionRepositoryImpl(userSessionManager);
         presenter = new OnboardingPresenter(this, sessionRepository);
 

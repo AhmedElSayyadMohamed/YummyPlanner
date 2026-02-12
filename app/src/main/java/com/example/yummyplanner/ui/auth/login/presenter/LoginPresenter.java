@@ -54,6 +54,8 @@ public class LoginPresenter implements LoginContract.Presenter {
                 if (view == null) return;
                 view.hideLoading();
                 view.showSuccessMessage("Login Successful");
+                sessionRepo.login();
+                sessionRepo.saveUser(user);
                 view.navigateToHome();
             }
 
@@ -104,6 +106,8 @@ public class LoginPresenter implements LoginContract.Presenter {
                 if (view == null) return;
                 view.hideLoading();
                 view.showSuccessMessage("Google Sign-In Successful");
+                sessionRepo.login();
+                sessionRepo.saveUser(user);
                 view.navigateToHome();
             }
 
