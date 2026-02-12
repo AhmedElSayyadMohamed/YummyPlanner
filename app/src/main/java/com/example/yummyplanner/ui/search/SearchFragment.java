@@ -50,6 +50,13 @@ public class SearchFragment extends Fragment implements SearchContract.View, Mea
         setupRecyclerView();
         setupSearchEditText();
         setupFilters();
+
+        binding.chipCategory.setChecked(true);
+        loadDefaultData();
+    }
+
+    private void loadDefaultData() {
+        presenter.filterByCategory("Seafood");
     }
 
     private void setupRecyclerView() {
@@ -86,7 +93,7 @@ public class SearchFragment extends Fragment implements SearchContract.View, Mea
 
     private void performSearch(String query) {
         if (query.isEmpty()) {
-            showEmptyState();
+            loadDefaultDataBasedOnFilter();
             return;
         }
 
@@ -102,11 +109,26 @@ public class SearchFragment extends Fragment implements SearchContract.View, Mea
         }
     }
 
+    private void loadDefaultDataBasedOnFilter() {
+        int checkedId = binding.filterChipGroup.getCheckedChipId();
+        if (checkedId == R.id.chipCategory) {
+            presenter.filterByCategory("Seafood");
+        } else if (checkedId == R.id.chipArea) {
+            presenter.filterByArea("Egyptian");
+        } else if (checkedId == R.id.chipIngredient) {
+            presenter.filterByIngredient("Chicken");
+        } else {
+            presenter.searchByName("a");
+        }
+    }
+
     private void setupFilters() {
         binding.filterChipGroup.setOnCheckedChangeListener((group, checkedId) -> {
             String query = binding.etSearch.getText().toString().trim();
             if (!query.isEmpty()) {
                 performSearch(query);
+            } else {
+                loadDefaultDataBasedOnFilter();
             }
         });
     }
@@ -125,14 +147,14 @@ public class SearchFragment extends Fragment implements SearchContract.View, Mea
 
     @Override
     public void showLoading() {
+        binding.searchProgressBar.setVisibility(View.VISIBLE);
         binding.rvSearchResults.setVisibility(View.GONE);
         binding.searchEmptyState.setVisibility(View.GONE);
-        // You can add a progress bar in XML if needed
     }
 
     @Override
     public void hideLoading() {
-        // Hide progress bar
+        binding.searchProgressBar.setVisibility(View.GONE);
     }
 
     @Override

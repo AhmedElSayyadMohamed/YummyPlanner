@@ -1,6 +1,10 @@
 package com.example.yummyplanner.ui.search;
 
+import com.example.yummyplanner.data.meals.model.MealItemModel;
 import com.example.yummyplanner.data.meals.repository.MealRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -55,11 +59,7 @@ public class SearchPresenter implements SearchContract.Presenter {
                         .subscribe(
                                 meals -> {
                                     view.hideLoading();
-                                    if (meals.isEmpty()) {
-                                        view.showEmptyState();
-                                    } else {
-                                        view.showResults(meals);
-                                    }
+                                    handleResults(meals);
                                 },
                                 throwable -> {
                                     view.hideLoading();
@@ -79,11 +79,7 @@ public class SearchPresenter implements SearchContract.Presenter {
                         .subscribe(
                                 meals -> {
                                     view.hideLoading();
-                                    if (meals.isEmpty()) {
-                                        view.showEmptyState();
-                                    } else {
-                                        view.showResults(meals);
-                                    }
+                                    handleResults(meals);
                                 },
                                 throwable -> {
                                     view.hideLoading();
@@ -103,11 +99,7 @@ public class SearchPresenter implements SearchContract.Presenter {
                         .subscribe(
                                 meals -> {
                                     view.hideLoading();
-                                    if (meals.isEmpty()) {
-                                        view.showEmptyState();
-                                    } else {
-                                        view.showResults(meals);
-                                    }
+                                    handleResults(meals);
                                 },
                                 throwable -> {
                                     view.hideLoading();
@@ -115,6 +107,17 @@ public class SearchPresenter implements SearchContract.Presenter {
                                 }
                         )
         );
+    }
+
+    private void handleResults(List<MealItemModel> meals) {
+        if (meals.isEmpty()) {
+            view.showEmptyState();
+        } else {
+            List<MealItemModel> limitedList = meals.stream()
+                    .limit(10)
+                    .collect(Collectors.toList());
+            view.showResults(limitedList);
+        }
     }
 
     @Override
