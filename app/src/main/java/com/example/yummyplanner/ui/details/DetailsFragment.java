@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.yummyplanner.R;
-import com.example.yummyplanner.data.repository.MealRepositoryImpl;
+import com.example.yummyplanner.data.meals.repository.MealRepositoryImpl;
 import com.example.yummyplanner.databinding.FragmentDetailsBinding;
 import com.example.yummyplanner.data.meals.model.MealdetailsItemModel;
 import com.example.yummyplanner.data.meals.model.response.Ingredient;
@@ -65,7 +65,7 @@ public class DetailsFragment extends Fragment implements MealDetailsContract.Vie
         String mealId = args.getMealId();
         Log.d("DetailsFragment", "mealId: " + mealId);
 
-        presenter = new MealDetailsPresenter(this, MealRepositoryImpl.getInstance(requireContext()));
+        presenter = new MealDetailsPresenter(this, MealRepositoryImpl.getInstance());
 
         presenter.getMealDetails(mealId);
 

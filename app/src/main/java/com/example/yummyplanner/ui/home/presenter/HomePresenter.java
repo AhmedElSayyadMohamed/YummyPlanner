@@ -2,9 +2,9 @@ package com.example.yummyplanner.ui.home.presenter;
 
 import com.example.yummyplanner.data.auth.repository.AuthRepository;
 import com.example.yummyplanner.data.auth.repository.AuthRepositoryImpl;
-import com.example.yummyplanner.data.repository.MealRepository;
-import com.example.yummyplanner.data.repository.MealRepositoryImpl;
 import com.example.yummyplanner.data.meals.model.MealItemModel;
+import com.example.yummyplanner.data.meals.repository.MealRepository;
+import com.example.yummyplanner.data.meals.repository.MealRepositoryImpl;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;

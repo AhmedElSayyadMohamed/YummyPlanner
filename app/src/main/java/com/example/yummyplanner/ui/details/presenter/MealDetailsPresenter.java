@@ -2,13 +2,11 @@ package com.example.yummyplanner.ui.details.presenter;
 
 import com.example.yummyplanner.data.meals.local.entity.FavouriteMealEntity;
 import com.example.yummyplanner.data.meals.model.MealdetailsItemModel;
-import com.example.yummyplanner.data.meals.repository.MealsDataCallback;
-import com.example.yummyplanner.data.repository.MealRepository;
+import com.example.yummyplanner.data.meals.repository.MealRepository;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-
 
 public class MealDetailsPresenter implements MealDetailsContract.Presenter {
 
@@ -31,28 +29,34 @@ public class MealDetailsPresenter implements MealDetailsContract.Presenter {
         if (view == null) return;
 
         view.showLoading();
-        mealRepository.getMeadDetails(mealId, new MealsDataCallback<MealdetailsItemModel>() {
-            @Override
-            public void onSuccess(MealdetailsItemModel meal) {
-                view.hideLoading();
-                view.showMealDetails(meal);
-                view.showIngredients(meal.getIngredientsList());
-                view.showInstructions(meal.getInstructions());
-                checkIfFavorite(meal.getId());
-            }
 
-            @Override
-            public void onFailure(String message) {
-                if (view == null) return;
-                view.hideLoading();
-                view.showError(message);
-            }
-        });
+
+        compositeDisposable.add(
+                mealRepository.getMealDetails(mealId)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                meal -> {
+                                    if (view != null) {
+                                        view.hideLoading();
+                                        view.showMealDetails(meal);
+                                        view.showIngredients(meal.getIngredientsList());
+                                        view.showInstructions(meal.getInstructions());
+                                        checkIfFavorite(meal.getId());
+                                    }
+                                },
+                                throwable -> {
+                                    if (view != null) {
+                                        view.hideLoading();
+                                        view.showError("Failed to load meal details: " + throwable.getMessage());
+                                    }
+                                }
+                        )
+        );
     }
 
     @Override
     public void onFavoriteClicked(MealdetailsItemModel meal) {
-
         compositeDisposable.add(
                 mealRepository.isFavorite(meal.getId())
                         .subscribeOn(Schedulers.io())
@@ -98,17 +102,14 @@ public class MealDetailsPresenter implements MealDetailsContract.Presenter {
         );
     }
 
-
     @Override
     public void onAddToPlannerClicked(MealdetailsItemModel meal, String date) {
 
     }
-
 
     @Override
     public void detachView() {
         this.view = null;
         compositeDisposable.clear();
     }
-
 }

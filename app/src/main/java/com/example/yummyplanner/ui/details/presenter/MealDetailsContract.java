@@ -33,13 +33,10 @@ public interface MealDetailsContract {
         void attachView(View view);
         void detachView();
 
-        // Meal Details
         void getMealDetails(String mealId);
 
-        // Favorite
         void onFavoriteClicked(MealdetailsItemModel meal);
 
-        // Meal Planner
         void onAddToPlannerClicked(MealdetailsItemModel meal, String date);
     }
 }

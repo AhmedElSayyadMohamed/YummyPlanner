@@ -1,12 +1,11 @@
-package com.example.yummyplanner.data.remote;
+package com.example.yummyplanner.data.meals.remote;
 
 import com.example.yummyplanner.data.meals.model.Area;
 import com.example.yummyplanner.data.meals.model.Category;
-import com.example.yummyplanner.data.meals.model.Ingredient;
+import com.example.yummyplanner.data.meals.model.IngredientApiItem;
 import com.example.yummyplanner.data.meals.model.MealItemModel;
+import com.example.yummyplanner.data.meals.model.MealdetailsItemModel;
 import com.example.yummyplanner.data.network.Network;
-import com.example.yummyplanner.data.remote.MealService;
-import  com.example.yummyplanner.data.remote.MealRemoteDataSource;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +13,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
 
-    private final com.example.yummyplanner.data.remote.MealService mealService;
+    private final MealService mealService;
     private static MealRemoteDataSourceImpl instance;
 
     private MealRemoteDataSourceImpl() {
@@ -47,7 +46,7 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
     }
 
     @Override
-    public Single<List<Ingredient>> getIngredients() {
+    public Single<List<IngredientApiItem>> getIngredients() {
         return mealService.getIngredients()
                 .map(response -> response.getIngredients());
     }
@@ -61,7 +60,7 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
     }
 
     @Override
-    public Single<MealItemModel> getMealById(String id) {
+    public Single<MealdetailsItemModel> getMealById(String id) {
         return mealService.getMealById(id)
                 .map(response -> response.getMeals().get(0));
     }

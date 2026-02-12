@@ -19,7 +19,6 @@ import com.example.yummyplanner.data.auth.repository.AuthRepositoryImpl;
 import com.example.yummyplanner.data.meals.model.Area;
 import com.example.yummyplanner.data.meals.model.Category;
 import com.example.yummyplanner.data.meals.model.MealItemModel;
-import com.example.yummyplanner.data.repository.MealRepositoryImpl;
 import com.example.yummyplanner.databinding.FragmentHomeBinding;
 import com.example.yummyplanner.ui.home.adapter.CategoryAdapter;
 import com.example.yummyplanner.ui.home.adapter.CuisinesAdapter;
