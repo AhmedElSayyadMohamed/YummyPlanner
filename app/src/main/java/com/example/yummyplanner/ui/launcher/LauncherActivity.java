@@ -45,7 +45,7 @@ public class LauncherActivity extends AppCompatActivity {
 
     private void showNoInternetSnackbar(View view) {
         if (noInternetSnackbar == null) {
-            noInternetSnackbar = Snackbar.make(view, R.string.no_internet_connection, Snackbar.LENGTH_INDEFINITE)
+            noInternetSnackbar = Snackbar.make(view, R.string.no_internet_connection, Snackbar.LENGTH_LONG)
                     .setBackgroundTint(Color.RED)
                     .setTextColor(Color.WHITE);
             noInternetSnackbar.getView().setAlpha(0.9f);

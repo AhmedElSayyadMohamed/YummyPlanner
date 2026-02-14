@@ -118,7 +118,8 @@ public class OnboardingFragment extends Fragment  implements OnboardingContract.
 
     @Override
     public void navigateToAuthActivity() {
-        Intent intent = new Intent(this.getContext(), AuthActivity.class);
+        Intent intent = new Intent(requireContext(), AuthActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 }
