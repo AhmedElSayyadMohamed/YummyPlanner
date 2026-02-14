@@ -26,7 +26,7 @@ public class LoginPresenter implements LoginContract.Presenter {
     public LoginPresenter(LoginContract.View view, Context context){
         this.view = view ;
         this.sessionRepo = SessionRepositoryImpl.getInstance(context);
-        this.authRepo = AuthRepositoryImpl.getInstance();
+        this.authRepo = AuthRepositoryImpl.getInstance(context);
         this.mealRepository = MealRepositoryImpl.getInstance(context);
     }
 

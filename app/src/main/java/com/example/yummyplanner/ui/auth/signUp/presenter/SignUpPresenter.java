@@ -1,5 +1,6 @@
 package com.example.yummyplanner.ui.auth.signUp.presenter;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.example.yummyplanner.data.auth.model.User;
@@ -18,9 +19,9 @@ public class SignUpPresenter implements SignUpContract.Presenter {
     private final AuthRepository authRepo;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    public SignUpPresenter(SignUpContract.View view) {
+    public SignUpPresenter(SignUpContract.View view, Context context) {
         this.view = view;
-        this.authRepo = AuthRepositoryImpl.getInstance();
+        this.authRepo = AuthRepositoryImpl.getInstance(context);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.yummyplanner.ui.setting;
+package com.example.yummyplanner.ui.setting.presenter;
 
 import android.content.Context;
 
@@ -11,13 +11,13 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class SettingPresenter implements com.example.yummyplanner.ui.setting.SettingContract.Presenter {
+public class SettingPresenter implements SettingContract.Presenter {
 
-    private final com.example.yummyplanner.ui.setting.SettingContract.View view;
+    private final SettingContract.View view;
     private final Context context;
     private final CompositeDisposable disposables = new CompositeDisposable();
 
-    public SettingPresenter(Context context, com.example.yummyplanner.ui.setting.SettingContract.View view) {
+    public SettingPresenter(Context context, SettingContract.View view) {
         this.context = context;
         this.view = view;
     }
@@ -61,7 +61,7 @@ public class SettingPresenter implements com.example.yummyplanner.ui.setting.Set
     public void logout() {
 
         disposables.add(
-                AuthRepositoryImpl.getInstance().logout()
+                AuthRepositoryImpl.getInstance(context).logout()
                         .andThen(MealRepositoryImpl.getInstance(context).clearAllData())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())

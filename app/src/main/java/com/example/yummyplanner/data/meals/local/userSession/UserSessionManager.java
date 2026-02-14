@@ -79,11 +79,12 @@ public class UserSessionManager {
     public User getUser() {
         if (!isLoggedIn()) return null;
 
+        // Correct order based on User class constructor: (name, email, avatarUrl, uId)
         return new User(
-                prefs.getString(KEY_USER_ID, ""),
                 prefs.getString(KEY_NAME, ""),
                 prefs.getString(KEY_EMAIL, ""),
-                prefs.getString(KEY_AVATAR, "")
+                prefs.getString(KEY_AVATAR, ""),
+                prefs.getString(KEY_USER_ID, "")
         );
     }
 

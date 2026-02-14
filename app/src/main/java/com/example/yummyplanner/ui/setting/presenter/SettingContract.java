@@ -1,4 +1,4 @@
-package com.example.yummyplanner.ui.setting;
+package com.example.yummyplanner.ui.setting.presenter;
 
 import com.example.yummyplanner.data.auth.model.User;
 

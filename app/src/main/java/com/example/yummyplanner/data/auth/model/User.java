@@ -16,6 +16,12 @@ public class User {
         this.createdAt = System.currentTimeMillis();
     }
 
+    public User(String uId, String name, String email) {
+        this.uId = uId;
+        this.name = name;
+        this.email = email;
+    }
+
     public User(String name, String email, String avatarUrl,String uId) {
         this.uId = uId;
         this.name = name;

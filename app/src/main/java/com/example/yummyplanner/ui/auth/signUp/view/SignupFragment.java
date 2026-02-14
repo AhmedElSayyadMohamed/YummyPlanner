@@ -31,7 +31,7 @@ public class SignupFragment extends BaseFragment implements SignUpContract.View 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new SignUpPresenter(this);
+        presenter = new SignUpPresenter(this,getContext().getApplicationContext());
     }
 
     @Override

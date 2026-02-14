@@ -24,7 +24,7 @@ public class HomePresenter implements HomeContract.Presenter {
     public HomePresenter(HomeContract.View view, Context context) {
         this.view = view;
         this.mealRepository = MealRepositoryImpl.getInstance(context);
-        this.authRepository = AuthRepositoryImpl.getInstance();
+        this.authRepository = AuthRepositoryImpl.getInstance(context);
     }
 
     @Override

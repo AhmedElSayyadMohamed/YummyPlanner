@@ -17,9 +17,10 @@ import com.example.yummyplanner.R;
 import com.example.yummyplanner.data.auth.model.User;
 import com.example.yummyplanner.databinding.FragmentSettingBinding;
 import com.example.yummyplanner.ui.auth.AuthActivity;
+import com.example.yummyplanner.ui.setting.presenter.SettingContract;
+import com.example.yummyplanner.ui.setting.presenter.SettingPresenter;
 
-
-public class SettingFragment extends Fragment implements com.example.yummyplanner.ui.setting.SettingContract.View {
+public class SettingFragment extends Fragment implements SettingContract.View {
 
     private FragmentSettingBinding binding;
     private SettingContract.Presenter presenter;
@@ -30,7 +31,7 @@ public class SettingFragment extends Fragment implements com.example.yummyplanne
                              Bundle savedInstanceState) {
 
         binding = FragmentSettingBinding.inflate(inflater, container, false);
-        presenter = new com.example.yummyplanner.ui.setting.SettingPresenter(requireContext(), this);
+        presenter = new SettingPresenter(requireContext(), this);
         return binding.getRoot();
     }
 

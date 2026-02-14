@@ -1,10 +1,11 @@
 package com.example.yummyplanner.data.auth.repository;
 
+import android.content.Context;
 import android.util.Log;
 import com.example.yummyplanner.data.auth.model.User;
 import com.example.yummyplanner.data.meals.cloud.CloudRemoteDataSource;
 import com.example.yummyplanner.data.meals.cloud.FireStoreManager;
-import com.example.yummyplanner.data.meals.repository.MealRepository;
+import com.example.yummyplanner.data.meals.local.userSession.UserSessionManager;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,17 +19,19 @@ public class AuthRepositoryImpl implements AuthRepository {
     private final FirebaseAuth firebaseAuth;
     private static AuthRepositoryImpl instance;
     private final CloudRemoteDataSource cloudRemoteDataSource;
+    private final UserSessionManager sessionManager;
 
 
 
-    private AuthRepositoryImpl() {
+    private AuthRepositoryImpl(Context context) {
         this.firebaseAuth = FirebaseAuth.getInstance();
         this.cloudRemoteDataSource = FireStoreManager.getInstance();
+        this.sessionManager = UserSessionManager.getInstance(context);
     }
 
-    public static synchronized AuthRepositoryImpl getInstance() {
+    public static synchronized AuthRepositoryImpl getInstance(Context context) {
         if (instance == null) {
-            instance = new AuthRepositoryImpl();
+            instance = new AuthRepositoryImpl(context);
         }
         return instance;
     }
@@ -40,7 +43,23 @@ public class AuthRepositoryImpl implements AuthRepository {
                     .addOnSuccessListener(authResult -> {
                         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                         if (firebaseUser != null) {
-                            emitter.onSuccess(getUserFromFirebaseUser(firebaseUser));
+                            String uid = firebaseUser.getUid();
+
+                            cloudRemoteDataSource.getUserDocument(uid)
+                                    .subscribe(documentSnapshot -> {
+                                        if (documentSnapshot.exists()) {
+                                            String name = documentSnapshot.getString("name");
+                                            if (name == null) name = "Guest";
+
+                                            User user = new User(uid, name, firebaseUser.getEmail());
+                                            Log.d("Login", "User: " + user.toString());
+
+                                            emitter.onSuccess(user);
+                                        } else {
+                                            emitter.onError(new Exception("User document not found in Firestore"));
+                                        }
+                                    }, emitter::onError);
+
                         } else {
                             emitter.onError(new Exception("User not found after login"));
                         }
@@ -48,6 +67,7 @@ public class AuthRepositoryImpl implements AuthRepository {
                     .addOnFailureListener(emitter::onError);
         });
     }
+
 
     @Override
     public Single<User> registerWithEmailAndPassword(User user) {
@@ -105,7 +125,12 @@ public class AuthRepositoryImpl implements AuthRepository {
     @Override
     public User getCurrentUser() {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        return getUserFromFirebaseUser(firebaseUser);
+        if (firebaseUser == null) return null;
+        
+        User sessionUser = sessionManager.getUser();
+        String userName = (sessionUser != null) ? sessionUser.getName() : firebaseUser.getDisplayName();
+        Log.d("userName",userName);
+        return new User(userName, firebaseUser.getEmail());
     }
 
     @Override

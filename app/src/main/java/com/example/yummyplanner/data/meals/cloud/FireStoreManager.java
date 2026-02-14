@@ -70,6 +70,25 @@ public class FireStoreManager implements CloudRemoteDataSource {
         });
     }
 
+    @Override
+    public Single<DocumentSnapshot> getUserDocument(String uid) {
+        return Single.create(emitter -> {
+            firestore.collection(USERS_COLLECTION).document(uid).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (!emitter.isDisposed()) {
+                            if (documentSnapshot.exists()) {
+                                emitter.onSuccess(documentSnapshot);
+                            } else {
+                                emitter.onError(new Exception("User document not found"));
+                            }
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        if (!emitter.isDisposed()) emitter.onError(e);
+                    });
+        });
+    }
+
 
     @Override
     public Completable addMealToPlanner(PlannedMealEntity meal) {
