@@ -21,7 +21,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.layout.LayoutActivity"
-            android:exported="false" /> <!-- Launcher / Splash -->
+            android:exported="false" />
         <activity
             android:name=".ui.launcher.LauncherActivity"
             android:exported="true">

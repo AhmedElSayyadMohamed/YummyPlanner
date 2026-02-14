@@ -3,13 +3,20 @@ package com.example.yummyplanner.data.meals.local.userSession;
 import com.example.yummyplanner.data.auth.model.User;
 
 public interface SessionRepository {
-    boolean isOnboardingCompleted();
-    boolean isLoggedIn();
-    boolean isGuest();
 
+    boolean isOnboardingCompleted();
     void completeOnboarding();
-    void login();
+
+    boolean isGuest();
     void enterGuest();
-    void logout();
+
+    boolean isLoggedIn();
+    void loginSuccess();
+
     void saveUser(User user);
+    User getUser();
+
+    void logout();
+    void clearAll();
 }
+

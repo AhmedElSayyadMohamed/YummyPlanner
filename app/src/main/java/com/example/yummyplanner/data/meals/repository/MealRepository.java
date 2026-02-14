@@ -40,5 +40,5 @@ public interface MealRepository {
     Completable deletePlannedMeal(PlannedMealEntity meal);
 
     Completable clearAllData();
-    Completable syncDataFromCloud();
+    Completable syncDataFromCloud(String UId);
 }

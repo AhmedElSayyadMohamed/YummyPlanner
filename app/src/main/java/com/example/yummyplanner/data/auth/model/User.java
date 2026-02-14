@@ -1,6 +1,7 @@
 package com.example.yummyplanner.data.auth.model;
 
 public class User {
+    private String uId;
     private String name;
     private String email;
     private String password;
@@ -15,12 +16,24 @@ public class User {
         this.createdAt = System.currentTimeMillis();
     }
 
-    public User(String name, String email, String avatarUrl) {
+    public User(String name, String email, String avatarUrl,String uId) {
+        this.uId = uId;
         this.name = name;
         this.email = email;
         this.avatarUrl = avatarUrl;
     }
 
+    public String getuId() {
+        return uId;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public void setuId(String uId) {
+        this.uId = uId;
+    }
 
     public String getAvatarUrl() { return avatarUrl; }
 

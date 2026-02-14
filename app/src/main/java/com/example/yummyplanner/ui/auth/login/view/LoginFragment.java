@@ -16,11 +16,8 @@ import com.example.yummyplanner.ui.BaseFragment;
 import com.example.yummyplanner.R;
 import com.example.yummyplanner.data.auth.social.GoogleAuthHelper;
 import com.example.yummyplanner.data.auth.social.SocialAuthCallback;
-import com.example.yummyplanner.data.meals.local.appPreferences.AppPreferences;
-import com.example.yummyplanner.data.meals.local.appPreferences.AppPreferencesImpl;
 import com.example.yummyplanner.data.meals.local.userSession.SessionRepository;
 import com.example.yummyplanner.data.meals.local.userSession.SessionRepositoryImpl;
-import com.example.yummyplanner.data.meals.local.userSession.UserSessionManager;
 import com.example.yummyplanner.databinding.FragmentLoginBinding;
 import com.example.yummyplanner.ui.layout.LayoutActivity;
 import com.example.yummyplanner.utiles.Constants;
@@ -52,11 +49,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        AppPreferences prefs = new AppPreferencesImpl(requireContext().getApplicationContext());
-        UserSessionManager sessionManager = UserSessionManager.getInstance(getContext().getApplicationContext());
-        SessionRepository sessionRepo = new SessionRepositoryImpl(sessionManager);
-
-        presenter = new LoginPresenter(this, sessionRepo);
+        presenter = new LoginPresenter(this,getContext().getApplicationContext());
         googleAuthHelper = new GoogleAuthHelper(requireActivity(), socialAuthCallback);
     }
 
@@ -160,7 +153,6 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
     @Override
     public void showErrorMessage(String message) {
         Constants.showErrorSnackbar(binding.getRoot(), message);
-
     }
 
     @Override

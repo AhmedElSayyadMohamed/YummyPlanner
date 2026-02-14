@@ -4,85 +4,101 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.yummyplanner.data.auth.model.User;
-import com.example.yummyplanner.data.meals.local.appPreferences.AppPreferences;
-import com.example.yummyplanner.data.meals.local.appPreferences.AppPreferencesImpl;
 
 public class UserSessionManager {
 
-    private static final String PREF_NAME = "UserSession";
+    private static final String PREF_NAME = "yummy_session";
+
+    private static final String KEY_ONBOARDING = "onboarding_seen";
+    private static final String KEY_GUEST = "is_guest";
+    private static final String KEY_LOGGED = "logged_in";
+
+    private static final String KEY_USER_ID = "user_id";
     private static final String KEY_NAME = "user_name";
     private static final String KEY_EMAIL = "user_email";
     private static final String KEY_AVATAR = "user_avatar";
-    private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
 
     private static UserSessionManager instance;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
-    private AppPreferences prefs;
+    private SharedPreferences prefs;
 
     private UserSessionManager(Context context) {
-        this.prefs = new AppPreferencesImpl(context);
-        this.sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        this.editor = sharedPreferences.edit();
+        prefs = context.getApplicationContext()
+                .getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
     public static synchronized UserSessionManager getInstance(Context context) {
         if (instance == null) {
-            instance = new UserSessionManager(context.getApplicationContext());
+            instance = new UserSessionManager(context);
         }
         return instance;
     }
 
+    public boolean isOnboardingCompleted() {
+        return prefs.getBoolean(KEY_ONBOARDING, false);
+    }
+
+    public void completeOnboarding() {
+        prefs.edit().putBoolean(KEY_ONBOARDING, true).apply();
+    }
+
+    public boolean isGuest() {
+        return prefs.getBoolean(KEY_GUEST, false);
+    }
+
+    public void enterGuest() {
+        prefs.edit()
+                .putBoolean(KEY_GUEST, true)
+                .putBoolean(KEY_LOGGED, false)
+                .apply();
+    }
+
+    public boolean isLoggedIn() {
+        return prefs.getBoolean(KEY_LOGGED, false);
+    }
+
+    public void loginSuccess() {
+        prefs.edit()
+                .putBoolean(KEY_LOGGED, true)
+                .putBoolean(KEY_GUEST, false)
+                .apply();
+    }
+
     public void saveUser(User user) {
-        editor.putBoolean(KEY_IS_LOGGED_IN, true);
-        editor.putString(KEY_NAME, user.getName());
-        editor.putString(KEY_EMAIL, user.getEmail());
-        editor.putString(KEY_AVATAR, user.getAvatarUrl());
-        editor.apply();
+        if (user == null) return;
+
+        prefs.edit()
+                .putString(KEY_USER_ID, user.getuId())
+                .putString(KEY_NAME, user.getName())
+                .putString(KEY_EMAIL, user.getEmail())
+                .putString(KEY_AVATAR, user.getAvatarUrl())
+                .apply();
+
+        loginSuccess();
     }
 
     public User getUser() {
-        if (!sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false)) return null;
+        if (!isLoggedIn()) return null;
 
         return new User(
-                sharedPreferences.getString(KEY_NAME, ""),
-                sharedPreferences.getString(KEY_EMAIL, ""),
-                sharedPreferences.getString(KEY_AVATAR, "")
+                prefs.getString(KEY_USER_ID, ""),
+                prefs.getString(KEY_NAME, ""),
+                prefs.getString(KEY_EMAIL, ""),
+                prefs.getString(KEY_AVATAR, "")
         );
     }
 
     public void logout() {
-        editor.clear();
-        editor.apply();
-        prefs.clear();
+        prefs.edit()
+                .remove(KEY_LOGGED)
+                .remove(KEY_GUEST)
+                .remove(KEY_USER_ID)
+                .remove(KEY_NAME)
+                .remove(KEY_EMAIL)
+                .remove(KEY_AVATAR)
+                .apply();
     }
 
-    public boolean isOnboardingCompleted() {
-        return prefs.isOnboardingCompleted();
+    public void clear() {
+        prefs.edit().clear().apply();
     }
-
-    public boolean isLoggedIn() {
-        return prefs.isLoggedIn();
-    }
-
-    public boolean isGuest() {
-        return prefs.isGuest();
-    }
-
-    public void completeOnboarding() {
-        prefs.setOnboardingCompleted(true);
-    }
-
-    public void loginSuccess() {
-        prefs.setLoggedIn(true);
-        prefs.setGuest(false);
-        prefs.setOnboardingCompleted(true);
-    }
-
-    public void enterGuest() {
-        prefs.setGuest(true);
-        prefs.setLoggedIn(false);
-        prefs.setOnboardingCompleted(true);
-    }
-
 }

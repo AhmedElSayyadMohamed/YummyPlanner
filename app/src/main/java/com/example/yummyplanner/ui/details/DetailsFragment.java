@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.yummyplanner.R;
+
 import com.example.yummyplanner.data.meals.local.userSession.UserSessionManager;
 import com.example.yummyplanner.data.meals.repository.MealRepositoryImpl;
 import com.example.yummyplanner.databinding.FragmentDetailsBinding;

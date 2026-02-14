@@ -32,10 +32,8 @@ public class LauncherActivity extends AppCompatActivity {
             return insets;
         });
 
-        // Initialize Network Callback
         NetworkUtils.registerNetworkCallback(this);
 
-        // Observe Network State
         NetworkUtils.isNetworkAvailable().observe(this, isAvailable -> {
             if (!isAvailable) {
                 showNoInternetSnackbar(mainView);
@@ -47,7 +45,7 @@ public class LauncherActivity extends AppCompatActivity {
 
     private void showNoInternetSnackbar(View view) {
         if (noInternetSnackbar == null) {
-            noInternetSnackbar = Snackbar.make(view, "No Internet Connection", Snackbar.LENGTH_INDEFINITE)
+            noInternetSnackbar = Snackbar.make(view, R.string.no_internet_connection, Snackbar.LENGTH_INDEFINITE)
                     .setBackgroundTint(Color.RED)
                     .setTextColor(Color.WHITE);
             noInternetSnackbar.getView().setAlpha(0.9f);

@@ -4,6 +4,7 @@ import android.util.Log;
 import com.example.yummyplanner.data.auth.model.User;
 import com.example.yummyplanner.data.meals.cloud.CloudRemoteDataSource;
 import com.example.yummyplanner.data.meals.cloud.FireStoreManager;
+import com.example.yummyplanner.data.meals.repository.MealRepository;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -13,9 +14,12 @@ import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
 public class AuthRepositoryImpl implements AuthRepository {
+
     private final FirebaseAuth firebaseAuth;
     private static AuthRepositoryImpl instance;
     private final CloudRemoteDataSource cloudRemoteDataSource;
+
+
 
     private AuthRepositoryImpl() {
         this.firebaseAuth = FirebaseAuth.getInstance();
@@ -72,11 +76,22 @@ public class AuthRepositoryImpl implements AuthRepository {
             firebaseAuth.signInWithCredential(credential)
                     .addOnSuccessListener(authResult -> {
                         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                        boolean isNewUser = authResult.getAdditionalUserInfo().isNewUser();
+
                         if (firebaseUser != null) {
-                            emitter.onSuccess(getUserFromFirebaseUser(firebaseUser));
+                            if(isNewUser){
+                            cloudRemoteDataSource.createUserDocument(firebaseUser.getDisplayName(),firebaseUser.getEmail())
+                                    .subscribe(
+                                            () -> emitter.onSuccess(getUserFromFirebaseUser(firebaseUser)),
+                                            emitter::onError
+                                    );
+                            }else {
+                                emitter.onSuccess(getUserFromFirebaseUser(firebaseUser));
+                            }
                         } else {
                             emitter.onError(new Exception("Google User is null"));
                         }
+
                     })
                     .addOnFailureListener(emitter::onError);
         });

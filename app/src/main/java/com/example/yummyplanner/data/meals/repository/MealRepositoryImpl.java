@@ -158,7 +158,7 @@ public class MealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Completable syncDataFromCloud() {
+    public Completable syncDataFromCloud(String UId) {
         Completable syncFavs = cloudRemoteDataSource.getAllFavorites().firstOrError()
                 .flatMapCompletable(localDataSource::insertAllFavorites);
         

@@ -72,8 +72,7 @@ public class LayoutActivity extends AppCompatActivity {
     private void updateNoInternetVisibility(boolean isAvailable) {
         int destinationId = navController.getCurrentDestination().getId();
         
-        // Show offline layout only if not on Favorites or Planner
-        if (!isAvailable && destinationId != R.id.favoritesFragment && destinationId != R.id.plannerFragment) {
+        if (!isAvailable && destinationId != R.id.favoritesFragment && destinationId != R.id.plannerFragment&& destinationId != R.id.settingsFragment) {
             binding.noInternetView.noInternetLayout.setVisibility(View.VISIBLE);
             binding.navHostFragment.setVisibility(View.GONE);
         } else {
