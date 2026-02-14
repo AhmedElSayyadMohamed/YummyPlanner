@@ -3,10 +3,11 @@ package com.example.yummyplanner.ui.search;
 import com.example.yummyplanner.data.meals.model.MealItemModel;
 import com.example.yummyplanner.data.meals.repository.MealRepository;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -15,6 +16,8 @@ public class SearchPresenter implements SearchContract.Presenter {
     private SearchContract.View view;
     private final MealRepository repository;
     private final CompositeDisposable disposables = new CompositeDisposable();
+    private List<MealItemModel> allResultsFromFilter = new ArrayList<>();
+    private boolean isFilterActive = false;
 
     public SearchPresenter(SearchContract.View view, MealRepository repository) {
         this.view = view;
@@ -22,28 +25,61 @@ public class SearchPresenter implements SearchContract.Presenter {
     }
 
     @Override
-    public void searchByName(String name) {
-        if (name.isEmpty()) {
-            view.showEmptyState();
+    public void attachView(SearchContract.View view) {
+        this.view = view;
+    }
+
+    @Override
+    public void searchByName(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            if (isFilterActive) {
+                if (view != null) view.showResults(allResultsFromFilter);
+            } else {
+                if (view != null) view.showResults(new ArrayList<>());
+            }
             return;
         }
-        view.showLoading();
+
+        if (isFilterActive) {
+            filterLocally(query);
+        } else {
+            performRemoteSearch(query);
+        }
+    }
+
+    private void filterLocally(String query) {
+        List<MealItemModel> filtered = new ArrayList<>();
+        String lowerQuery = query.toLowerCase().trim();
+        for (MealItemModel meal : allResultsFromFilter) {
+            if (meal.getName().toLowerCase().contains(lowerQuery)) {
+                filtered.add(meal);
+            }
+        }
+        if (view != null) {
+            if (filtered.isEmpty()) view.showEmptyState();
+            else view.showResults(filtered);
+        }
+    }
+
+    private void performRemoteSearch(String query) {
+        if (view != null) view.showLoading();
         disposables.add(
-                repository.searchMealsByName(name)
+                repository.searchMealsByName(query)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 meals -> {
-                                    view.hideLoading();
-                                    if (meals.isEmpty()) {
-                                        view.showEmptyState();
-                                    } else {
-                                        view.showResults(meals);
+                                    if (view != null) {
+                                        view.hideLoading();
+                                        if (meals.isEmpty()) view.showEmptyState();
+                                        else view.showResults(meals);
                                     }
                                 },
                                 throwable -> {
-                                    view.hideLoading();
-                                    view.showError(throwable.getMessage());
+                                    if (view != null) {
+                                        view.hideLoading();
+                                        view.showError(throwable.getMessage());
+                                    }
                                 }
                         )
         );
@@ -51,73 +87,73 @@ public class SearchPresenter implements SearchContract.Presenter {
 
     @Override
     public void filterByCategory(String category) {
-        view.showLoading();
-        disposables.add(
-                repository.filterByCategory(category)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                meals -> {
-                                    view.hideLoading();
-                                    handleResults(meals);
-                                },
-                                throwable -> {
-                                    view.hideLoading();
-                                    view.showError(throwable.getMessage());
-                                }
-                        )
-        );
+        isFilterActive = true;
+        fetchFullMeals(repository.filterByCategory(category));
     }
 
     @Override
     public void filterByArea(String area) {
-        view.showLoading();
-        disposables.add(
-                repository.filterByArea(area)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                meals -> {
-                                    view.hideLoading();
-                                    handleResults(meals);
-                                },
-                                throwable -> {
-                                    view.hideLoading();
-                                    view.showError(throwable.getMessage());
-                                }
-                        )
-        );
+        isFilterActive = true;
+        fetchFullMeals(repository.filterByArea(area));
     }
 
     @Override
     public void filterByIngredient(String ingredient) {
-        view.showLoading();
+        isFilterActive = true;
+        fetchFullMeals(repository.filterByIngredient(ingredient));
+    }
+
+    private void fetchFullMeals(Single<List<MealItemModel>> filterSource) {
+        if (view != null) view.showLoading();
+        
         disposables.add(
-                repository.filterByIngredient(ingredient)
+                filterSource
+                        .flatMap(meals -> {
+                            if (meals.isEmpty()) return Single.just(new ArrayList<MealItemModel>());
+                            
+                            List<Single<MealItemModel>> detailSingles = new ArrayList<>();
+                            for (MealItemModel meal : meals) {
+                                detailSingles.add(
+                                        repository.getMealDetails(meal.getId())
+                                                .map(details -> {
+                                                    MealItemModel fullMeal = new MealItemModel();
+                                                    fullMeal.setId(details.getId());
+                                                    fullMeal.setName(details.getName());
+                                                    fullMeal.setImageUrl(details.getThumbNail());
+                                                    fullMeal.setCategory(details.getCategory());
+                                                    fullMeal.setArea(details.getArea());
+                                                    return fullMeal;
+                                                })
+                                );
+                            }
+                            
+                            return Single.zip(detailSingles, args -> {
+                                List<MealItemModel> fullMeals = new ArrayList<>();
+                                for (Object obj : args) {
+                                    fullMeals.add((MealItemModel) obj);
+                                }
+                                return fullMeals;
+                            });
+                        })
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 meals -> {
-                                    view.hideLoading();
-                                    handleResults(meals);
+                                    allResultsFromFilter = meals;
+                                    if (view != null) {
+                                        view.hideLoading();
+                                        if (meals.isEmpty()) view.showEmptyState();
+                                        else view.showResults(meals);
+                                    }
                                 },
                                 throwable -> {
-                                    view.hideLoading();
-                                    view.showError(throwable.getMessage());
+                                    if (view != null) {
+                                        view.hideLoading();
+                                        view.showError(throwable.getMessage());
+                                    }
                                 }
                         )
         );
-    }
-
-    private void handleResults(List<MealItemModel> meals) {
-        if (meals.isEmpty()) {
-            view.showEmptyState();
-        } else {
-            List<MealItemModel> limitedList = meals.stream()
-                    .limit(10)
-                    .collect(Collectors.toList());
-            view.showResults(limitedList);
-        }
     }
 
     @Override

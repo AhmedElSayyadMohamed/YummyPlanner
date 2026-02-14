@@ -1,22 +1,23 @@
 package com.example.yummyplanner.data.auth.social;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.credentials.Credential;
 import androidx.credentials.CredentialManager;
+import androidx.credentials.CredentialManagerCallback;
+import androidx.credentials.CustomCredential;
+import androidx.credentials.GetCredentialRequest;
 import androidx.credentials.GetCredentialResponse;
 import androidx.credentials.exceptions.GetCredentialException;
 
 import com.example.yummyplanner.R;
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
-import androidx.credentials.GetCredentialRequest;
-import java.util.concurrent.Executors;
-import androidx.credentials.CredentialManagerCallback;
-import androidx.annotation.NonNull;
-import androidx.credentials.Credential;
-import androidx.credentials.CustomCredential;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
+
+import java.security.MessageDigest;
+import java.util.UUID;
 
 public class GoogleAuthHelper {
 
@@ -31,16 +32,29 @@ public class GoogleAuthHelper {
     }
 
     public void launchSignIn() {
-
         Log.d("LOGIN", "launchSignIn started");
+
+        // Generate a nonce for security and to help resolve BAD_AUTHENTICATION issues
+        String rawNonce = UUID.randomUUID().toString();
+        String nonce = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] digest = md.digest(rawNonce.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b));
+            }
+            nonce = sb.toString();
+        } catch (Exception e) {
+            Log.e("LOGIN", "Error creating nonce", e);
+        }
 
         GetGoogleIdOption googleIdOption =
                 new GetGoogleIdOption.Builder()
                         .setFilterByAuthorizedAccounts(false)
-                        .setServerClientId(
-                                activity.getString(R.string.default_web_client_id)
-                        )
+                        .setServerClientId(activity.getString(R.string.default_web_client_id))
                         .setAutoSelectEnabled(false)
+                        .setNonce(nonce) // Adding nonce
                         .build();
 
         GetCredentialRequest request =
@@ -78,22 +92,18 @@ public class GoogleAuthHelper {
                 try {
                     GoogleIdTokenCredential googleIdTokenCredential =
                             GoogleIdTokenCredential.createFrom(customCredential.getData());
-                    Log.d("LOGIN", " Success We are and get googl token");
-
+                    Log.d("LOGIN", "Success: Received Google ID Token");
                     callback.onSuccess(googleIdTokenCredential.getIdToken());
                 } catch (Exception e) {
-                    Log.d("LOGIN", " ERROR We are and can't get googl token");
-
+                    Log.e("LOGIN", "Error parsing Google credentials", e);
                     callback.onError("Invalid Google credentials");
                 }
             } else {
-                Log.d("LOGIN", " ERROR We are and can't get googl token");
-
+                Log.e("LOGIN", "Unexpected custom credential type: " + customCredential.getType());
                 callback.onError("Unexpected credential type");
             }
         } else {
-            Log.d("LOGIN", " ERROR We are and can't get googl token");
-
+            Log.e("LOGIN", "Unexpected credential type: " + credential.getClass().getName());
             callback.onError("Unexpected credential type");
         }
     }

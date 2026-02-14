@@ -118,11 +118,10 @@ public class FireStoreManager implements CloudRemoteDataSource {
     }
 
     @Override
-    public Single<List<PlannedMealEntity>> getPlannerMeals() {
+    public Single<List<PlannedMealEntity>> getPlannerMeals(String uid) {
         return Single.create(emitter -> {
-            String uid = getUserId();
             if (uid == null) {
-                emitter.onError(new Exception("User not logged in"));
+                emitter.onError(new Exception("User ID is null"));
                 return;
             }
 
@@ -169,11 +168,10 @@ public class FireStoreManager implements CloudRemoteDataSource {
 
 
     @Override
-    public Flowable<List<FavouriteMealEntity>> getAllFavorites() {
+    public Flowable<List<FavouriteMealEntity>> getAllFavorites(String uid) {
         return Flowable.create(emitter -> {
-            String uid = getUserId();
             if (uid == null) {
-                emitter.onError(new Exception("User not logged in"));
+                emitter.onError(new Exception("User ID is null"));
                 return;
             }
 

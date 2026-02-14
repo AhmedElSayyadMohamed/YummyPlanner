@@ -54,6 +54,8 @@ public class LoginPresenter implements LoginContract.Presenter {
 
         disposables.add(
                 authRepo.loginWithEmailAndPassword(email, password)
+                        .flatMap(user -> mealRepository.syncDataFromCloud(user.getuId())
+                                .andThen(io.reactivex.rxjava3.core.Single.just(user)))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
@@ -84,6 +86,8 @@ public class LoginPresenter implements LoginContract.Presenter {
 
         disposables.add(
                 authRepo.loginWithGoogle(idToken)
+                        .flatMap(user -> mealRepository.syncDataFromCloud(user.getuId())
+                                .andThen(io.reactivex.rxjava3.core.Single.just(user)))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(

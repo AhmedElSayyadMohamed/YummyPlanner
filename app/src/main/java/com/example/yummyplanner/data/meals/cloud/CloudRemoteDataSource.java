@@ -18,11 +18,11 @@ public interface CloudRemoteDataSource {
 
     Completable addMealToPlanner(PlannedMealEntity meal);
 
-    Single<List<PlannedMealEntity>> getPlannerMeals();
+    Single<List<PlannedMealEntity>> getPlannerMeals(String uid);
 
     Completable deletePlannerMeal(String mealId);
 
-    Flowable<List<FavouriteMealEntity>> getAllFavorites();
+    Flowable<List<FavouriteMealEntity>> getAllFavorites(String uid);
 
     Completable insertFavorite(FavouriteMealEntity meal);
 

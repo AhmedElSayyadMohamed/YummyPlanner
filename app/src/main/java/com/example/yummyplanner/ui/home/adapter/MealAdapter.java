@@ -20,6 +20,7 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
 
     private List<MealItemModel> meals = new ArrayList<>();
     private OnMealClickListener listener;
+    private String currentCategoryFilter;
 
     public interface OnMealClickListener {
         void onMealClick(MealItemModel meal);
@@ -32,6 +33,12 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
 
     public void setMeals(List<MealItemModel> meals) {
         this.meals = meals;
+        notifyDataSetChanged();
+    }
+    
+    public void setMeals(List<MealItemModel> meals, String categoryFilter) {
+        this.meals = meals;
+        this.currentCategoryFilter = categoryFilter;
         notifyDataSetChanged();
     }
 
@@ -49,9 +56,16 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
 
         holder.mealName.setText(meal.getName());
 
-        holder.mealCategory.setText(meal.getCategory() != null ? meal.getCategory() : "-");
+        // Use category from meal or fall back to the filter name
+        String category = meal.getCategory();
+        if (category == null || category.isEmpty()) {
+            category = currentCategoryFilter;
+        }
+        holder.mealCategory.setText(category != null ? category : "");
+        holder.mealCategory.setVisibility(category != null ? View.VISIBLE : View.GONE);
 
-        holder.mealCountry.setText(meal.getArea() != null ? meal.getArea() : "-");
+        holder.mealCountry.setText(meal.getArea() != null ? meal.getArea() : "");
+        holder.mealCountry.setVisibility(meal.getArea() != null ? View.VISIBLE : View.GONE);
 
         Glide.with(holder.itemView.getContext())
                 .load(meal.getImageUrl())
@@ -60,15 +74,9 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
                 .error(R.drawable.plan1)
                 .into(holder.mealImage);
 
-//        Glide.with(holder.itemView.getContext())
-//                .load(meal.getCountryFlagUrl())
-//                .centerCrop()
-//                .placeholder(R.drawable.flag)
-//                .error(R.drawable.ic_error)
-//                .into(holder.countryFlag);
-
         String flagUrl = meal.getCountryFlagUrl();
         if(flagUrl != null && !flagUrl.isEmpty()){
+            holder.countryFlag.setVisibility(View.VISIBLE);
             Glide.with(holder.itemView.getContext())
                     .load(flagUrl)
                     .centerCrop()
@@ -76,8 +84,9 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
                     .error(R.drawable.flag)
                     .into(holder.countryFlag);
         }else{
-            holder.countryFlag.setImageResource(R.drawable.flag);
+            holder.countryFlag.setVisibility(View.GONE);
         }
+
         holder.itemView.setOnClickListener(v -> {
             int pos = holder.getAbsoluteAdapterPosition();
             if (pos != RecyclerView.NO_POSITION && listener != null) {

@@ -22,6 +22,7 @@ public interface HomeContract {
         void navigateToMealDetails(MealItemModel meal);
         void navigateToMealsList(String filter, String type);
         void setUserName(String name);
+        void setUserAvatar(String avatarUrl);
 
     }
 

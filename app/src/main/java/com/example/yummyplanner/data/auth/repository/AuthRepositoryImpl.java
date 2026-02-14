@@ -78,7 +78,12 @@ public class AuthRepositoryImpl implements AuthRepository {
                         if (firebaseUser != null) {
                             cloudRemoteDataSource.createUserDocument(user.getName(), user.getEmail())
                                     .subscribe(
-                                            () -> emitter.onSuccess(getUserFromFirebaseUser(firebaseUser)),
+                                            () -> {
+                                                User newUser = getUserFromFirebaseUser(firebaseUser);
+                                                // Make sure UID is set
+                                                newUser.setuId(firebaseUser.getUid());
+                                                emitter.onSuccess(newUser);
+                                            },
                                             emitter::onError
                                     );
                         } else {
@@ -96,17 +101,18 @@ public class AuthRepositoryImpl implements AuthRepository {
             firebaseAuth.signInWithCredential(credential)
                     .addOnSuccessListener(authResult -> {
                         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                        boolean isNewUser = authResult.getAdditionalUserInfo().isNewUser();
+                        boolean isNewUser = authResult.getAdditionalUserInfo() != null && authResult.getAdditionalUserInfo().isNewUser();
 
                         if (firebaseUser != null) {
+                            User user = getUserFromFirebaseUser(firebaseUser);
                             if(isNewUser){
-                            cloudRemoteDataSource.createUserDocument(firebaseUser.getDisplayName(),firebaseUser.getEmail())
+                                cloudRemoteDataSource.createUserDocument(firebaseUser.getDisplayName(), firebaseUser.getEmail())
                                     .subscribe(
-                                            () -> emitter.onSuccess(getUserFromFirebaseUser(firebaseUser)),
+                                            () -> emitter.onSuccess(user),
                                             emitter::onError
                                     );
-                            }else {
-                                emitter.onSuccess(getUserFromFirebaseUser(firebaseUser));
+                            } else {
+                                emitter.onSuccess(user);
                             }
                         } else {
                             emitter.onError(new Exception("Google User is null"));
@@ -129,8 +135,12 @@ public class AuthRepositoryImpl implements AuthRepository {
         
         User sessionUser = sessionManager.getUser();
         String userName = (sessionUser != null) ? sessionUser.getName() : firebaseUser.getDisplayName();
-        Log.d("userName",userName);
-        return new User(userName, firebaseUser.getEmail());
+        String avatarUrl = (firebaseUser.getPhotoUrl() != null) ? firebaseUser.getPhotoUrl().toString() : null;
+        
+        User user = new User(userName, firebaseUser.getEmail());
+        user.setuId(firebaseUser.getUid());
+        user.setAvatarUrl(avatarUrl);
+        return user;
     }
 
     @Override
@@ -140,6 +150,9 @@ public class AuthRepositoryImpl implements AuthRepository {
 
     private User getUserFromFirebaseUser(FirebaseUser firebaseUser) {
         if (firebaseUser == null) return null;
-        return new User(firebaseUser.getDisplayName(), firebaseUser.getEmail());
+        String photoUrl = (firebaseUser.getPhotoUrl() != null) ? firebaseUser.getPhotoUrl().toString() : null;
+        // Correct constructor usage or manual setting
+        User user = new User(firebaseUser.getDisplayName(), firebaseUser.getEmail(), photoUrl, firebaseUser.getUid());
+        return user;
     }
 }

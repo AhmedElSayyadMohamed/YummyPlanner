@@ -13,6 +13,7 @@ public interface SearchContract {
     }
 
     interface Presenter {
+        void attachView(View view);
         void searchByName(String name);
         void filterByCategory(String category);
         void filterByArea(String area);

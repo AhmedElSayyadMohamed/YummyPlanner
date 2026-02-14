@@ -33,6 +33,7 @@ public class SearchFragment extends Fragment implements SearchContract.View, Mea
     private SearchContract.Presenter presenter;
     private MealAdapter adapter;
     private final CompositeDisposable disposables = new CompositeDisposable();
+    private boolean isInitialLoad = true;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -55,25 +56,32 @@ public class SearchFragment extends Fragment implements SearchContract.View, Mea
     }
 
     private void handleIncomingArgs() {
+        if (getArguments() == null) {
+            loadDefaultData();
+            return;
+        }
+        
         SearchFragmentArgs args = SearchFragmentArgs.fromBundle(getArguments());
         String categoryName = args.getCategoryName();
         String areaName = args.getAreaName();
 
         if (categoryName != null && !categoryName.isEmpty()) {
+            isInitialLoad = true;
             binding.chipCategory.setChecked(true);
             binding.etSearch.setText(categoryName);
             presenter.filterByCategory(categoryName);
         } else if (areaName != null && !areaName.isEmpty()) {
+            isInitialLoad = true;
             binding.chipArea.setChecked(true);
             binding.etSearch.setText(areaName);
             presenter.filterByArea(areaName);
         } else {
-            binding.chipCategory.setChecked(true);
             loadDefaultData();
         }
     }
 
     private void loadDefaultData() {
+        binding.chipCategory.setChecked(true);
         presenter.filterByCategory("Seafood");
     }
 
@@ -104,7 +112,11 @@ public class SearchFragment extends Fragment implements SearchContract.View, Mea
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(query -> {
-                    performSearch(query.toString());
+                    if (isInitialLoad) {
+                        isInitialLoad = false;
+                    } else {
+                        performSearch(query.toString());
+                    }
                 })
         );
     }
@@ -153,18 +165,35 @@ public class SearchFragment extends Fragment implements SearchContract.View, Mea
 
     @Override
     public void showResults(List<MealItemModel> meals) {
-        binding.searchEmptyState.setVisibility(View.GONE);
-        binding.rvSearchResults.setVisibility(View.VISIBLE);
-        adapter.setMeals(meals);
+        if (binding == null) return;
+        binding.searchProgressBar.setVisibility(View.GONE);
+        if (meals == null || meals.isEmpty()) {
+            showEmptyState();
+        } else {
+            binding.searchEmptyState.setVisibility(View.GONE);
+            binding.rvSearchResults.setVisibility(View.VISIBLE);
+            
+            String currentFilter = binding.etSearch.getText().toString().trim();
+            int checkedId = binding.filterChipGroup.getCheckedChipId();
+            
+            if (checkedId == R.id.chipCategory) {
+                adapter.setMeals(meals, currentFilter);
+            } else {
+                adapter.setMeals(meals);
+            }
+        }
     }
 
     @Override
     public void showError(String message) {
+        if (binding == null) return;
+        binding.searchProgressBar.setVisibility(View.GONE);
         Toast.makeText(requireContext(), "Error: " + message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showLoading() {
+        if (binding == null) return;
         binding.searchProgressBar.setVisibility(View.VISIBLE);
         binding.rvSearchResults.setVisibility(View.GONE);
         binding.searchEmptyState.setVisibility(View.GONE);
@@ -172,11 +201,13 @@ public class SearchFragment extends Fragment implements SearchContract.View, Mea
 
     @Override
     public void hideLoading() {
+        if (binding == null) return;
         binding.searchProgressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void showEmptyState() {
+        if (binding == null) return;
         binding.rvSearchResults.setVisibility(View.GONE);
         binding.searchEmptyState.setVisibility(View.VISIBLE);
     }

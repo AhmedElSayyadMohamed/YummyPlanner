@@ -159,11 +159,20 @@ public class MealRepositoryImpl implements MealRepository {
 
     @Override
     public Completable syncDataFromCloud(String UId) {
-        Completable syncFavs = cloudRemoteDataSource.getAllFavorites().firstOrError()
-                .flatMapCompletable(localDataSource::insertAllFavorites);
+        Completable syncFavs = cloudRemoteDataSource.getAllFavorites(UId)
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .flatMapCompletable(favorites -> 
+                    localDataSource.insertAllFavorites(favorites)
+                        .subscribeOn(Schedulers.io())
+                );
         
-        Completable syncPlanner = cloudRemoteDataSource.getPlannerMeals()
-                .flatMapCompletable(localDataSource::insertAllPlannedMeals);
+        Completable syncPlanner = cloudRemoteDataSource.getPlannerMeals(UId)
+                .subscribeOn(Schedulers.io())
+                .flatMapCompletable(plannedMeals -> 
+                    localDataSource.insertAllPlannedMeals(plannedMeals)
+                        .subscribeOn(Schedulers.io())
+                );
 
         return Completable.mergeArray(syncFavs, syncPlanner)
                 .subscribeOn(Schedulers.io());

@@ -35,7 +35,7 @@ public class HomePresenter implements HomeContract.Presenter {
     @Override
     public void loadHomeData() {
         if (view == null) return;
-        loadUserName();
+        loadUserInfo();
         view.showLoading();
 
         loadMealOfTheDay();
@@ -113,13 +113,14 @@ public class HomePresenter implements HomeContract.Presenter {
         );
     }
 
-    private void loadUserName() {
+    private void loadUserInfo() {
         if (view == null) return;
-        if (authRepository.isUserLoggedIn() && authRepository.getCurrentUser() != null) {
-            String userName = authRepository.getCurrentUser().getName();
-            view.setUserName(userName != null ? userName : "Guest");
+        if (authRepository.getCurrentUser() != null) {
+            view.setUserName(authRepository.getCurrentUser().getName());
+            view.setUserAvatar(authRepository.getCurrentUser().getAvatarUrl());
         } else {
             view.setUserName("Guest");
+            view.setUserAvatar(null);
         }
     }
 

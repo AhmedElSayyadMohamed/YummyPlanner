@@ -91,7 +91,6 @@ public class HomeFragment extends Fragment implements HomeContract.View,
         binding.tvSeeAllCountries.setOnClickListener(v -> {
             HomeFragmentDirections.ActionHomeFragmentToSearchFragment action =
                     HomeFragmentDirections.actionHomeFragmentToSearchFragment();
-            // Passing a special value or just navigating to search with area chip selected
             NavHostFragment.findNavController(this).navigate(action);
         });
     }
@@ -108,8 +107,10 @@ public class HomeFragment extends Fragment implements HomeContract.View,
     public void hideLoading() {
         if (binding.loadingContainer != null) {
             binding.loadingContainer.postDelayed(() -> {
-                binding.loadingLottie.cancelAnimation();
-                binding.loadingContainer.setVisibility(View.GONE);
+                if (binding != null && binding.loadingContainer != null) {
+                    binding.loadingLottie.cancelAnimation();
+                    binding.loadingContainer.setVisibility(View.GONE);
+                }
             }, 1000);
         }
     }
@@ -179,12 +180,24 @@ public class HomeFragment extends Fragment implements HomeContract.View,
 
     @Override
     public void setUserName(String name) {
-        if (isAdded()) binding.tvUseName.setText(name);
+        if (isAdded()) binding.tvUseName.setText(name != null ? name : "Guest");
+    }
+
+    @Override
+    public void setUserAvatar(String avatarUrl) {
+        if (isAdded() && binding != null) {
+            Glide.with(this)
+                    .load(avatarUrl)
+                    .placeholder(R.drawable.profile)
+                    .error(R.drawable.profile)
+                    .into(binding.imgAvatar);
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        presenter.detachView();
         binding = null;
     }
 }
