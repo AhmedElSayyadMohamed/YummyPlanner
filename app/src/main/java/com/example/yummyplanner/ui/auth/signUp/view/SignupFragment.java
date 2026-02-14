@@ -75,7 +75,7 @@ public class SignupFragment extends BaseFragment implements SignUpContract.View 
 
     @Override
     public void navigateToLoginScreen() {
-        if (isAdded() && getView() != null) {
+        if (isAdded() && getView() != null && binding != null) {
                 Navigation.findNavController(binding.getRoot())
                         .navigate(R.id.action_signup_to_login);
                     }
@@ -83,6 +83,7 @@ public class SignupFragment extends BaseFragment implements SignUpContract.View 
 
     @Override
     public void showFullNameError(String message) {
+        if (binding == null) return;
         binding.tilUsername.setErrorEnabled(true);
         binding.tilUsername.setError(message);
         binding.etUsername.requestFocus();
@@ -90,6 +91,7 @@ public class SignupFragment extends BaseFragment implements SignUpContract.View 
 
     @Override
     public void showEmailError(String message) {
+        if (binding == null) return;
         binding.tilEmail.setErrorEnabled(true);
         binding.tilEmail.setError(message);
         binding.etEmail.requestFocus();
@@ -97,6 +99,7 @@ public class SignupFragment extends BaseFragment implements SignUpContract.View 
 
     @Override
     public void showPasswordError(String message) {
+        if (binding == null) return;
         binding.tilPassword.setErrorEnabled(true);
         binding.tilPassword.setError(message);
         binding.etPassword.requestFocus();
@@ -104,6 +107,7 @@ public class SignupFragment extends BaseFragment implements SignUpContract.View 
 
     @Override
     public void showConfirmPasswordError(String message) {
+        if (binding == null) return;
         binding.tilConfirmPassword.setErrorEnabled(true);
         binding.tilConfirmPassword.setError(message);
         binding.etConfirmPassword.requestFocus();
@@ -111,16 +115,19 @@ public class SignupFragment extends BaseFragment implements SignUpContract.View 
 
     @Override
     public void showErrorMessage(String message) {
+        if (binding == null) return;
         Constants.showErrorSnackbar(binding.getRoot(),message);
     }
 
     @Override
     public void showSuccessMessage(String message) {
+        if (binding == null) return;
         Constants.showSuccessSnackbar(binding.getRoot(),message);
     }
 
     @Override
     public void showLoading() {
+        if (binding == null) return;
         hideKeyboard();
         binding.loadingContainer.setAlpha(0f);
         binding.loadingContainer.setVisibility(View.VISIBLE);
@@ -130,10 +137,15 @@ public class SignupFragment extends BaseFragment implements SignUpContract.View 
 
     @Override
     public void hideLoading() {
+        if (binding == null) return;
         binding.loadingContainer.animate()
                 .alpha(0f)
                 .setDuration(200)
-                .withEndAction(() -> binding.loadingContainer.setVisibility(View.GONE));
+                .withEndAction(() -> {
+                    if (binding != null) {
+                        binding.loadingContainer.setVisibility(View.GONE);
+                    }
+                });
         binding.btnSignUp.setEnabled(true);
     }
 
