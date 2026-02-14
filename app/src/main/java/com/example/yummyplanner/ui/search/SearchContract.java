@@ -14,10 +14,12 @@ public interface SearchContract {
 
     interface Presenter {
         void attachView(View view);
-        void searchByName(String name);
-        void filterByCategory(String category);
-        void filterByArea(String area);
-        void filterByIngredient(String ingredient);
+        void onSearchQueryChanged(String query, SearchType type);
+        void onFilterTypeChanged(SearchType type, String currentQuery);
         void detachView();
+    }
+
+    enum SearchType {
+        NAME, CATEGORY, AREA, INGREDIENT
     }
 }

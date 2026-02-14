@@ -5,11 +5,14 @@ import com.example.yummyplanner.data.meals.repository.MealRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import io.reactivex.rxjava3.subjects.PublishSubject;
 
 public class SearchPresenter implements SearchContract.Presenter {
 
@@ -18,10 +21,23 @@ public class SearchPresenter implements SearchContract.Presenter {
     private final CompositeDisposable disposables = new CompositeDisposable();
     private List<MealItemModel> allResultsFromFilter = new ArrayList<>();
     private boolean isFilterActive = false;
+    private final PublishSubject<String> searchSubject = PublishSubject.create();
+    private SearchContract.SearchType currentSearchType = SearchContract.SearchType.CATEGORY;
 
     public SearchPresenter(SearchContract.View view, MealRepository repository) {
         this.view = view;
         this.repository = repository;
+        setupSearchDebounce();
+    }
+
+    private void setupSearchDebounce() {
+        disposables.add(
+                searchSubject
+                        .debounce(500, TimeUnit.MILLISECONDS)
+                        .distinctUntilChanged()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::performSearch)
+        );
     }
 
     @Override
@@ -30,38 +46,65 @@ public class SearchPresenter implements SearchContract.Presenter {
     }
 
     @Override
-    public void searchByName(String query) {
+    public void onSearchQueryChanged(String query, SearchContract.SearchType type) {
+        this.currentSearchType = type;
         if (query == null || query.trim().isEmpty()) {
-            if (isFilterActive) {
-                if (view != null) view.showResults(allResultsFromFilter);
-            } else {
-                if (view != null) view.showResults(new ArrayList<>());
-            }
-            return;
-        }
-
-        if (isFilterActive) {
-            filterLocally(query);
+            loadDefaultData();
         } else {
-            performRemoteSearch(query);
+            searchSubject.onNext(query.trim());
         }
     }
 
-    private void filterLocally(String query) {
-        List<MealItemModel> filtered = new ArrayList<>();
-        String lowerQuery = query.toLowerCase().trim();
-        for (MealItemModel meal : allResultsFromFilter) {
-            if (meal.getName().toLowerCase().contains(lowerQuery)) {
-                filtered.add(meal);
-            }
+    @Override
+    public void onFilterTypeChanged(SearchContract.SearchType type, String currentQuery) {
+        this.currentSearchType = type;
+        if (type == SearchContract.SearchType.NAME) {
+            isFilterActive = false;
+            allResultsFromFilter.clear();
         }
-        if (view != null) {
-            if (filtered.isEmpty()) view.showEmptyState();
-            else view.showResults(filtered);
+        if (currentQuery != null && !currentQuery.trim().isEmpty()) {
+            performSearch(currentQuery.trim());
+        } else {
+            loadDefaultData();
         }
     }
 
-    private void performRemoteSearch(String query) {
+    private void loadDefaultData() {
+        switch (currentSearchType) {
+            case CATEGORY:
+                filterByCategory("Seafood");
+                break;
+            case AREA:
+                filterByArea("Egyptian");
+                break;
+            case INGREDIENT:
+                filterByIngredient("Chicken");
+                break;
+            case NAME:
+                isFilterActive = false;
+                searchByName("a");
+                break;
+        }
+    }
+
+    private void performSearch(String query) {
+        switch (currentSearchType) {
+            case CATEGORY:
+                filterByCategory(query);
+                break;
+            case AREA:
+                filterByArea(query);
+                break;
+            case INGREDIENT:
+                filterByIngredient(query);
+                break;
+            case NAME:
+                searchByName(query);
+                break;
+        }
+    }
+
+    private void searchByName(String query) {
         if (view != null) view.showLoading();
         disposables.add(
                 repository.searchMealsByName(query)
@@ -71,7 +114,7 @@ public class SearchPresenter implements SearchContract.Presenter {
                                 meals -> {
                                     if (view != null) {
                                         view.hideLoading();
-                                        if (meals.isEmpty()) view.showEmptyState();
+                                        if (meals == null || meals.isEmpty()) view.showEmptyState();
                                         else view.showResults(meals);
                                     }
                                 },
@@ -85,54 +128,45 @@ public class SearchPresenter implements SearchContract.Presenter {
         );
     }
 
-    @Override
-    public void filterByCategory(String category) {
+    private void filterByCategory(String category) {
         isFilterActive = true;
         fetchFullMeals(repository.filterByCategory(category));
     }
 
-    @Override
-    public void filterByArea(String area) {
+    private void filterByArea(String area) {
         isFilterActive = true;
         fetchFullMeals(repository.filterByArea(area));
     }
 
-    @Override
-    public void filterByIngredient(String ingredient) {
+    private void filterByIngredient(String ingredient) {
         isFilterActive = true;
         fetchFullMeals(repository.filterByIngredient(ingredient));
     }
 
     private void fetchFullMeals(Single<List<MealItemModel>> filterSource) {
         if (view != null) view.showLoading();
-        
+        allResultsFromFilter.clear();
         disposables.add(
                 filterSource
                         .flatMap(meals -> {
-                            if (meals.isEmpty()) return Single.just(new ArrayList<MealItemModel>());
-                            
+                            if (meals == null || meals.isEmpty()) return Single.just(new ArrayList<MealItemModel>());
                             List<Single<MealItemModel>> detailSingles = new ArrayList<>();
                             for (MealItemModel meal : meals) {
-                                detailSingles.add(
-                                        repository.getMealDetails(meal.getId())
-                                                .map(details -> {
-                                                    MealItemModel fullMeal = new MealItemModel();
-                                                    fullMeal.setId(details.getId());
-                                                    fullMeal.setName(details.getName());
-                                                    fullMeal.setImageUrl(details.getThumbNail());
-                                                    fullMeal.setCategory(details.getCategory());
-                                                    fullMeal.setArea(details.getArea());
-                                                    return fullMeal;
-                                                })
-                                );
+                                detailSingles.add(repository.getMealDetails(meal.getId())
+                                        .map(details -> {
+                                            MealItemModel m = new MealItemModel();
+                                            m.setId(details.getId());
+                                            m.setName(details.getName());
+                                            m.setImageUrl(details.getThumbNail());
+                                            m.setCategory(details.getCategory());
+                                            m.setArea(details.getArea());
+                                            return m;
+                                        }));
                             }
-                            
                             return Single.zip(detailSingles, args -> {
-                                List<MealItemModel> fullMeals = new ArrayList<>();
-                                for (Object obj : args) {
-                                    fullMeals.add((MealItemModel) obj);
-                                }
-                                return fullMeals;
+                                List<MealItemModel> list = new ArrayList<>();
+                                for (Object o : args) list.add((MealItemModel) o);
+                                return list;
                             });
                         })
                         .subscribeOn(Schedulers.io())

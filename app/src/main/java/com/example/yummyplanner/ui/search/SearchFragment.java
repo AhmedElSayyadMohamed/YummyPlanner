@@ -21,19 +21,12 @@ import com.example.yummyplanner.databinding.FragmentSearchBinding;
 import com.example.yummyplanner.ui.home.adapter.MealAdapter;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class SearchFragment extends Fragment implements SearchContract.View, MealAdapter.OnMealClickListener {
 
     private FragmentSearchBinding binding;
     private SearchContract.Presenter presenter;
     private MealAdapter adapter;
-    private final CompositeDisposable disposables = new CompositeDisposable();
-    private boolean isInitialLoad = true;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -51,38 +44,26 @@ public class SearchFragment extends Fragment implements SearchContract.View, Mea
         setupRecyclerView();
         setupSearchEditText();
         setupFilters();
+        setupBackButton();
 
         handleIncomingArgs();
     }
 
     private void handleIncomingArgs() {
-        if (getArguments() == null) {
-            loadDefaultData();
-            return;
-        }
-        
-        SearchFragmentArgs args = SearchFragmentArgs.fromBundle(getArguments());
-        String categoryName = args.getCategoryName();
-        String areaName = args.getAreaName();
-
-        if (categoryName != null && !categoryName.isEmpty()) {
-            isInitialLoad = true;
-            binding.chipCategory.setChecked(true);
-            binding.etSearch.setText(categoryName);
-            presenter.filterByCategory(categoryName);
-        } else if (areaName != null && !areaName.isEmpty()) {
-            isInitialLoad = true;
-            binding.chipArea.setChecked(true);
-            binding.etSearch.setText(areaName);
-            presenter.filterByArea(areaName);
-        } else {
-            loadDefaultData();
+        if (getArguments() != null) {
+            SearchFragmentArgs args = SearchFragmentArgs.fromBundle(getArguments());
+            if (args.getCategoryName() != null) {
+                binding.chipCategory.setChecked(true);
+                binding.etSearch.setText(args.getCategoryName());
+            } else if (args.getAreaName() != null) {
+                binding.chipArea.setChecked(true);
+                binding.etSearch.setText(args.getAreaName());
+            }
         }
     }
 
-    private void loadDefaultData() {
-        binding.chipCategory.setChecked(true);
-        presenter.filterByCategory("Seafood");
+    private void setupBackButton() {
+        binding.btnBack.setOnClickListener(v -> Navigation.findNavController(requireView()).navigateUp());
     }
 
     private void setupRecyclerView() {
@@ -92,95 +73,47 @@ public class SearchFragment extends Fragment implements SearchContract.View, Mea
     }
 
     private void setupSearchEditText() {
-        disposables.add(
-                Observable.create(emitter -> {
-                    TextWatcher watcher = new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        binding.etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            emitter.onNext(s.toString());
-                        }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.onSearchQueryChanged(s.toString(), getSelectedSearchType());
+            }
 
-                        @Override
-                        public void afterTextChanged(Editable s) {}
-                    };
-                    binding.etSearch.addTextChangedListener(watcher);
-                    emitter.setCancellable(() -> binding.etSearch.removeTextChangedListener(watcher));
-                })
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(query -> {
-                    if (isInitialLoad) {
-                        isInitialLoad = false;
-                    } else {
-                        performSearch(query.toString());
-                    }
-                })
-        );
-    }
-
-    private void performSearch(String query) {
-        if (query.isEmpty()) {
-            loadDefaultDataBasedOnFilter();
-            return;
-        }
-
-        int checkedId = binding.filterChipGroup.getCheckedChipId();
-        if (checkedId == R.id.chipCategory) {
-            presenter.filterByCategory(query);
-        } else if (checkedId == R.id.chipArea) {
-            presenter.filterByArea(query);
-        } else if (checkedId == R.id.chipIngredient) {
-            presenter.filterByIngredient(query);
-        } else {
-            presenter.searchByName(query);
-        }
-    }
-
-    private void loadDefaultDataBasedOnFilter() {
-        int checkedId = binding.filterChipGroup.getCheckedChipId();
-        if (checkedId == R.id.chipCategory) {
-            presenter.filterByCategory("Seafood");
-        } else if (checkedId == R.id.chipArea) {
-            presenter.filterByArea("Egyptian");
-        } else if (checkedId == R.id.chipIngredient) {
-            presenter.filterByIngredient("Chicken");
-        } else {
-            presenter.searchByName("a");
-        }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
     }
 
     private void setupFilters() {
         binding.filterChipGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            String query = binding.etSearch.getText().toString().trim();
-            if (!query.isEmpty()) {
-                performSearch(query);
-            } else {
-                loadDefaultDataBasedOnFilter();
-            }
+            String query = binding.etSearch.getText().toString();
+            presenter.onFilterTypeChanged(getSelectedSearchType(), query);
         });
+    }
+
+    private SearchContract.SearchType getSelectedSearchType() {
+        int checkedId = binding.filterChipGroup.getCheckedChipId();
+        if (checkedId == R.id.chipCategory) return SearchContract.SearchType.CATEGORY;
+        if (checkedId == R.id.chipArea) return SearchContract.SearchType.AREA;
+        if (checkedId == R.id.chipIngredient) return SearchContract.SearchType.INGREDIENT;
+        return SearchContract.SearchType.NAME;
     }
 
     @Override
     public void showResults(List<MealItemModel> meals) {
         if (binding == null) return;
         binding.searchProgressBar.setVisibility(View.GONE);
-        if (meals == null || meals.isEmpty()) {
-            showEmptyState();
+        binding.searchEmptyState.setVisibility(View.GONE);
+        binding.rvSearchResults.setVisibility(View.VISIBLE);
+        
+        String currentFilter = binding.etSearch.getText().toString().trim();
+        if (binding.chipCategory.isChecked()) {
+            adapter.setMeals(meals, currentFilter);
         } else {
-            binding.searchEmptyState.setVisibility(View.GONE);
-            binding.rvSearchResults.setVisibility(View.VISIBLE);
-            
-            String currentFilter = binding.etSearch.getText().toString().trim();
-            int checkedId = binding.filterChipGroup.getCheckedChipId();
-            
-            if (checkedId == R.id.chipCategory) {
-                adapter.setMeals(meals, currentFilter);
-            } else {
-                adapter.setMeals(meals);
-            }
+            adapter.setMeals(meals);
         }
     }
 
@@ -188,7 +121,7 @@ public class SearchFragment extends Fragment implements SearchContract.View, Mea
     public void showError(String message) {
         if (binding == null) return;
         binding.searchProgressBar.setVisibility(View.GONE);
-        Toast.makeText(requireContext(), "Error: " + message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -210,6 +143,7 @@ public class SearchFragment extends Fragment implements SearchContract.View, Mea
         if (binding == null) return;
         binding.rvSearchResults.setVisibility(View.GONE);
         binding.searchEmptyState.setVisibility(View.VISIBLE);
+        binding.searchProgressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -222,7 +156,6 @@ public class SearchFragment extends Fragment implements SearchContract.View, Mea
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        disposables.clear();
         presenter.detachView();
         binding = null;
     }
