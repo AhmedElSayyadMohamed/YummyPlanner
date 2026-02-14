@@ -105,13 +105,18 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
 
     @Override
     public void showLoading() {
-        binding.progressBar.setVisibility(View.VISIBLE);
+        binding.loadingContainer.setAlpha(0f);
+        binding.loadingContainer.setVisibility(View.VISIBLE);
+        binding.loadingContainer.animate().alpha(1f).setDuration(200);
         binding.loginBtn.setEnabled(false);
     }
 
     @Override
     public void hideLoading() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.loadingContainer.animate()
+                .alpha(0f)
+                .setDuration(200)
+                .withEndAction(() -> binding.loadingContainer.setVisibility(View.GONE));
         binding.loginBtn.setEnabled(true);
     }
 

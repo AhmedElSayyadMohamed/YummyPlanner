@@ -122,13 +122,18 @@ public class SignupFragment extends BaseFragment implements SignUpContract.View 
     @Override
     public void showLoading() {
         hideKeyboard();
-        binding.progressBar.setVisibility(View.VISIBLE);
-        binding. btnSignUp.setEnabled(false);
+        binding.loadingContainer.setAlpha(0f);
+        binding.loadingContainer.setVisibility(View.VISIBLE);
+        binding.loadingContainer.animate().alpha(1f).setDuration(200);
+        binding.btnSignUp.setEnabled(false);
     }
 
     @Override
     public void hideLoading() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.loadingContainer.animate()
+                .alpha(0f)
+                .setDuration(200)
+                .withEndAction(() -> binding.loadingContainer.setVisibility(View.GONE));
         binding.btnSignUp.setEnabled(true);
     }
 
