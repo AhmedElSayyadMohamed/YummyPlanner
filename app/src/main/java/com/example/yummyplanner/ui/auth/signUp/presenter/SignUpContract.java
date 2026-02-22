@@ -16,8 +16,6 @@ public interface SignUpContract {
     interface Presenter {
         void attachView(SignUpContract.View view);
         void registerUser(String fullName, String email, String password, String confirmPassword);
-        void onLoginClicked();
         void detachView();
     }
-
 }

@@ -1,5 +1,6 @@
 package com.example.yummyplanner.ui.auth.signUp.presenter;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.example.yummyplanner.data.auth.model.User;
@@ -18,9 +19,9 @@ public class SignUpPresenter implements SignUpContract.Presenter {
     private final AuthRepository authRepo;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    public SignUpPresenter(SignUpContract.View view) {
+    public SignUpPresenter(SignUpContract.View view, Context context) {
         this.view = view;
-        this.authRepo = AuthRepositoryImpl.getInstance();
+        this.authRepo = AuthRepositoryImpl.getInstance(context);
     }
 
     @Override
@@ -73,24 +74,23 @@ public class SignUpPresenter implements SignUpContract.Presenter {
         compositeDisposable.add(authRepo.registerWithEmailAndPassword(user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(registeredUser -> {
+                .subscribe(
+                        registeredUser -> {
                     if (view == null) return;
 
                     view.hideLoading();
                     view.showSuccessMessage("User registered successfully");
                     view.navigateToLoginScreen();
-                }, throwable -> {
+                },
+                        throwable -> {
                     if (view == null) return;
 
                     view.hideLoading();
                     view.showErrorMessage(throwable.getMessage() != null ? throwable.getMessage() : "Registration failed");
-                }));
+                }
+                ));
     }
 
-    @Override
-    public void onLoginClicked() {
-        if (view != null) view.navigateToLoginScreen();
-    }
 
     @Override
     public void detachView() {

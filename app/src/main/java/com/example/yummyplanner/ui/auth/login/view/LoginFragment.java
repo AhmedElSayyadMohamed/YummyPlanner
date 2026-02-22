@@ -16,11 +16,8 @@ import com.example.yummyplanner.ui.BaseFragment;
 import com.example.yummyplanner.R;
 import com.example.yummyplanner.data.auth.social.GoogleAuthHelper;
 import com.example.yummyplanner.data.auth.social.SocialAuthCallback;
-import com.example.yummyplanner.data.meals.local.appPreferences.AppPreferences;
-import com.example.yummyplanner.data.meals.local.appPreferences.AppPreferencesImpl;
 import com.example.yummyplanner.data.meals.local.userSession.SessionRepository;
 import com.example.yummyplanner.data.meals.local.userSession.SessionRepositoryImpl;
-import com.example.yummyplanner.data.meals.local.userSession.UserSessionManager;
 import com.example.yummyplanner.databinding.FragmentLoginBinding;
 import com.example.yummyplanner.ui.layout.LayoutActivity;
 import com.example.yummyplanner.utiles.Constants;
@@ -34,9 +31,11 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
     private final SocialAuthCallback socialAuthCallback = new SocialAuthCallback() {
         @Override
         public void onSuccess(String idToken) {
-            requireActivity().runOnUiThread(() ->
-                    presenter.firebaseAuthWithGoogle(idToken)
-            );
+            requireActivity().runOnUiThread(() -> {
+                if (presenter != null) {
+                    presenter.firebaseAuthWithGoogle(idToken);
+                }
+            });
         }
 
         @Override
@@ -52,11 +51,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        AppPreferences prefs = new AppPreferencesImpl(requireContext().getApplicationContext());
-        UserSessionManager sessionManager = UserSessionManager.getInstance(getContext().getApplicationContext());
-        SessionRepository sessionRepo = new SessionRepositoryImpl(sessionManager);
-
-        presenter = new LoginPresenter(this, sessionRepo);
+        presenter = new LoginPresenter(this,getContext().getApplicationContext());
         googleAuthHelper = new GoogleAuthHelper(requireActivity(), socialAuthCallback);
     }
 
@@ -112,30 +107,44 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
 
     @Override
     public void showLoading() {
-        binding.progressBar.setVisibility(View.VISIBLE);
+        if (binding == null) return;
+        binding.loadingContainer.setAlpha(0f);
+        binding.loadingContainer.setVisibility(View.VISIBLE);
+        binding.loadingContainer.animate().alpha(1f).setDuration(200);
         binding.loginBtn.setEnabled(false);
     }
 
     @Override
     public void hideLoading() {
-        binding.progressBar.setVisibility(View.GONE);
+        if (binding == null) return;
+        binding.loadingContainer.animate()
+                .alpha(0f)
+                .setDuration(200)
+                .withEndAction(() -> {
+                    if (binding != null) {
+                        binding.loadingContainer.setVisibility(View.GONE);
+                    }
+                });
         binding.loginBtn.setEnabled(true);
     }
 
     @Override
     public void showEmailError(String message) {
+        if (binding == null) return;
         binding.tilEmail.setError(message);
         binding.tilEmail.requestFocus();
     }
 
     @Override
     public void showPasswordError(String message) {
+        if (binding == null) return;
         binding.tilPassword.setError(message);
         binding.tilPassword.requestFocus();
     }
 
     @Override
     public void navigateToHome() {
+        if (!isAdded()) return;
         Intent intent = new Intent(requireContext(), LayoutActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
@@ -143,7 +152,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
 
     @Override
     public void navigateToSignup() {
-        if (isAdded()) {
+        if (isAdded() && binding != null) {
             Navigation.findNavController(binding.getRoot())
                     .navigate(R.id.action_login_to_signup);
         }
@@ -159,13 +168,13 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
 
     @Override
     public void showErrorMessage(String message) {
+        if (binding == null) return;
         Constants.showErrorSnackbar(binding.getRoot(), message);
-
     }
 
     @Override
     public void showSuccessMessage(String message) {
-
+        if (binding == null) return;
         Constants.showSuccessSnackbar(binding.getRoot(), message);
     }
 

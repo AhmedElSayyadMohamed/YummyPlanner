@@ -2,6 +2,7 @@ package com.example.yummyplanner.data.meals.cloud;
 
 import com.example.yummyplanner.data.meals.local.entity.FavouriteMealEntity;
 import com.example.yummyplanner.data.meals.local.entity.PlannedMealEntity;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.List;
 
@@ -13,13 +14,15 @@ public interface CloudRemoteDataSource {
 
     Completable createUserDocument(String name, String email);
 
+    Single<DocumentSnapshot> getUserDocument(String uid);
+
     Completable addMealToPlanner(PlannedMealEntity meal);
 
-    Single<List<PlannedMealEntity>> getPlannerMeals();
+    Single<List<PlannedMealEntity>> getPlannerMeals(String uid);
 
     Completable deletePlannerMeal(String mealId);
 
-    Flowable<List<FavouriteMealEntity>> getAllFavorites();
+    Flowable<List<FavouriteMealEntity>> getAllFavorites(String uid);
 
     Completable insertFavorite(FavouriteMealEntity meal);
 

@@ -1,9 +1,14 @@
 package com.example.yummyplanner.ui.auth.login.presenter;
 
 
+import android.content.Context;
+
 import com.example.yummyplanner.data.auth.repository.AuthRepository;
 import com.example.yummyplanner.data.auth.repository.AuthRepositoryImpl;
 import com.example.yummyplanner.data.meals.local.userSession.SessionRepository;
+import com.example.yummyplanner.data.meals.local.userSession.SessionRepositoryImpl;
+import com.example.yummyplanner.data.meals.repository.MealRepository;
+import com.example.yummyplanner.data.meals.repository.MealRepositoryImpl;
 import com.example.yummyplanner.utiles.EmailAndPasswordValidation;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -15,13 +20,14 @@ public class LoginPresenter implements LoginContract.Presenter {
     private LoginContract.View view;
     private final SessionRepository sessionRepo;
     private final AuthRepository authRepo;
-
+    private final MealRepository mealRepository;
     private final CompositeDisposable disposables = new CompositeDisposable();
 
-    public LoginPresenter(LoginContract.View view, SessionRepository sessionRepo){
+    public LoginPresenter(LoginContract.View view, Context context){
         this.view = view ;
-        this.sessionRepo = sessionRepo;
-        this.authRepo = AuthRepositoryImpl.getInstance();
+        this.sessionRepo = SessionRepositoryImpl.getInstance(context);
+        this.authRepo = AuthRepositoryImpl.getInstance(context);
+        this.mealRepository = MealRepositoryImpl.getInstance(context);
     }
 
     @Override
@@ -48,12 +54,14 @@ public class LoginPresenter implements LoginContract.Presenter {
 
         disposables.add(
                 authRepo.loginWithEmailAndPassword(email, password)
+                        .flatMap(user -> mealRepository.syncDataFromCloud(user.getuId())
+                                .andThen(io.reactivex.rxjava3.core.Single.just(user)))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 user -> {
                                     if (view != null) {
-                                        sessionRepo.login();
+                                        sessionRepo.loginSuccess();
                                         sessionRepo.saveUser(user);
                                         view.hideLoading();
                                         view.showSuccessMessage("Login Successful");
@@ -69,6 +77,7 @@ public class LoginPresenter implements LoginContract.Presenter {
                                 }
                         )
         );
+
     }
 
     @Override
@@ -77,12 +86,14 @@ public class LoginPresenter implements LoginContract.Presenter {
 
         disposables.add(
                 authRepo.loginWithGoogle(idToken)
+                        .flatMap(user -> mealRepository.syncDataFromCloud(user.getuId())
+                                .andThen(io.reactivex.rxjava3.core.Single.just(user)))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 user -> {
                                     if (view != null) {
-                                        sessionRepo.login();
+                                        sessionRepo.loginSuccess();
                                         sessionRepo.saveUser(user);
                                         view.hideLoading();
                                         view.showSuccessMessage("Google Sign-In Successful");

@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.yummyplanner.R;
+
 import com.example.yummyplanner.data.meals.local.userSession.UserSessionManager;
 import com.example.yummyplanner.data.meals.repository.MealRepositoryImpl;
 import com.example.yummyplanner.databinding.FragmentDetailsBinding;
@@ -214,7 +215,7 @@ public class DetailsFragment extends Fragment implements MealDetailsContract.Vie
         startDate.add(Calendar.DAY_OF_MONTH, 1);
 
         Calendar endDate = (Calendar) startDate.clone();
-        endDate.add(Calendar.DAY_OF_MONTH, 6); // Tomorrow + 6 = 7 days total
+        endDate.add(Calendar.DAY_OF_MONTH, 6);
 
         CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder()
                 .setValidator(new CalendarConstraints.DateValidator() {

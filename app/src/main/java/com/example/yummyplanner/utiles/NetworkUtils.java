@@ -40,7 +40,6 @@ public class NetworkUtils {
             }
         });
 
-        // Initial check
         NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
         boolean isConnected = capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
         isNetworkAvailable.postValue(isConnected);

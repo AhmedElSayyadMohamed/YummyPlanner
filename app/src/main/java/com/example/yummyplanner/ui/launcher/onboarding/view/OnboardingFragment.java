@@ -12,11 +12,9 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.yummyplanner.R;
-import com.example.yummyplanner.data.meals.local.appPreferences.AppPreferences;
-import com.example.yummyplanner.data.meals.local.appPreferences.AppPreferencesImpl;
+
 import com.example.yummyplanner.data.meals.local.userSession.SessionRepository;
 import com.example.yummyplanner.data.meals.local.userSession.SessionRepositoryImpl;
-import com.example.yummyplanner.data.meals.local.userSession.UserSessionManager;
 import com.example.yummyplanner.ui.auth.AuthActivity;
 import com.example.yummyplanner.ui.launcher.onboarding.model.OnboardingItem;
 import com.example.yummyplanner.ui.launcher.onboarding.presenter.OnboardingContract;
@@ -26,7 +24,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.List;
-
+import com.example.yummyplanner.data.meals.local.userSession.UserSessionManager;
 
 public class OnboardingFragment extends Fragment  implements OnboardingContract.View {
 
@@ -46,10 +44,8 @@ public class OnboardingFragment extends Fragment  implements OnboardingContract.
         View view = inflater.inflate(R.layout.fragment_onboarding, container, false);
 
         // presenter
-        AppPreferences appPreferences = new AppPreferencesImpl(requireActivity());
-        UserSessionManager userSessionManager = UserSessionManager.getInstance(getContext().getApplicationContext());
-        SessionRepository sessionRepository = new SessionRepositoryImpl(userSessionManager);
-        presenter = new OnboardingPresenter(this, sessionRepository);
+
+        presenter = new OnboardingPresenter(this, getContext().getApplicationContext());
 
         //ui binding
         viewPager = view.findViewById(R.id.onboardingViewPager);
@@ -122,7 +118,8 @@ public class OnboardingFragment extends Fragment  implements OnboardingContract.
 
     @Override
     public void navigateToAuthActivity() {
-        Intent intent = new Intent(this.getContext(), AuthActivity.class);
+        Intent intent = new Intent(requireContext(), AuthActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 }

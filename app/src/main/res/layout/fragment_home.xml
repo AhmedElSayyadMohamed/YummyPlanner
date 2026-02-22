@@ -52,8 +52,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgAvatar"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="end|center_vertical"
                 android:src="@drawable/profile"/>
 
@@ -61,7 +61,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- ================= CONTENT ================= -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/contentContainer"
 
@@ -356,8 +355,8 @@
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/loadingLottie"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:layout_gravity="center"
             app:lottie_fileName="loading.json"
             app:lottie_loop="true"

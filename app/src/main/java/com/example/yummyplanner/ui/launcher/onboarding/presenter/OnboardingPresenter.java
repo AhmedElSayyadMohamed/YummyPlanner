@@ -1,5 +1,8 @@
 package com.example.yummyplanner.ui.launcher.onboarding.presenter;
+import android.content.Context;
+
 import com.example.yummyplanner.data.meals.local.userSession.SessionRepository;
+import com.example.yummyplanner.data.meals.local.userSession.SessionRepositoryImpl;
 import com.example.yummyplanner.ui.launcher.onboarding.model.OnboardingItem;
 import com.example.yummyplanner.ui.launcher.onboarding.repository.OnboardingRepository;
 
@@ -14,10 +17,10 @@ public class OnboardingPresenter implements OnboardingContract.Presenter {
     private SessionRepository sessionRepo;
     private final List<OnboardingItem> onboardingItems;
 
-    public OnboardingPresenter(OnboardingContract.View view,SessionRepository sessionRepo) {
+    public OnboardingPresenter(OnboardingContract.View view , Context context) {
         this.view = view;
         this.onboardingRepository = new OnboardingRepository();
-        this.sessionRepo = sessionRepo;
+        this.sessionRepo = SessionRepositoryImpl.getInstance(context);
         this.onboardingItems = onboardingRepository.getOnboardingItems();
         this.totalPages = this.onboardingItems.size();
         this.currentPage = 0;

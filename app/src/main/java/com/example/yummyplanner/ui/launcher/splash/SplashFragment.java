@@ -21,8 +21,6 @@ import com.airbnb.lottie.LottieProperty;
 import com.airbnb.lottie.model.KeyPath;
 import com.airbnb.lottie.value.LottieValueCallback;
 import com.example.yummyplanner.R;
-import com.example.yummyplanner.data.meals.local.appPreferences.AppPreferences;
-import com.example.yummyplanner.data.meals.local.appPreferences.AppPreferencesImpl;
 import com.example.yummyplanner.data.meals.local.userSession.SessionRepository;
 import com.example.yummyplanner.data.meals.local.userSession.SessionRepositoryImpl;
 import com.example.yummyplanner.data.meals.local.userSession.UserSessionManager;
@@ -47,8 +45,7 @@ public class SplashFragment extends Fragment implements SplashContract.View {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        AppPreferences prefs = new AppPreferencesImpl(getContext().getApplicationContext());
-        UserSessionManager sessionManager =UserSessionManager.getInstance(getContext().getApplicationContext());
+        UserSessionManager sessionManager = UserSessionManager.getInstance(getContext().getApplicationContext());
         SessionRepository sessionRepo = new SessionRepositoryImpl(sessionManager);
 
         presenter = new SplashPresenter(this, sessionRepo);
@@ -112,7 +109,6 @@ public class SplashFragment extends Fragment implements SplashContract.View {
 
         startActivity(intent);
     }
-
 
     @Override
     public void onDestroyView() {
